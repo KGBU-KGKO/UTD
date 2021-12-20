@@ -1,0 +1,5 @@
+# Project settings
+data/config.php
+
+# Files
+files/*
