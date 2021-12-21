@@ -1,6 +1,6 @@
 $.when($.ready).then(function() {
     $('#numSMEV').prop('disabled', "true");
-    $.removeCookie('listFL');
+    localStorage.setItem("listFL", "");
     $.ajax({
         url: 'data/new-request.php',
         method: 'GET',
@@ -18,8 +18,8 @@ $.when($.ready).then(function() {
         }
     });
 
-    //   console.log(new Date());
-    // $('#reqDate').val($.now());
+    let today = new Date();
+    $('#reqDate').val(today.getFullYear() + "-" + (today.getMonth()+1)  + "-" + today.getDate());
 
     //Enable tooltips everywhere
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
@@ -34,9 +34,15 @@ $( "#dFLName" ).on( "autocompleteselect", function( event, ui ) {
     //console.log(ui.item.label);
     let listDec = [];
     decID = ui.item.label.split(" | ")[3];
-    listDec = $.parseJSON(eval($.cookie('listFL')));
-    index = listDec.findIndex(x => x.ID === decID);
-    $('#dFLAddress').val(listDec[index].address);
+    listFL = $.parseJSON(localStorage.getItem("listFL"));
+    index = listFL.findIndex(x => x.ID === decID);
+    $('#dFLAddress').val(listFL[index].address);
+    $('#dFLEmail').val(listFL[index].email);
+    $('#dFLPhone').val(listFL[index].tel);
+    $('#dFLBD').val(listFL[index].dateBirth);
+    $('#dFLNumDUL').val(listFL[index].dulNum);
+    $('#dFLDateDUL').val(listFL[index].dulDate);
+    $('#dFLWhoDUL').val(listFL[index].dulOrg);
 } );
 
 $("input[name=reqFiles]").change(function() {
@@ -75,10 +81,10 @@ $('#declarantType').on('change', function() {
                 method: 'GET',
                 data: { ref: "declarant", decType: this.value },
                 success: function(data){
-                    $.cookie("listFL", JSON.stringify(data));
+                    localStorage.setItem("listFL", data);
                     let obj = $.parseJSON(data);
                     $.each(obj, function(key,value) {
-                      listFL.push({label: value.name + " | " +value.dulNum+ " | " + value.dateBirth+ " | " + value.ID, value: value.name});
+                      listFL.push({label: value.name + " | " +value.dulNum.substring(0,4)+ " " +value.dulNum.substring(4,10)+ " | " + value.dateBirth+ " | " + value.ID, value: value.name});
                     }); 
 
                     $( "#dFLName" ).autocomplete({
@@ -110,9 +116,10 @@ $(".attach button").click(function() {
 
 $("#send").click(function() {
     let decType = $('#declarantType').val();
+    let param = '';
     switch (decType) {
         case 'FL':
-            console.log('decType=' + decType + '&' + $('#reqFL').serialize() +'&'+ $('#reqInfo').serialize());
+            param = 'decType=' + decType + '&' + $('#reqFL').serialize() +'&'+ $('#reqInfo').serialize();
             break;
         case 'UL':
             console.log('decType=' + decType + '&' + $('#reqUL').serialize() +'&'+ $('#reqInfo').serialize());
@@ -122,24 +129,33 @@ $("#send").click(function() {
             break;
     }
 
-
-
-var data = new FormData();
-$.each($('#reqFiles')[0].files, function(i, file) {
-    data.append('file[]', file);
-});
-
 $.ajax({
     url: 'data/new-request.php',
-    data: data,
-    cache: false,
-    contentType: false,
-    processData: false,
-    method: 'POST',
+    method: 'GET',
+    data: param,
     success: function(data){
-        //console.log(data);
+        data = $.parseJSON(data);
+        console.log(data);
+        // var data = new FormData();
+        // $.each($('#reqFiles')[0].files, function(i, file) {
+        //     data.append('file[]', file);
+        // });
+
+        // $.ajax({
+        //     url: 'data/new-request.php',
+        //     data: data,
+        //     cache: false,
+        //     contentType: false,
+        //     processData: false,
+        //     method: 'POST',
+        //     success: function(data){
+        //         console.log('ok-ok'+data);
+        //     }
+        // });
     }
 });
+
+
 
 
 });

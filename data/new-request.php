@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 include 'config.php';
-//список svc отправлять в виде 1;2;3
 
 if (isset($_GET['getNumLog'])) {
     $numLog = htmlspecialchars($_GET["getNumLog"]);
@@ -11,9 +10,74 @@ if (isset($_GET['getNumLog'])) {
     $rows = $stmt->fetch(PDO::FETCH_ASSOC);
     echo $rows['numLog'];
 } else {
-    // foreach ($_GET as $param_name => $param_val) {
-    //     echo "Param: $param_name; Value: $param_val<br />\n";
-    // }
+
+    if ($_GET['decType'] == 'FL') {
+        if (isset($_GET["agentFLSwitch"])) {
+            $agentFLSwitch = $_GET["agentFLSwitch"];
+        } else {
+            $agentFLSwitch = 'off';
+        }
+
+        $svc = '';
+        $i = 1;
+        do {
+            if (isset($_GET["svc-$i"])) {
+                $svc = $svc.';'.$i;
+            }
+            $i++;
+        } while ($i <= 11);
+        $svc = substr($svc, 1);
+
+        $path = 'files/'.explode('/', htmlspecialchars($_GET["reqNum"]))[1];
+        $Name = htmlspecialchars($_GET["dFLName"]);
+        $BDay = htmlspecialchars($_GET["dFLBD"]);
+        $Phone = htmlspecialchars($_GET["dFLPhone"]);
+        $Email = htmlspecialchars($_GET["dFLEmail"]);
+        $Address = htmlspecialchars($_GET["dFLAddress"]);
+        $NumDUL = htmlspecialchars($_GET["dFLNumDUL"]);
+        $DateDUL = htmlspecialchars($_GET["dFLDateDUL"]);
+        $WhoDUL = htmlspecialchars($_GET["dFLWhoDUL"]);
+        $AgentName = htmlspecialchars($_GET["dFLAgentName"]);
+        $AgentDoc = htmlspecialchars($_GET["dFLAgentDoc"]);
+        $reqNum = htmlspecialchars($_GET["reqNum"]);
+        $reqDate = date( "Y-m-d", strtotime(htmlspecialchars($_GET["reqDate"])));
+        $reqObjAddress = htmlspecialchars($_GET["reqObjAddress"]);
+        $reqComment = htmlspecialchars($_GET["reqComment"]);
+        $delivery = htmlspecialchars($_GET["delivery"]);
+        $attachList = htmlspecialchars($_GET["attachList"]);
+
+        //отправляем запрос, получаем номер запроса и ID
+        try {
+            $query = "{call AddRequestFL(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(1, $Name, PDO::PARAM_STR);
+            $stmt->bindParam(2, $BDay, PDO::PARAM_STR);
+            $stmt->bindParam(3, $Phone, PDO::PARAM_STR);
+            $stmt->bindParam(4, $Email, PDO::PARAM_STR);
+            $stmt->bindParam(5, $Address, PDO::PARAM_STR);
+            $stmt->bindParam(6, $NumDUL, PDO::PARAM_STR);
+            $stmt->bindParam(7, $DateDUL, PDO::PARAM_STR);
+            $stmt->bindParam(8, $WhoDUL, PDO::PARAM_STR);
+            $stmt->bindParam(9, $agentFLSwitch, PDO::PARAM_STR);
+            $stmt->bindParam(10, $AgentName, PDO::PARAM_STR);
+            $stmt->bindParam(11, $AgentDoc, PDO::PARAM_STR);
+            $stmt->bindParam(12, $reqNum, PDO::PARAM_STR);
+            $stmt->bindParam(13, $reqDate, PDO::PARAM_STR);
+            $stmt->bindParam(14, $reqObjAddress, PDO::PARAM_STR);
+            $stmt->bindParam(15, $reqComment, PDO::PARAM_STR);
+            $stmt->bindParam(16, $svc, PDO::PARAM_STR);
+            $stmt->bindParam(17, $delivery, PDO::PARAM_STR);
+            $stmt->bindParam(18, $attachList, PDO::PARAM_STR);
+            $stmt->bindParam(19, $path, PDO::PARAM_STR);
+            $stmt->execute();
+            $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+            echo json_encode($rows);
+        } catch(PDOException $e) {
+            die("Error executing stored procedure: ".$e->getMessage());
+        }
+        //отправляем файлы в папку ID запроса
+
+    }
 
 
 /*
@@ -33,32 +97,6 @@ foreach ($_FILES["file"]["error"] as $key => $error) {
 */
 }
 
-
-
-
-// $start = date( "Y-m-d", strtotime(htmlspecialchars($_GET["start"])));
-// $end = date( "Y-m-d", strtotime(htmlspecialchars($_GET["end"])));
-
-// $query = "insert ...";
-
-// $stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
-// $stmt->execute();
-// $rowCount = $stmt->rowCount();
-
-// $rows = [];
-// $a = [];
-// foreach ($stmt as $row) {
-//     for ($i = 0; $i < $stmt->columnCount(); $i++) {
-//         $col = $stmt->getColumnMeta($i);
-//         $colName = $col['name'];
-//         array_push($a, $row[$colName]);
-//     }
-//     array_push($rows, $a);
-//     $a = [];
-// }
-
-//$d = array('draw' => '1', 'recordsTotal' => $rowCount, 'recordsFiltered' => $rowCount, 'data' => $rows);
-//echo json_encode($d);
 $stmt = null;
 $conn = null;
 ?>
