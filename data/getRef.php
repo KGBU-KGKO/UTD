@@ -5,16 +5,18 @@ include 'config.php';
 
 if (isset($_GET['ref'])) {
     $ref = htmlspecialchars($_GET["ref"]);
-    if ($ref = "declarant") {
+    if ($ref == "declarant") {
         if (isset($_GET['decType'])) {
             $decType = htmlspecialchars($_GET["decType"]);
-            $query = "select * from declarant where type = '$decType';";
-            //fio, address, BD, phone, email, numDUL, dateDUL, WhoDUL
+            $query = "select * from declarant where type = '$decType'";
+            // FL: fio, address, BD, phone, email, numDUL, dateDUL, WhoDUL
+            //UL: 
         }        
-    } elseif ($ref = "agent") {
-        $query = ""; 
-        //fio, doc, phone, email, numDUL, dateDUL, WhoDUL
+    } 
 
+    if ($ref == "agent") {
+        $query = "select * from agent"; 
+        //fio, phone, numDUL, dateDUL, WhoDUL
     }
 
 

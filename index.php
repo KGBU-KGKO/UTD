@@ -21,7 +21,9 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 link-secondary" mb-checked="1" data-tip="">Инф. панель</a></li>
+          <li><a href="/" class="nav-link px-2 link-secondary" mb-checked="1" data-tip="">Инф. панель 
+            <span class="badge bg-danger">4</span>
+          </a></li>  
           <li><a href="requests.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Запросы</a></li>
           <li><a href="new-request.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Создать запрос</a></li>
         </ul>
@@ -48,7 +50,88 @@
   <body>
     <div class="container mb-5">
       <h6 class="display-6">Информационная панель</h6>
-      
+
+<div class="bd-callout bd-callout-danger">
+<h4 id="asynchronous-methods-and-transitions">Загрузите файлы в данные запросы</h4>
+<p>Сначала укажите запрос для загрузки файлов, после чего с помощью кнопки "Выберите файлы" укажите файлы, которые относятся к данному запросу и нажмите кнопку "Загрузить файлы". После успешной загрузки вы увидите уведомление, а запрос больше не будет отображаться в таблице.</p>
+</div>
+      <div class="bd-example">
+        <table class="table table-hover">
+            <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td>@twitter</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td>@twitter</td>
+          </tr>          
+        </tbody>
+
+        </table>
+      </div>
+      <form id="formFiles" enctype="multipart/form-data">
+      <div class="row g-1 mb-3">
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="numReq" name="numReq" placeholder="Укажите запрос в таблице" value="">
+            <label for="numReq">Укажите запрос в таблице</label>
+          </div>
+        </div>        
+      </div>
+      <div class="row g-1 mb-1">
+        <div class="mb-3">
+          <label for="reqFiles" class="form-label">Загрузите файлы приложений</label>
+          <input class="form-control form-control-lg" type="file" id="reqFiles" name="reqFiles" multiple>
+        </div>  
+      </div>
+      </form>
+      <div class="row g-1 mb-3">
+        <div class="mb-3">
+          <label for="nameFiles" class="form-label">Список файлов для загрузки:</label>
+          <div id="nameFiles"></div>
+        </div>  
+      </div> 
+
+      <div class="row g-2 mb-3">
+        <div class="col-md mb-1">
+          <button type="button" id="upload" class="btn btn-primary btn-lg">Загрузить файлы</button>   
+        </div>
+      </div>
+
+<div style="display: none;" id="toast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+<div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body">
+      Привет, мир! Это тост-сообщение.
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+  </div>
+</div>
+</div>
+
     </div>
   </body>
 </html>
@@ -64,4 +147,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     <script src="https://getbootstrap.com/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="js/requests.js"></script>
+    <script type="text/javascript" src="js/dashboard.js"></script>

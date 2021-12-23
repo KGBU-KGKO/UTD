@@ -22,7 +22,7 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель</a></li>
+          <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель <span class="badge bg-danger">4</span></a></li>
           <li><a href="requests.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Запросы</a></li>
           <li><a href="new-request.php" class="nav-link px-2 link-secondary" mb-checked="1" data-tip="">Создать запрос</a></li>
         </ul>
@@ -79,6 +79,14 @@
           </div>
         </div>        
       </div>
+      <div class="row g-1 mb-3">
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="dFLAddress" name="dFLAddress" placeholder="Адрес места жительства заявителя" value="">
+            <label for="dFLAddress">Адрес места жительства заявителя</label>
+          </div>
+        </div> 
+      </div> 
       <div id="agentFLForm" style="display: none;">
       <div class="row g-1 mb-3">
           <div class="col-md">
@@ -95,16 +103,17 @@
               <label for="dFLAgentDoc">Реквизиты доверенности представителя</label>
             </div>
           </div>
-      </div>           
-      </div>       
+      </div>     
       <div class="row g-1 mb-3">
         <div class="col-md">
           <div class="form-floating">
-            <input type="text" class="form-control" id="dFLAddress" name="dFLAddress" placeholder="Адрес места жительства" value="">
-            <label for="dFLAddress">Адрес места жительства</label>
+            <input type="text" class="form-control" id="dFLAgentAddress" name="dFLAgentAddress" placeholder="Адрес места жительства представителя" value="">
+            <label for="dFLAgentAddress">Адрес места жительства представителя</label>
           </div>
         </div> 
-      </div>      
+      </div>       
+      </div>       
+     
       <div class="row g-3 mb-3">
         <div class="col-md">
           <div class="form-floating">
@@ -204,7 +213,43 @@
               <label for="dULAgentPhone">Контактный телефон представителя</label>
             </div>
           </div>
-        </div>  
+        </div>
+      <div class="row g-1 mb-3">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="dULAgentDoc" name="dULAgentDoc" placeholder="Реквизиты доверенности представителя" value="" data-bs-toggle="tooltip" data-bs-placement="left" title="Или иного документа, подтверждающего полномочия">
+              <label for="dULAgentDoc">Реквизиты доверенности представителя</label>
+            </div>
+          </div>
+      </div>        
+        <div class="row g-1 mb-3">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="dULAgentAddress" name="dULAgentAddress" placeholder="Адрес проживания представителя" value="">
+              <label for="dULAgentAddress">Адрес проживания представителя</label>
+            </div>
+          </div>                  
+        </div>        
+      <div class="row g-3 mb-3">
+        <div class="col-md-2">
+          <div class="form-floating" data-bs-toggle="tooltip" data-bs-placement="left" title="Серия и номер паспорта заявителя (представителя)">
+            <input type="text" class="form-control" id="dULNumDUL" name="dULNumDUL" placeholder="Серия и номер ДУЛ" value="">
+            <label for="dULNumDUL">Серия и номер ДУЛ</label>
+          </div>
+        </div> 
+        <div class="col-md-2">
+          <div class="form-floating">
+            <input type="Date" class="form-control" id="dULDateDUL" name="dULDateDUL" placeholder="Даты выдачи ДУЛ" value="">
+            <label for="dULDateDUL">Даты выдачи ДУЛ</label>
+          </div>
+        </div> 
+        <div class="col-md-8">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="dULWhoDUL" name="dULWhoDUL" placeholder="Кем выдан ДУЛ" value="">
+            <label for="dULWhoDUL">Кем выдан ДУЛ</label>
+          </div>
+        </div>                 
+      </div>          
         </form>                  
       </div>
       <div id="declarantOGV" class="declarant">
@@ -331,19 +376,19 @@
       <h6 class="display-6">Способ получения копии/справки</h6>      
       <div class="row g-1 mb-3">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="delivery" id="post" value="post">
+          <input class="form-check-input" type="radio" name="delivery" id="post" value="Почтовым отправление">
           <label class="form-check-label" for="post">
             Почтовым отправление
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="delivery" id="email" value="email">
+          <input class="form-check-input" type="radio" name="delivery" id="email" value="Электронной почтой">
           <label class="form-check-label" for="email">
             Электронной почтой
           </label>
         </div>      
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="delivery" id="foot" value="foot" checked>
+          <input class="form-check-input" type="radio" name="delivery" id="foot" value="При личном обращении в КГБУ «КГКО»" checked>
           <label class="form-check-label" for="foot">
             При личном обращении в КГБУ "КГКО"
           </label>
@@ -363,20 +408,7 @@
         </div>   
       </div> 
       </form>
-      <form id="formFiles" enctype="multipart/form-data">
-      <div class="row g-1 mb-1">
-        <div class="mb-3">
-          <label for="reqFiles" class="form-label">Загрузите файлы приложений</label>
-          <input class="form-control" type="file" id="reqFiles" name="reqFiles" multiple>
-        </div>  
-      </div>
-      </form>
-      <div class="row g-1 mb-3">
-        <div class="mb-3">
-          <label for="nameFiles" class="form-label">Список файлов для загрузки:</label>
-          <div id="nameFiles"></div>
-        </div>  
-      </div>      
+     
       <div class="row g-2 mb-3">
         <div class="col-md mb-1">
           <button type="button" id="send" class="btn btn-primary btn-lg">Создать запрос</button>   
@@ -384,6 +416,27 @@
         </div>
       </div>
     </div>
+
+<?php 
+
+if (isset($_GET['toast'])) {
+
+
+
+  echo '
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Запрос №'.$_GET['toast'].' создан.
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+    </div>
+  </div>
+  </div>';
+}
+?>
+
   </body>
 </html>
 

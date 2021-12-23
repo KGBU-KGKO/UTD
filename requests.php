@@ -21,7 +21,7 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель</a></li>
+          <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель <span class="badge bg-danger">4</span></a></li>
           <li><a href="requests.php" class="nav-link px-2 link-secondary" mb-checked="1" data-tip="">Запросы</a></li>
           <li><a href="new-request.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Создать запрос</a></li>
         </ul>

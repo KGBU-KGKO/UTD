@@ -1,6 +1,9 @@
 $.when($.ready).then(function() {
     $('#numSMEV').prop('disabled', "true");
     localStorage.setItem("listFL", "");
+    localStorage.setItem("listAgents", "");
+    localStorage.setItem("listUL", "");
+    localStorage.setItem("listOGV", "");
     $.ajax({
         url: 'data/new-request.php',
         method: 'GET',
@@ -25,14 +28,13 @@ $.when($.ready).then(function() {
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
-    })    
+    })
 
 });
 
 $( "#dFLName" ).on( "autocompleteselect", function( event, ui ) {
     //console.log(ui.item.value);
     //console.log(ui.item.label);
-    let listDec = [];
     decID = ui.item.label.split(" | ")[3];
     listFL = $.parseJSON(localStorage.getItem("listFL"));
     index = listFL.findIndex(x => x.ID === decID);
@@ -45,17 +47,40 @@ $( "#dFLName" ).on( "autocompleteselect", function( event, ui ) {
     $('#dFLWhoDUL').val(listFL[index].dulOrg);
 } );
 
-$("input[name=reqFiles]").change(function() {
-    let names = [];
-    let text = '';
-    for (var i = 0; i < $(this).get(0).files.length; ++i) {
-        names.push($(this).get(0).files[i].name);
-    }
-    $.each(names, function( index, value ) {
-      text = text + value + '<br>';
-    });
-    $("#nameFiles").html(text);
-});
+$( "#dFLAgentName" ).on( "autocompleteselect", function( event, ui ) {
+    let listAgents = [];
+    agID = ui.item.label.split(" | ")[3];
+    listAgents = $.parseJSON(localStorage.getItem("listAgents"));
+    index = listAgents.findIndex(x => x.ID === agID);
+    $('#dFLPhone').val(listAgents[index].tel);
+    $('#dFLAgentAddress').val(listAgents[index].address);
+    $('#dFLNumDUL').val(listAgents[index].dulNum);
+    $('#dFLDateDUL').val(listAgents[index].dulDate);
+    $('#dFLWhoDUL').val(listAgents[index].dulOrg);
+} );
+
+$( "#dULName" ).on( "autocompleteselect", function( event, ui ) {
+    decID = ui.item.label.split(" | ")[3];
+    listUL = $.parseJSON(localStorage.getItem("listUL"));
+    index = listUL.findIndex(x => x.ID === decID);
+    $('#dULINN').val(listUL[index].INN);
+    $('#dULOGRN').val(listUL[index].OGRN);
+    $('#dULAddress').val(listUL[index].address);
+    $('#dULEmail').val(listUL[index].email);
+    $('#dULPhone').val(listUL[index].tel);
+} );
+
+$( "#dULAgentName" ).on( "autocompleteselect", function( event, ui ) {
+    let listAgents = [];
+    agID = ui.item.label.split(" | ")[3];
+    listAgents = $.parseJSON(localStorage.getItem("listAgents"));
+    index = listAgents.findIndex(x => x.ID === agID);
+    $('#dULAgentPhone').val(listAgents[index].tel);
+    $('#dULAgentAddress').val(listAgents[index].address);
+    $('#dULNumDUL').val(listAgents[index].dulNum);
+    $('#dULDateDUL').val(listAgents[index].dulDate);
+    $('#dULWhoDUL').val(listAgents[index].dulOrg);
+} );
 
 $('#agentFLSwitch').change(function() {
     if ($(this).prop('checked')) {
@@ -69,13 +94,44 @@ $('#reqNum').on('input', function() {
     $('#numTitle').html($('#reqNum').val());
 })
 
+// function getRef(referenceType, declarantType, storageName, inputName, haveDUL, listAttr) {
+//     let listRef = [];
+//     $.ajax({
+//         url: 'data/getRef.php',
+//         method: 'GET',
+//         data: { ref: referenceType, decType: declarantType },
+//         success: function(data){
+//             localStorage.setItem(storageName, data);
+//             let obj = $.parseJSON(data);
+//             if (haveDUL) {
+//                 $.each(listAttr, function(value) {
+//                     rowRef = value + ' + " | " +value.';
+//                 });
+//                 rowRef = '{label: value.' + rowRef + ', value: value.name}';
+//             }
+//             $.each(obj, function(key,value) {
+//               listRef.push(rowRef);
+//             }); 
+
+//             $( "#"+inputName ).autocomplete({
+//               source: listRef
+//             });
+//         }
+//     });     
+// }
+
 $('#declarantType').on('change', function() {
+    let listFL = [];
+    let listUL = [];
+    let listOGV = [];
+    let listAgents = []; 
+    let dull = '';   
     $('.declarant').hide();
     $('#numSMEV').prop('disabled', "true");
     switch (this.value) {
         case 'FL':
             $('#declarantFL').show();
-            let listFL = [];
+            //getRef('declarant', this.value, 'listFL', 'dFLName', 'True', ['name', 'dulNum', 'dateBirth', 'ID']);
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
@@ -84,7 +140,11 @@ $('#declarantType').on('change', function() {
                     localStorage.setItem("listFL", data);
                     let obj = $.parseJSON(data);
                     $.each(obj, function(key,value) {
-                      listFL.push({label: value.name + " | " +value.dulNum.substring(0,4)+ " " +value.dulNum.substring(4,10)+ " | " + value.dateBirth+ " | " + value.ID, value: value.name});
+                      if (value.dulNum) 
+                        {dull = value.dulNum.substring(0,4)+ " " +value.dulNum.substring(4,10);} 
+                      else 
+                        {dull = "-";}
+                      listFL.push({label: value.name + " | " +dull+ " | " + value.dateBirth+ " | " + value.ID, value: value.name});
                     }); 
 
                     $( "#dFLName" ).autocomplete({
@@ -92,13 +152,78 @@ $('#declarantType').on('change', function() {
                     });
                 }
             }); 
+            $.ajax({
+                url: 'data/getRef.php',
+                method: 'GET',
+                data: { ref: "agent", decType: this.value },
+                success: function(data){
+                    localStorage.setItem("listAgents", data);
+                    let obj = $.parseJSON(data);
+                    $.each(obj, function(key,value) {
+                      listAgents.push({label: value.FIO + " | " +value.dulNum.substring(0,4)+ " " +value.dulNum.substring(4,10)+ " | " + value.tel+ " | " + value.ID, value: value.FIO});
+                    }); 
+
+                    $( "#dFLAgentName" ).autocomplete({
+                      source: listAgents
+                    });
+                }
+            });         
+
             break;
         case 'UL':
             $('#declarantUL').show();
+            $.ajax({
+                url: 'data/getRef.php',
+                method: 'GET',
+                data: { ref: "declarant", decType: this.value },
+                success: function(data){
+                    localStorage.setItem("listUL", data);
+                    let obj = $.parseJSON(data);
+                    $.each(obj, function(key,value) {
+                      listUL.push({label: value.name + " | " +value.INN+ " | " + value.OGRN+ " | " + value.ID, value: value.name});
+                    }); 
+
+                    $( "#dULName" ).autocomplete({
+                      source: listUL
+                    });
+                }
+            });    
+            $.ajax({
+                url: 'data/getRef.php',
+                method: 'GET',
+                data: { ref: "agent", decType: this.value },
+                success: function(data){
+                    localStorage.setItem("listAgents", data);
+                    let obj = $.parseJSON(data);
+                    $.each(obj, function(key,value) {
+                      listAgents.push({label: value.FIO + " | " +value.dulNum.substring(0,4)+ " " +value.dulNum.substring(4,10)+ " | " + value.tel+ " | " + value.ID, value: value.FIO});
+                    }); 
+
+                    $( "#dULAgentName" ).autocomplete({
+                      source: listAgents
+                    });
+                }
+            });                      
             break;
         case 'OGV':
             $('#declarantOGV').show();
             $('#numSMEV').prop('disabled', "");
+            $.ajax({
+                url: 'data/getRef.php',
+                method: 'GET',
+                data: { ref: "declarant", decType: this.value },
+                success: function(data){
+                    localStorage.setItem("listOGV", data);
+                    let obj = $.parseJSON(data);
+                    $.each(obj, function(key,value) {
+                      listOGV.push({label: value.name + " | " + value.ID, value: value.name});
+                    }); 
+
+                    $( "#dULName" ).autocomplete({
+                      source: listOGV
+                    });
+                }
+            });            
             break;
     }
 });
@@ -122,10 +247,10 @@ $("#send").click(function() {
             param = 'decType=' + decType + '&' + $('#reqFL').serialize() +'&'+ $('#reqInfo').serialize();
             break;
         case 'UL':
-            console.log('decType=' + decType + '&' + $('#reqUL').serialize() +'&'+ $('#reqInfo').serialize());
+            param = 'decType=' + decType + '&' + $('#reqUL').serialize() +'&'+ $('#reqInfo').serialize();
             break;
         case 'OGV':
-            console.log('decType=' + decType + '&' + $('#reqOGV').serialize() +'&'+ $('#reqInfo').serialize() +'&'+ $('#formFiles').serialize());
+            param = 'decType=' + decType + '&' + $('#reqOGV').serialize() +'&'+ $('#reqInfo').serialize() +'&'+ $('#formFiles').serialize();
             break;
     }
 
@@ -135,23 +260,7 @@ $.ajax({
     data: param,
     success: function(data){
         data = $.parseJSON(data);
-        console.log(data);
-        // var data = new FormData();
-        // $.each($('#reqFiles')[0].files, function(i, file) {
-        //     data.append('file[]', file);
-        // });
-
-        // $.ajax({
-        //     url: 'data/new-request.php',
-        //     data: data,
-        //     cache: false,
-        //     contentType: false,
-        //     processData: false,
-        //     method: 'POST',
-        //     success: function(data){
-        //         console.log('ok-ok'+data);
-        //     }
-        // });
+        window.location.replace("new-request.php?toast="+data.numLog+"&ID="+data.ID);
     }
 });
 
@@ -162,15 +271,4 @@ $.ajax({
 
 $("#clearForms").click(function() {
     $('form').trigger("reset");
-    $("#nameFiles").html('');
 });
-
-
-
-// $.when(
-//   $.getJSON( "ajax/test.json" ),
-//   $.ready
-// ).done(function( data ) {
-//   // Document is ready.
-//   // Value of test.json is passed as `data`.
-// });
