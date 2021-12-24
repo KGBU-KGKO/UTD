@@ -4,10 +4,10 @@ include 'config.php';
 //declarant, agent
 
 if (isset($_GET['ref'])) {
-    $ref = htmlspecialchars($_GET["ref"]);
+    $ref = $_GET["ref"];
     if ($ref == "declarant") {
         if (isset($_GET['decType'])) {
-            $decType = htmlspecialchars($_GET["decType"]);
+            $decType = $_GET["decType"];
             $query = "select * from declarant where type = '$decType'";
             // FL: fio, address, BD, phone, email, numDUL, dateDUL, WhoDUL
             //UL: 

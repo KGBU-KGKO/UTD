@@ -21,7 +21,20 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель <span class="badge bg-danger">4</span></a></li>
+          <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель 
+            <span class="badge bg-danger">
+              <?php 
+              include 'data/config.php';
+              $query = "select count(*) as count from request where status = 'Ожидает загрузки'";
+
+              $stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+              $stmt->execute();
+              $res = $stmt->fetch(PDO::FETCH_ASSOC);
+              echo $res['count'];
+              $stmt = null;
+              $conn = null;
+              ?>
+            </span></a></li>
           <li><a href="requests.php" class="nav-link px-2 link-secondary" mb-checked="1" data-tip="">Запросы</a></li>
           <li><a href="new-request.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Создать запрос</a></li>
         </ul>
@@ -66,20 +79,20 @@
       <div class="row g-3 mb-3">
         <div class="col-md-3">
           <div class="form-floating">
-            <input type="text" class="form-control" id="reqNum" name="reqNum" placeholder="Регистрационный номер" value="">
-            <label for="reqNum">Регистрационный номер</label>
+            <input type="text" class="form-control" id="reqNumNew" name="reqNumNew" placeholder="Регистрационный номер" value="">
+            <label for="reqNumNew">Регистрационный номер</label>
           </div>
         </div>  
        <div class="col-md-3">
           <div class="form-floating">
-            <select class="form-select" id="executor" aria-label="Floating label select">
+            <select class="form-select" id="performer" aria-label="Floating label select">
               <option selected>---</option>
-              <option value="ФЛ">Батышева А.М.</option>
-              <option value="ЮЛ">Понамарёва К.С.</option>
-              <option value="ОГВ">Кондратьева Н.В.</option>
-              <option value="ОГВ">Захарова Е.А.</option>
+              <option value="1">Батышева А.М.</option>
+              <option value="2">Понамарёва К.С.</option>
+              <option value="3">Кондратьева Н.В.</option>
+              <option value="4">Захарова Е.А.</option>
             </select>
-            <label for="executor">Выберите исполнителя</label>
+            <label for="performer">Выберите исполнителя</label>
           </div>
         </div> 
         <div class="col-md-3">
@@ -89,7 +102,7 @@
         </div>   
         <div class="col-md-3">
           <div class="form-floating d-grid gap-2 mx-auto">
-            <button style="height: 58px;" type="button" id="inWork" class="btn btn-success btn-lg">Печать реестра</button>
+            <button style="height: 58px;" type="button" id="printList" class="btn btn-success btn-lg">Печать реестра</button>
           </div>
         </div>                             
       </div> 
@@ -117,25 +130,25 @@
       <div class="row g-3 mb-3">
         <div class="col-md-3">
           <div class="form-floating">
-            <input type="text" class="form-control" id="reqNum" name="reqNum" placeholder="Регистрационный номер" value="">
-            <label for="reqNum">Номер запроса</label>
+            <input type="text" class="form-control" id="reqNumWork" name="reqNumWork" placeholder="Номер запроса" value="">
+            <label for="reqNumWork">Номер запроса</label>
           </div>
         </div>  
         <div class="col-md-3">
           <div class="form-floating">
-            <input type="text" class="form-control" id="reqNum" name="reqNum" placeholder="Регистрационный номер" value="">
-            <label for="reqNum">Исходящий рег. номер</label>
+            <input type="text" class="form-control" id="reqOutNum" name="reqOutNum" placeholder="Исходящий рег. номер" value="">
+            <label for="reqOutNum">Исходящий рег. номер</label>
           </div>
         </div>   
         <div class="col-md-3">
           <div class="form-floating">
-            <input type="Date" class="form-control" id="reqNum" name="reqNum" placeholder="Регистрационный номер" value="">
-            <label for="reqNum">Дата исходящего</label>
+            <input type="Date" class="form-control" id="reqOutDate" name="reqOutDate" placeholder="Дата исходящего" value="">
+            <label for="reqOutDate">Дата исходящего</label>
           </div>
         </div>                
         <div class="col-md-3">
           <div class="form-floating d-grid gap-2 mx-auto">
-            <button style="height: 58px;" type="button" id="inWork" class="btn btn-success btn-lg">Закрыть запрос</button>
+            <button style="height: 58px;" type="button" id="Complete" class="btn btn-success btn-lg">Закрыть запрос</button>
           </div>
         </div>                 
       </div> 

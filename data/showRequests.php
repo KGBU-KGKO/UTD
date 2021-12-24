@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 include 'config.php';
 
 if (isset($_GET["status"])) {
-  $status = htmlspecialchars($_GET["status"]);
+  $status = $_GET["status"];
 }
 
 try {

@@ -22,7 +22,21 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель <span class="badge bg-danger">4</span></a></li>
+          <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель 
+            <span class="badge bg-danger">
+              <?php 
+              include 'data/config.php';
+              $query = "select count(*) as count from request where status = 'Ожидает загрузки'";
+
+              $stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+              $stmt->execute();
+              $res = $stmt->fetch(PDO::FETCH_ASSOC);
+              echo $res['count'];
+              $stmt = null;
+              $conn = null;
+              ?>
+            </span>            
+          </a></li>
           <li><a href="requests.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Запросы</a></li>
           <li><a href="new-request.php" class="nav-link px-2 link-secondary" mb-checked="1" data-tip="">Создать запрос</a></li>
         </ul>
@@ -262,6 +276,20 @@
             </div>
           </div>                   
         </div>
+        <div class="row g-2 mb-3">
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="dOGVSenderNum" name="dOGVSenderNum" placeholder="Исходящий номер отправителя" value="">
+              <label for="dOGVSenderNum">Исходящий номер отправителя</label>
+            </div>
+          </div>  
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="Date" class="form-control" id="dOGVSenderDate" name="dOGVSenderDate" placeholder="Дата исходящего отправителя" value="">
+              <label for="dOGVSenderDate">Дата исходящего отправителя</label>
+            </div>
+          </div>
+        </div>        
         </form>
       </div>   
       <h6 class="display-6">Сведения о запросе</h6>

@@ -1,7 +1,18 @@
 $.when($.ready).then(function() {
 
-//$("#toast").show();
+  $.ajax({
+      url: 'data/showRequests.php',
+      type: 'GET',
+      data: { status: "Ожидает загрузки" },
+      success: function(data){
+         $('#waitUploadTable').html(data);
+      }
+  }); 
 
+});
+
+$("#waitUploadTable").on('click','tr',function(){
+    $('#numReq').val($(this).find('td').eq(0).text());
 });
 
 $("input[name=reqFiles]").change(function() {
@@ -16,20 +27,26 @@ $("input[name=reqFiles]").change(function() {
     $("#nameFiles").html(text);
 });
 
-// upload files
-        // var data = new FormData();
-        // $.each($('#reqFiles')[0].files, function(i, file) {
-        //     data.append('file[]', file);
-        // });
 
-        // $.ajax({
-        //     url: 'data/new-request.php',
-        //     data: data,
-        //     cache: false,
-        //     contentType: false,
-        //     processData: false,
-        //     method: 'POST',
-        //     success: function(data){
-        //         console.log('ok-ok'+data);
-        //     }
-        // });
+$("#upload").click(function() {
+    // upload files
+    let num = $('#numReq').val();
+    let data = new FormData();
+    $.each($('#reqFiles')[0].files, function(i, file) {
+        data.append('file[]', file);
+    });
+    data.append('num', num);
+
+    $.ajax({
+        url: 'data/upload.php',
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        success: function(data){
+            window.location.replace("index.php?success="+num);
+        }
+    });
+
+});
