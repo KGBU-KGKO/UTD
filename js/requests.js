@@ -19,7 +19,25 @@ $.when($.ready).then(function() {
          $('#inworkReqTable').html(data);
       }
   }); 
+
 });
+
+$("#newReqTable").on('click','a',function(){
+  let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
+  addModalInfo($(this).html());
+  reqInfoModal.show();
+});
+
+function addModalInfo(num) {
+  $.ajax({
+      url: 'data/getRequestInfo.php',
+      type: 'GET',
+      data: { numLog: num },
+      success: function(data){
+         $('#reqInfoContent').html(data);
+      }
+  });   
+}
 
 $("#newReqTable").on('click','tr',function(){
     $('#reqNumNew').val($(this).find('td').eq(0).text());
@@ -79,5 +97,5 @@ $("#Complete").click(function() {
 });
 
 $("#printList").click(function() {
-  console.log('Напечатал реестр');
+  window.open("/tpl/printRegister.php", "_blank");
 });

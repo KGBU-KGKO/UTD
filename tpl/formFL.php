@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
-	<title>Document</title>
+	<title>Запрос №<?=$rowsRequest['numLog'];?></title>
 </head>
 <body>
 	<div class="container">
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 	<br>
-	<p class="text-center my-0 py-0">ЗАПРОС</p>
+	<p class="text-center my-0 py-0">ЗАПРОС №<?=$rowsRequest['numLog'];?></p>
 	<p class="text-center">о предоставлении копий учетно-технической документации и (или)<br>содержащихся в ней сведений</p>
 	<table class="table table-bordered border-dark" style="page-break-after: always;">
   		<tbody>

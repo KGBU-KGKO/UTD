@@ -12,10 +12,12 @@ $.when($.ready).then(function() {
 });
 
 $("#waitUploadTable").on('click','tr',function(){
+    $('#numReq').removeClass('is-invalid');
     $('#numReq').val($(this).find('td').eq(0).text());
 });
 
 $("input[name=reqFiles]").change(function() {
+    $('#reqFiles').removeClass('is-invalid');
     let names = [];
     let text = '';
     for (var i = 0; i < $(this).get(0).files.length; ++i) {
@@ -29,6 +31,16 @@ $("input[name=reqFiles]").change(function() {
 
 
 $("#upload").click(function() {
+  if ($('#numReq').val() == '') {
+  $('#numReq').addClass('is-invalid');
+  return;
+  }
+
+  if ($('#reqFiles').val() == '') {
+  $('#reqFiles').addClass('is-invalid');
+  return;
+  }  
+
     // upload files
     let num = $('#numReq').val();
     let data = new FormData();

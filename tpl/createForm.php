@@ -2,8 +2,8 @@
 	include '../data/config.php';
 	if (isset($_GET['numLog'])) {
 		//$numLog =$_GET['numLog']; 
-		$query = "select request.numLog, declarant.name, request.dFLAgentDoc, request.realEstate, request.IDs,  request.delivery, request.attachList, ".
-		"declarant.dulNum, declarant.dulDate, declarant.dulOrg, declarant.email, declarant.tel, declarant.address, ".
+		$query = "select request.numLog, request.dateReq, request.Comment, declarant.name, request.dFLAgentDoc, request.realEstate, request.IDs,  request.delivery, request.attachList, ".
+		"declarant.dulNum, declarant.dulDate, declarant.dulOrg, declarant.email, declarant.tel, declarant.address, declarant.dateBirth, ".
 		"agent.FIO as aFIO, agent.tel as aTel, agent.dulNum as aDulNum, agent.dulDate as aDulDate, agent.dulOrg as aDulOrg, agent.address as aAddress ".
 		"from request INNER JOIN declarant ON request.IDd = declarant.ID ".
 		"LEFT JOIN agent ON request.IDa = agent.ID ".

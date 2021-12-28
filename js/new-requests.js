@@ -1,5 +1,4 @@
 $.when($.ready).then(function() {
-    $('#numSMEV').prop('disabled', "true");
     localStorage.setItem("listFL", "");
     localStorage.setItem("listAgents", "");
     localStorage.setItem("listUL", "");
@@ -127,7 +126,6 @@ $('#declarantType').on('change', function() {
     let listAgents = []; 
     let dull = '';   
     $('.declarant').hide();
-    $('#numSMEV').prop('disabled', "true");
     switch (this.value) {
         case 'FL':
             $('#declarantFL').show();
@@ -207,7 +205,6 @@ $('#declarantType').on('change', function() {
             break;
         case 'OGV':
             $('#declarantOGV').show();
-            $('#numSMEV').prop('disabled', "");
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
@@ -219,7 +216,7 @@ $('#declarantType').on('change', function() {
                       listOGV.push({label: value.name + " | " + value.ID, value: value.name});
                     }); 
 
-                    $( "#dULName" ).autocomplete({
+                    $( "#dOGVName" ).autocomplete({
                       source: listOGV
                     });
                 }
@@ -241,18 +238,21 @@ $(".attach button").click(function() {
 
 $("#send").click(function() {
     let decType = $('#declarantType').val();
+    let decInfo = '';
     let param = '';
     switch (decType) {
         case 'FL':
-            param = 'decType=' + decType + '&' + $('#reqFL').serialize() +'&'+ $('#reqInfo').serialize();
+            decInfo = $('#reqFL').serialize();
             break;
         case 'UL':
-            param = 'decType=' + decType + '&' + $('#reqUL').serialize() +'&'+ $('#reqInfo').serialize();
+            decInfo = $('#reqUL').serialize();
             break;
         case 'OGV':
-            param = 'decType=' + decType + '&' + $('#reqOGV').serialize() +'&'+ $('#reqInfo').serialize() +'&'+ $('#formFiles').serialize();
+            decInfo = $('#reqOGV').serialize();
             break;
     }
+
+param = 'decType=' + decType + '&' + decInfo +'&'+ $('#reqInfo').serialize();
 
 $.ajax({
     url: 'data/new-request.php',

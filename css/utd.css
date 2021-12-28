@@ -22,3 +22,21 @@
 .bd-callout-danger {
     border-left-color: #d9534f;
 }
+
+.bd-callout-primary {
+    border-left-color: #4e73df;
+}
+
+.wlink {
+    color: #ffffff;
+    text-decoration: none;    
+}
+
+.wlink:hover {
+    color: #ffffff;
+    text-decoration: none;    
+}
+
+.reqLink {
+    cursor: pointer;
+}

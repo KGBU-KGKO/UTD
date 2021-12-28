@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="css/utd.css">
     <title>ИС УТД - Создать запрос</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   </head>
 <header class="p-3 mb-3 border-bottom">
     <div class="container">
@@ -47,14 +48,14 @@
 
         <div class="dropdown text-end">
           <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false" mb-checked="1" data-tip="">
-            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+            <img src="img/avatar/2624892_deadpool_marvel_super hero_hero.svg" alt="mdo" width="64" height="64" class="rounded-circle"> Батышева А.М.
           </a>
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
             <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">New project...</a></li>
             <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">Settings</a></li>
             <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">Profile</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">Sign out</a></li>
+            <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">Выйти</a></li>
           </ul>
         </div>
       </div>
@@ -276,7 +277,7 @@
             </div>
           </div>                   
         </div>
-        <div class="row g-2 mb-3">
+        <div class="row g-3 mb-3">
           <div class="col-md">
             <div class="form-floating">
               <input type="text" class="form-control" id="dOGVSenderNum" name="dOGVSenderNum" placeholder="Исходящий номер отправителя" value="">
@@ -289,12 +290,18 @@
               <label for="dOGVSenderDate">Дата исходящего отправителя</label>
             </div>
           </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="numSMEV" name="numSMEV" placeholder="Номер СМЭВ" value="">
+              <label for="numSMEV">Номер СМЭВ</label>
+            </div>
+          </div>           
         </div>        
         </form>
       </div>   
       <h6 class="display-6">Сведения о запросе</h6>
       <form id="reqInfo">
-      <div class="row g-3 mb-3">
+      <div class="row g-2 mb-3">
         <div class="col-md">
           <div class="form-floating">
             <input type="text" class="form-control" id="reqNum" name="reqNum" placeholder="Регистрационный номер" value="">
@@ -307,12 +314,6 @@
             <label for="reqDate">Дата регистрации</label>
           </div>
         </div>
-        <div class="col-md">
-          <div class="form-floating">
-            <input type="text" class="form-control" id="numSMEV" name="numSMEV" placeholder="Номер СМЭВ" value="">
-            <label for="numSMEV">Номер СМЭВ</label>
-          </div>
-        </div>                 
       </div> 
       <div class="row g-1 mb-3">
         <div class="col-md">
@@ -372,7 +373,7 @@
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" value="" id="svc-7" name="svc-7">
             <label class="form-check-label" for="svc-7">
-              Выписка из реестровой книги о праве собственности на ОКС/помещение (до 1988 года)
+              Выписка из реестровой книги о праве собственности на ОКС/помещение
             </label>
           </div>
           <div class="form-check mb-3">
@@ -403,6 +404,12 @@
       </div>
       <h6 class="display-6">Способ получения копии/справки</h6>      
       <div class="row g-1 mb-3">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="delivery" id="smev" value="СМЭВ" checked>
+          <label class="form-check-label" for="smev">
+            СМЭВ
+          </label>
+        </div>          
         <div class="form-check">
           <input class="form-check-input" type="radio" name="delivery" id="post" value="Почтовым отправление">
           <label class="form-check-label" for="post">
@@ -456,7 +463,7 @@ if (isset($_GET['toast'])) {
   <div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body">
-        Запрос №'.$_GET['toast'].' создан.
+        Запрос <a class="wlink" href="/tpl/formFL?numLog='.$_GET['toast'].'" target="_blank">№'.$_GET['toast'].'</a> создан.
       </div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
     </div>
@@ -467,17 +474,7 @@ if (isset($_GET['toast'])) {
 
   </body>
 </html>
-
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    <script src="https://getbootstrap.com/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="js/new-requests.js"></script>

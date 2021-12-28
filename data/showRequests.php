@@ -14,7 +14,7 @@ try {
 
     while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
       echo "<tr>";
-      echo "<td class=\"col-md-1\"><a href=\"#\">" . $rows['reqNum'] . "</a></td>";
+      echo "<td class=\"col-md-1\"><a class=\"reqLink\">" . $rows['reqNum'] . "</a></td>";
       echo "<td class=\"col-md-2\">" . $rows['name'] . "</td>";
       echo "<td class=\"col-md-2\">" . $rows['reqObjAddress'] . "</td>";
       echo "<td>" . $rows['svc'] . "</td>";

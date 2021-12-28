@@ -83,55 +83,85 @@ if (isset($_GET['decType'])) {
         }
     }
 
-if ($_GET['decType'] == 'UL') {
+    if ($_GET['decType'] == 'UL') {
 
-        $dULName = $_GET["dULName"];
-        $dINN = $_GET["dULINN"];
-        $OGRN = $_GET["dULOGRN"];
-        $dULPhone = $_GET["dULPhone"];
-        $dULEmail = $_GET["dULEmail"];
-        $dULAddress = $_GET["dULAddress"];
-        $dULNumDUL = $_GET["dULNumDUL"];
-        $dULDateDUL = $_GET["dULDateDUL"];
-        $dULWhoDUL = $_GET["dULWhoDUL"];
-        $dULAgentName = $_GET["dULAgentName"];
-        $dULAgentAddress = $_GET["dULAgentAddress"];
-        $dULAgentPhone = $_GET["dULAgentPhone"];
-        $dULAgentDoc = $_GET["dULAgentDoc"];
+            $dULName = $_GET["dULName"];
+            $dINN = $_GET["dULINN"];
+            $OGRN = $_GET["dULOGRN"];
+            $dULPhone = $_GET["dULPhone"];
+            $dULEmail = $_GET["dULEmail"];
+            $dULAddress = $_GET["dULAddress"];
+            $dULNumDUL = $_GET["dULNumDUL"];
+            $dULDateDUL = $_GET["dULDateDUL"];
+            $dULWhoDUL = $_GET["dULWhoDUL"];
+            $dULAgentName = $_GET["dULAgentName"];
+            $dULAgentAddress = $_GET["dULAgentAddress"];
+            $dULAgentPhone = $_GET["dULAgentPhone"];
+            $dULAgentDoc = $_GET["dULAgentDoc"];
 
-        //отправляем запрос, получаем 0 или 1
-        try {
-            $query = "{call AddRequestUL(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}"; 
-            $stmt = $conn->prepare($query);
-            $stmt->bindParam(1, $dULName, PDO::PARAM_STR);
-            $stmt->bindParam(2, $dINN, PDO::PARAM_STR);
-            $stmt->bindParam(3, $OGRN, PDO::PARAM_STR);
-            $stmt->bindParam(4, $dULPhone, PDO::PARAM_STR);
-            $stmt->bindParam(5, $dULEmail, PDO::PARAM_STR);
-            $stmt->bindParam(6, $dULAddress, PDO::PARAM_STR);
-            $stmt->bindParam(7, $dULNumDUL, PDO::PARAM_STR);
-            $stmt->bindParam(8, $dULDateDUL, PDO::PARAM_STR);
-            $stmt->bindParam(9, $dULWhoDUL, PDO::PARAM_STR);
-            $stmt->bindParam(10, $dULAgentName, PDO::PARAM_STR);
-            $stmt->bindParam(11, $dULAgentAddress, PDO::PARAM_STR);
-            $stmt->bindParam(12, $dULAgentPhone, PDO::PARAM_STR);
-            $stmt->bindParam(13, $dULAgentDoc, PDO::PARAM_STR);
-            $stmt->bindParam(14, $reqNum, PDO::PARAM_STR);
-            $stmt->bindParam(15, $reqDate, PDO::PARAM_STR);
-            $stmt->bindParam(16, $reqObjAddress, PDO::PARAM_STR);
-            $stmt->bindParam(17, $reqComment, PDO::PARAM_STR);
-            $stmt->bindParam(18, $svc, PDO::PARAM_STR);
-            $stmt->bindParam(19, $delivery, PDO::PARAM_STR);
-            $stmt->bindParam(20, $attachList, PDO::PARAM_STR);
-            $stmt->bindParam(21, $path, PDO::PARAM_STR);
-            $stmt->execute();
-            $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-            echo json_encode($rows);
-        } catch(PDOException $e) {
-            die("Error executing stored procedure: ".$e->getMessage());
-        }    
+            //отправляем запрос, получаем 0 или 1
+            try {
+                $query = "{call AddRequestUL(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}"; 
+                $stmt = $conn->prepare($query);
+                $stmt->bindParam(1, $dULName, PDO::PARAM_STR);
+                $stmt->bindParam(2, $dINN, PDO::PARAM_STR);
+                $stmt->bindParam(3, $OGRN, PDO::PARAM_STR);
+                $stmt->bindParam(4, $dULPhone, PDO::PARAM_STR);
+                $stmt->bindParam(5, $dULEmail, PDO::PARAM_STR);
+                $stmt->bindParam(6, $dULAddress, PDO::PARAM_STR);
+                $stmt->bindParam(7, $dULNumDUL, PDO::PARAM_STR);
+                $stmt->bindParam(8, $dULDateDUL, PDO::PARAM_STR);
+                $stmt->bindParam(9, $dULWhoDUL, PDO::PARAM_STR);
+                $stmt->bindParam(10, $dULAgentName, PDO::PARAM_STR);
+                $stmt->bindParam(11, $dULAgentAddress, PDO::PARAM_STR);
+                $stmt->bindParam(12, $dULAgentPhone, PDO::PARAM_STR);
+                $stmt->bindParam(13, $dULAgentDoc, PDO::PARAM_STR);
+                $stmt->bindParam(14, $reqNum, PDO::PARAM_STR);
+                $stmt->bindParam(15, $reqDate, PDO::PARAM_STR);
+                $stmt->bindParam(16, $reqObjAddress, PDO::PARAM_STR);
+                $stmt->bindParam(17, $reqComment, PDO::PARAM_STR);
+                $stmt->bindParam(18, $svc, PDO::PARAM_STR);
+                $stmt->bindParam(19, $delivery, PDO::PARAM_STR);
+                $stmt->bindParam(20, $attachList, PDO::PARAM_STR);
+                $stmt->bindParam(21, $path, PDO::PARAM_STR);
+                $stmt->execute();
+                $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+                echo json_encode($rows);
+            } catch(PDOException $e) {
+                die("Error executing stored procedure: ".$e->getMessage());
+            }    
 
-}
+    }
+
+    if ($_GET['decType'] == 'OGV') {
+            $dOGVName = $_GET["dOGVName"];
+            $dOGVSenderNum = $_GET["dOGVSenderNum"];
+            $dOGVSenderDate = $_GET["dOGVSenderDate"];
+            $numSMEV = $_GET["numSMEV"];
+
+            //отправляем запрос, получаем 0 или 1
+            try {
+                $query = "{call AddRequestOGV(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}"; 
+                $stmt = $conn->prepare($query);
+                $stmt->bindParam(1, $dOGVName, PDO::PARAM_STR);
+                $stmt->bindParam(2, $reqNum, PDO::PARAM_STR);
+                $stmt->bindParam(3, $reqDate, PDO::PARAM_STR);
+                $stmt->bindParam(4, $numSMEV, PDO::PARAM_STR);
+                $stmt->bindParam(5, $dOGVSenderNum, PDO::PARAM_STR);
+                $stmt->bindParam(6, $dOGVSenderDate, PDO::PARAM_STR);
+                $stmt->bindParam(7, $reqObjAddress, PDO::PARAM_STR);
+                $stmt->bindParam(8, $reqComment, PDO::PARAM_STR);
+                $stmt->bindParam(9, $svc, PDO::PARAM_STR);
+                $stmt->bindParam(10, $delivery, PDO::PARAM_STR);
+                $stmt->bindParam(11, $attachList, PDO::PARAM_STR);
+                $stmt->bindParam(12, $path, PDO::PARAM_STR);
+                $stmt->execute();
+                $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+                echo json_encode($rows);
+            } catch(PDOException $e) {
+                die("Error executing stored procedure: ".$e->getMessage());
+            }         
+    }
 
 }
 
