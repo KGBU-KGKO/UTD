@@ -1,7 +1,7 @@
 $.when($.ready).then(function() {
 
   let today = new Date();
-  $('#reqOutDate').val(today.getFullYear() + "-" + (today.getMonth()+1)  + "-" + today.getDate());
+  $('#reqOutDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth()+1)).slice(-2)  + "-" + ('0' + today.getDate()).slice(-2));
 
   $.ajax({
       url: 'data/showRequests.php',
@@ -23,6 +23,12 @@ $.when($.ready).then(function() {
 });
 
 $("#newReqTable").on('click','a',function(){
+  let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
+  addModalInfo($(this).html());
+  reqInfoModal.show();
+});
+
+$("#inworkReqTable").on('click','a',function(){
   let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
   addModalInfo($(this).html());
   reqInfoModal.show();

@@ -1,7 +1,7 @@
 <?php 
 error_reporting(E_ALL);
 include '../data/config.php';
-$status = 'Новый';
+$status = 'В работе';
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,6 +19,7 @@ $status = 'Новый';
       <th scope="col">Заявитель</th>
       <th scope="col">Объект недвижимости</th>
       <th scope="col">Вид услуги</th>
+      <th scope="col">Комментарий</th>
       <th scope="col">Для заметок</th>
     </tr>
   </thead>
@@ -36,6 +37,7 @@ try {
       echo "<td class=\"col-md-2\">" . $rows['name'] . "</td>";
       echo "<td class=\"col-md-2\">" . $rows['reqObjAddress'] . "</td>";
       echo "<td>" . $rows['svc'] . "</td>";
+      echo "<td>" . $rows['Comment'] . "</td>";
       echo "<td class=\"col-md-3\"></td>";
       echo "</tr>";
     }

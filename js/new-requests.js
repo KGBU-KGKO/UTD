@@ -8,26 +8,52 @@ $.when($.ready).then(function() {
         method: 'GET',
         data: { getNumLog: "true" },
         success: function(data){
-            numLogData = data.split("/");
-            num = parseInt(numLogData[1]);
-            num++;
-            let zeros = '';
-            for (let i = 0; i < num.toString().length; i++) { 
-              zeros = zeros + '0';
-            }
-            $('#reqNum').val(numLogData[0] + "/" + zeros + num.toString());
-            $('#numTitle').html($('#reqNum').val());
+            $('#reqNum').val(data);
+            $('#numTitle').html(data);
         }
     });
 
     let today = new Date();
-    $('#reqDate').val(today.getFullYear() + "-" + (today.getMonth()+1)  + "-" + today.getDate());
+    $('#reqDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth()+1)).slice(-2)  + "-" + ('0' + today.getDate()).slice(-2));
 
     //Enable tooltips everywhere
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
     })
+
+    $(".address").suggestions({
+        token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
+        type: "ADDRESS",
+        onSelect: function(suggestion) {
+            //console.log(suggestion);
+        }
+    });
+
+    $("#dULINN").suggestions({
+        token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
+        type: "PARTY",
+        onSelect: function(suggestion) {
+          let data = suggestion.data;
+          if (!data)
+            return;
+        $("#dULName").val(data.name.short_with_opf);
+        $("#dULINN").val(data.inn);
+        $("#dULOGRN").val(data.ogrn);
+        if (data.address)
+        $("#dULAddress").val(data.address.value);
+        $("#dULEmail").val('');
+        $("#dULPhone").val('')
+/* нету в бесплатном тарифе dadata
+        if (data.emails) {
+            $("#dULEmail").val(data.emails[0].value);    
+        }
+        if (data.phones)
+        $("#dULPhone").val(data.phones[0].value);
+*/ 
+        }
+       
+    });    
 
 });
 
@@ -58,6 +84,7 @@ $( "#dFLAgentName" ).on( "autocompleteselect", function( event, ui ) {
     $('#dFLWhoDUL').val(listAgents[index].dulOrg);
 } );
 
+// собственые подсказки из базы по юрлицам
 $( "#dULName" ).on( "autocompleteselect", function( event, ui ) {
     decID = ui.item.label.split(" | ")[3];
     listUL = $.parseJSON(localStorage.getItem("listUL"));
@@ -86,6 +113,14 @@ $('#agentFLSwitch').change(function() {
         $('#agentFLForm').show();
     } else {
         $('#agentFLForm').hide();
+    }
+})
+
+$('#likeAddress').change(function() {
+    if ($(this).prop('checked')) {
+        $('#reqObjAddress').val($('#dFLAddress').val());
+    } else {
+        $('#reqObjAddress').val('');
     }
 })
 
@@ -125,10 +160,14 @@ $('#declarantType').on('change', function() {
     let listOGV = [];
     let listAgents = []; 
     let dull = '';   
+    $('#likeAddress').prop('checked', false);
+    $('#likeAddress').parents().eq(1).addClass('d-none');
     $('.declarant').hide();
     switch (this.value) {
         case 'FL':
             $('#declarantFL').show();
+            $('input[name="delivery"][value="При личном обращении в КГБУ «КГКО»"]').prop('checked', true);
+            $('#likeAddress').parents().eq(1).removeClass('d-none');
             //getRef('declarant', this.value, 'listFL', 'dFLName', 'True', ['name', 'dulNum', 'dateBirth', 'ID']);
             $.ajax({
                 url: 'data/getRef.php',
@@ -170,6 +209,7 @@ $('#declarantType').on('change', function() {
             break;
         case 'UL':
             $('#declarantUL').show();
+            $('input[name="delivery"][value="При личном обращении в КГБУ «КГКО»"]').prop('checked', true);
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
@@ -205,6 +245,7 @@ $('#declarantType').on('change', function() {
             break;
         case 'OGV':
             $('#declarantOGV').show();
+            $('input[name="delivery"][value="СМЭВ"]').prop('checked', true);
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
@@ -260,7 +301,7 @@ $.ajax({
     data: param,
     success: function(data){
         data = $.parseJSON(data);
-        window.location.replace("new-request.php?toast="+data.numLog+"&ID="+data.ID);
+        window.location.replace("new-request.php?toast="+data.numLog+"&ID="+data.ID+"&decType="+decType);
     }
 });
 

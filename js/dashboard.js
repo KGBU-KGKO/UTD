@@ -57,7 +57,11 @@ $("#upload").click(function() {
         processData: false,
         method: 'POST',
         success: function(data){
-            window.location.replace("index.php?success="+num);
+            if (data.split(" ")[0] == 'Ошибка') {
+                window.location.replace("index.php?error="+data);
+            } else {
+                window.location.replace("index.php?success="+data);
+            }
         }
     });
 

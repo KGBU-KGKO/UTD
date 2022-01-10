@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="css/utd.css">
+    <link href="css/suggestions.min.css" rel="stylesheet" />
     <title>ИС УТД - Создать запрос</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   </head>
@@ -24,20 +25,19 @@
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="/" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Инф. панель 
-            <span class="badge bg-danger">
-              <?php 
+            <span class="badge bg-danger"><?php 
               include 'data/config.php';
               $query = "select count(*) as count from request where status = 'Ожидает загрузки'";
 
               $stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
               $stmt->execute();
               $res = $stmt->fetch(PDO::FETCH_ASSOC);
-              echo $res['count'];
+              if ($res['count'] != '0') {
+                echo $res['count'];                
+              }
               $stmt = null;
               $conn = null;
-              ?>
-            </span>            
-          </a></li>
+              ?></span></a></li>
           <li><a href="requests.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Запросы</a></li>
           <li><a href="new-request.php" class="nav-link px-2 link-secondary" mb-checked="1" data-tip="">Создать запрос</a></li>
         </ul>
@@ -97,7 +97,7 @@
       <div class="row g-1 mb-3">
         <div class="col-md">
           <div class="form-floating">
-            <input type="text" class="form-control" id="dFLAddress" name="dFLAddress" placeholder="Адрес места жительства заявителя" value="">
+            <input type="text" class="form-control address" id="dFLAddress" name="dFLAddress" placeholder="Адрес места жительства заявителя" value="">
             <label for="dFLAddress">Адрес места жительства заявителя</label>
           </div>
         </div> 
@@ -122,7 +122,7 @@
       <div class="row g-1 mb-3">
         <div class="col-md">
           <div class="form-floating">
-            <input type="text" class="form-control" id="dFLAgentAddress" name="dFLAgentAddress" placeholder="Адрес места жительства представителя" value="">
+            <input type="text" class="form-control address" id="dFLAgentAddress" name="dFLAgentAddress" placeholder="Адрес места жительства представителя" value="">
             <label for="dFLAgentAddress">Адрес места жительства представителя</label>
           </div>
         </div> 
@@ -196,7 +196,7 @@
         <div class="row g-1 mb-3">
           <div class="col-md">
             <div class="form-floating">
-              <input type="text" class="form-control" id="dULAddress" name="dULAddress" placeholder="Адрес местонахождения" value="">
+              <input type="text" class="form-control address" id="dULAddress" name="dULAddress" placeholder="Адрес местонахождения" value="">
               <label for="dULAddress">Адрес местонахождения</label>
             </div>
           </div>                  
@@ -240,7 +240,7 @@
         <div class="row g-1 mb-3">
           <div class="col-md">
             <div class="form-floating">
-              <input type="text" class="form-control" id="dULAgentAddress" name="dULAgentAddress" placeholder="Адрес проживания представителя" value="">
+              <input type="text" class="form-control address" id="dULAgentAddress" name="dULAgentAddress" placeholder="Адрес проживания представителя" value="">
               <label for="dULAgentAddress">Адрес проживания представителя</label>
             </div>
           </div>                  
@@ -315,10 +315,16 @@
           </div>
         </div>
       </div> 
+      <div class="row g-3 mb-3 d-none">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" name="likeAddress" id="likeAddress">
+          <label class="form-check-label" for="likeAddress">Адрес совпадает с адресом места жительства</label>
+        </div>                
+      </div> 
       <div class="row g-1 mb-3">
         <div class="col-md">
           <div class="form-floating">
-            <input type="text" class="form-control" id="reqObjAddress" name="reqObjAddress" placeholder="Адрес объекта недвижимости" value="">
+            <input type="text" class="form-control address" id="reqObjAddress" name="reqObjAddress" placeholder="Адрес объекта недвижимости" value="">
             <label for="reqObjAddress">Адрес объекта недвижимости</label>
           </div>
         </div>  
@@ -341,7 +347,7 @@
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" value="" id="svc-2" name="svc-2">
             <label class="form-check-label" for="svc-2">
-              Пэтажный/ситуационный план
+              Поэтажный/ситуационный план
             </label>
           </div>
           <div class="form-check mb-3">
@@ -405,7 +411,7 @@
       <h6 class="display-6">Способ получения копии/справки</h6>      
       <div class="row g-1 mb-3">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="delivery" id="smev" value="СМЭВ" checked>
+          <input class="form-check-input" type="radio" name="delivery" id="smev" value="СМЭВ">
           <label class="form-check-label" for="smev">
             СМЭВ
           </label>
@@ -463,7 +469,7 @@ if (isset($_GET['toast'])) {
   <div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body">
-        Запрос <a class="wlink" href="/tpl/formFL?numLog='.$_GET['toast'].'" target="_blank">№'.$_GET['toast'].'</a> создан.
+        Запрос <a class="wlink" href="/tpl/form'.$_GET['decType'].'.php?numLog='.$_GET['toast'].'" target="_blank">№'.$_GET['toast'].'</a> создан.
       </div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
     </div>
@@ -478,3 +484,5 @@ if (isset($_GET['toast'])) {
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script type="text/javascript" src="js/new-requests.js"></script>
+    <script type="text/javascript" src="js/common.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@21.8.0/dist/js/jquery.suggestions.min.js"></script>    

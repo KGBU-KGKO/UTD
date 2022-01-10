@@ -1,12 +1,19 @@
 <?php
 error_reporting(E_ALL);
-include '../tpl/createForm.php';
+include 'getDataFL.php';
+
+$filesList = '';
+$files = glob("../files/".explode('/', $rowsRequest['numLog'])[1]."/*.*");
+foreach ($files as $file) {
+    $filesList = $filesList.'<li><a href="'.substr($file, 2).'" target="_blank">'.explode("/", $file)[3].'</a></li>';
+}
 
 $attachmentsList = '';
 $attachments = explode(", ", $rowsRequest['attachList']);
 foreach ($attachments as $attachment) {
-    $attachmentsList = $attachmentsList.'<li><a href="'.'files/'.explode('/', $rowsRequest['numLog'])[1].'/" target="_blank">'.$attachment.'</a></li>';
+    $attachmentsList = $attachmentsList.'<li>'.$attachment.'</li>';
 }
+
 
 echo '<div class="modal-header">
         <h5 class="modal-title" id="reqInfoLabel">Запрос №'.$rowsRequest['numLog'].' от '.date_format(new DateTime($rowsRequest['dateReq']),"d.m.Y").'</h5>
@@ -27,10 +34,14 @@ echo '<div class="modal-header">
           <b>Комментарий:</b> '.$rowsRequest['Comment'].' <br>
           <b>Услуги:</b> '.preg_replace('/[0-9]+/', '<br>- ', $rowsSvc['svcConcat']).' <br>
           <b>Способ получения:</b> '.$rowsRequest['delivery'].'
-        </p>        
-        <h6 class="display-6">Приложения</h6>
+        </p>   
+        <h6 class="display-6">Список приложений</h6>
         <p class="ps-4">
           <ul>'.$attachmentsList.'</ul>             
+        </p>             
+        <h6 class="display-6">Файлы приложений</h6>
+        <p class="ps-4">
+          <ul>'.$filesList.'</ul>             
         </p>
       </div>';
 

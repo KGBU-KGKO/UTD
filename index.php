@@ -23,20 +23,19 @@
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="/" class="nav-link px-2 link-secondary" mb-checked="1" data-tip="">Инф. панель 
-            <span class="badge bg-danger">
-              <?php 
+            <span class="badge bg-danger"><?php 
               include 'data/config.php';
               $query = "select count(*) as count from request where status = 'Ожидает загрузки'";
 
               $stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
               $stmt->execute();
               $res = $stmt->fetch(PDO::FETCH_ASSOC);
-              echo $res['count'];
+              if ($res['count'] != '0') {
+                echo $res['count'];                
+              }
               $stmt = null;
               $conn = null;
-              ?>
-            </span>
-          </a></li>  
+              ?></span></a></li>  
           <li><a href="requests.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Запросы</a></li>
           <li><a href="new-request.php" class="nav-link px-2 link-dark" mb-checked="1" data-tip="">Создать запрос</a></li>
         </ul>
@@ -129,21 +128,31 @@
 <?php 
 
 if (isset($_GET['success'])) {
+  $text = $_GET['success'];
+  $class = 'success';
+} 
+
+if (isset($_GET['error'])) {
+  $text = $_GET['error'];
+  $class = 'danger';
+} 
+
+if (isset($_GET['success']) || isset($_GET['error'])) {
   echo '
   <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast bg-'.$class.' text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
-      <div class="toast-body">
-        Файлы запроса №'.$_GET['success'].' успешно загружены.
-      </div>
+      <div class="toast-body">'.$text.'</div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
     </div>
   </div>
   </div>';
 }
+
 ?>    
   </body>
 </html>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="js/dashboard.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>    

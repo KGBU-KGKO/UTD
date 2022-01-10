@@ -1,5 +1,5 @@
 <?php
-	include '../data/getDataFL.php';
+	include '../data/getDataUL.php';
 ?>
 <!DOCTYPE html>
 <html lang="en" style="font-size: 12px;">
@@ -23,80 +23,59 @@
 		</div>
 	<br>
 	<p class="text-center my-0 py-0">ЗАПРОС №<?=$rowsRequest['numLog'];?></p>
-	<p class="text-center">о предоставлении копий учетно-технической документации и (или) содержащихся в ней сведений</p>
+	<p class="text-center">о предоставлении копий учетно-технической документации и (или)<br>содержащихся в ней сведений</p>
 	<table class="table table-bordered border-dark">
   		<tbody>
   			<tr>
-      			<th scope="row" colspan="2" class="text-center fw-weight-bold">Сведения о заявителе - физическом лице<br>(паспортные данные подтверждаются копией паспорта)</th>
+      			<th scope="row" colspan="2" class="text-center fw-weight-bold">Сведения о заявителе - юридическом лице</th>
     	 	</tr>
 		    <tr>
-		      <td scope="row">ФИО</td>
+		      <td scope="row">Наименование юридического лица</td>
 		      <td><?=$rowsRequest['name'];?></td>
 		    </tr>
 		    <tr>
-		      <td scope="row" class="align-middle">Адрес места жительства</td>
+		      <td scope="row" class="align-middle">Адрес местонахождения юридического лица</td>
 		      <td><?=$rowsRequest['address'];?></td>
 		    </tr>
 		    <tr>
-		      <td scope="row">Эл.почта</td>
+		      <td scope="row">ИНН/ОГРН</td>
+		      <td><?=$rowsRequest['INN']." / ".$rowsRequest['OGRN'];?></td>
+		    </tr>
+		    <tr>
+		      <td scope="row">Эл. почта</td>
 		      <td><?=$rowsRequest['email'];?></td>
 		    </tr>
 		    <tr>
 		      <td scope="row">Контактный телефон</td>
 		      <td><?=$rowsRequest['tel'];?></td>
 		    </tr>
-		    <?php
-		    	if (!is_null($rowsRequest['aFIO'])) {
-		    		echo ' 
-		    			<tr>
-					      <th scope="row" colspan="2" class="align-middle">В лице представителя по доверенности:</th>
-					    </tr>
-					    <tr>
-					      <td scope="row" class="align-middle">ФИО</td>
-					      <td>'.$rowsRequest['aFIO'].'</td>
-					    </tr>
-					    <tr>
-					      <td scope="row">Контактный телефон</td>
-					      <td>'.$rowsRequest['aTel'].'</td>
-					    </tr>
-					    <tr>
-					      <td scope="row">Реквизиты доверенности или иного документа, подтверждающего полномочия представителя</td>
-					      <td>'.$rowsRequest['dFLAgentDoc'].'</td>
-					    </tr>
-		    		'
-		    		;
-		    	}
-		    ?>
+		    <tr>
+		      <th scope="row" colspan="2" class="align-middle">В лице представителя по доверенности:</th>
+		    </tr>
+		    <tr>
+		      <td scope="row" class="align-middle">ФИО</td>
+		      <td><?=$rowsRequest['aFIO'];?></td>
+		    </tr>
+		    <tr>
+		      <td scope="row">Контактный телефон</td>
+		      <td><?=$rowsRequest['aTel'];?></td>
+		    </tr>
+		    <tr>
+		      <td scope="row">Реквизиты доверенности или иного документа, подтверждающего полномочия представителя</td>
+		      <td><?=$rowsRequest['dFLAgentDoc'];?></td>
+		    </tr>
 		    <tr>
 		      <th scope="row" class="align-middle">Адрес запрашиваемого объекта</th>
 		      <td><?=$rowsRequest['realEstate'];?></td>
 		    </tr>
-		    <?php
-		    	if (!is_null($rowsRequest['aFIO'])) {
-		    		echo ' 
-		    			<tr>
-					      <td scope="row">Серия и номер документа, удостоверяющего личность представителя</td>
-					      <td>'.$dulNum.'</td>
-					    </tr>
-					    <tr>
-					      <td scope="row">Когда и кем выдан документ, удостоверяющий личность представителя</td>
-					      <td>'.$dulDate.', '.$dulOrg.'</td>
-					    </tr>
-		    		';
-		    	}
-		    	else {
-		    		echo ' 
-		    			<tr>
-					      <td scope="row">Серия и номер документа, удостоверяющего личность заявителя</td>
-					      <td>'.$dulNum.'</td>
-					    </tr>
-					    <tr>
-					      <td scope="row">Когда и кем выдан документ, удостоверяющий личность заявителя</td>
-					      <td>'.$dulDate.', '.$dulOrg.'</td>
-					    </tr>
-		    		';
-		    	}
-		    ?>
+		    <tr>
+		      <td scope="row">Серия и номер документа, удостоверяющего личность заявителя или представителя</td>
+		      <td><?=$dulNum;?></td>
+		    </tr>
+		    <tr>
+		      <td scope="row">Когда и кем выдан документ, удостоверяющий личность заявителя или представителя</td>
+		      <td><?=$dulDate.", ".$dulOrg;?></td>
+		    </tr>
 		</tbody>
 	</table>
 	<br style="page-break-after: always;">
@@ -133,7 +112,6 @@
 		    </tr>
 		</tbody>
 	</table>
-	<br><br>
 	<table class="table table-bordered border-dark">
   		<tbody>
   			<tr>
