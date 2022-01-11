@@ -102,7 +102,7 @@
 		</tbody>
 	</table>
 	<br>
-	<table class="table table-bordered border-dark" style="page-break-after: always;">
+	<table class="table table-bordered border-dark">
   		<tbody>
   			<tr>
       			<th scope="row" colspan="2" class="text-center fw-weight-bold">Перечень прилагаемых документов </th>
@@ -112,6 +112,18 @@
 		    </tr>
 		</tbody>
 	</table>
+	<br>
+	<table class="table table-bordered border-dark" style="page-break-after: always;">
+  		<tbody>
+  			<tr>
+      			<th scope="row" colspan="2" class="text-center fw-weight-bold">Комментарий</th>
+    	 	</tr>
+		    <tr>
+		      <td scope="row" colspan="2"><?=$rowsRequest['Comment'];?></td>
+		    </tr>
+		</tbody>
+	</table>
+	<br>
 	<table class="table table-bordered border-dark">
   		<tbody>
   			<tr>

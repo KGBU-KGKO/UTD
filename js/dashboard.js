@@ -9,11 +9,48 @@ $.when($.ready).then(function() {
       }
   }); 
 
+new Chart(document.getElementById("line-chart"), {
+  type: 'line',
+  data: {
+    labels: [10.01,11.01,12.01,13.01,14.01],
+    datasets: [{ 
+        data: [5,10,7,8,5],
+        label: "ФЛ",
+        borderColor: "#198754",
+        backgroundColor: "#198754",
+        fill: false
+      }, { 
+        data: [2,3,5,3,2],
+        label: "ЮЛ",
+        borderColor: "#ffc107",
+        backgroundColor: "#ffc107",
+        fill: false
+      }, { 
+        data: [10,12,15,10,6],
+        label: "СМЭВ",
+        borderColor: "#dc3545",
+        backgroundColor: "#dc3545",
+        fill: false
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: false,
+      text: 'Поступление запрос за текущую неделю'
+    }
+  }
+});
+
 });
 
 $("#waitUploadTable").on('click','tr',function(){
     $('#numReq').removeClass('is-invalid');
     $('#numReq').val($(this).find('td').eq(0).text());
+});
+
+$("#waitUploadTable").on('click','a',function(){
+    window.open('/tpl/form'+$(this).parents().find('td').eq(1).text()+'.php?numLog='+$(this).html(), '_blank');
 });
 
 $("input[name=reqFiles]").change(function() {

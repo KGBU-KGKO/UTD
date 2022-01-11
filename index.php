@@ -62,54 +62,224 @@
   <body>
     <div class="container mb-5">
       <h6 class="display-6">Информационная панель</h6>
-
-<div class="bd-callout bd-callout-danger">
-<h4 id="asynchronous-methods-and-transitions">Загрузите файлы в данные запросы</h4>
-<p>Сначала укажите запрос для загрузки файлов, после чего с помощью кнопки "Выберите файлы" укажите файлы, которые относятся к данному запросу и нажмите кнопку "Загрузить файлы". После успешной загрузки вы увидите уведомление, а запрос больше не будет отображаться в таблице.</p>
-</div>
-      <div class="bd-example">
-        <table class="table table-hover">
-            <thead>
-          <tr>
-            <th scope="col">№ запроса</th>
-            <th scope="col">Заявитель</th>
-            <th scope="col">Объект запроса</th>
-            <th scope="col">Вид запроса</th>
-          </tr>
-        </thead>
-        <tbody id="waitUploadTable">
-        </tbody>
-
-        </table>
+<?php 
+if ($res['count'] != '0') {
+  echo '<div id="reqForUpload" class="mb-5">
+  <div class="bd-callout bd-callout-danger">
+  <h4 id="asynchronous-methods-and-transitions">Загрузите файлы в данные запросы</h4>
+  <p>Сначала укажите запрос для загрузки файлов, после чего с помощью кнопки "Выберите файлы" укажите файлы, которые относятся к данному запросу и нажмите кнопку "Загрузить файлы". После успешной загрузки вы увидите уведомление, а запрос больше не будет отображаться в таблице.</p>
+  </div>
+  <table class="table table-hover">
+      <thead>
+    <tr>
+      <th scope="col">№ запроса</th>
+      <th scope="col">Тип</th>
+      <th scope="col">Заявитель</th>
+      <th scope="col">Объект запроса</th>
+      <th scope="col">Вид запроса</th>
+    </tr>
+  </thead>
+  <tbody id="waitUploadTable">
+  </tbody>
+  </table>
+  <form id="formFiles" enctype="multipart/form-data">
+  <div class="row g-1 mb-3">
+    <div class="col-md">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="numReq" name="numReq" placeholder="Укажите запрос в таблице" value="">
+        <label for="numReq">Укажите запрос в таблице</label>
       </div>
-      <form id="formFiles" enctype="multipart/form-data">
-      <div class="row g-1 mb-3">
-        <div class="col-md">
-          <div class="form-floating">
-            <input type="text" class="form-control" id="numReq" name="numReq" placeholder="Укажите запрос в таблице" value="">
-            <label for="numReq">Укажите запрос в таблице</label>
+    </div>        
+  </div>
+  <div class="row g-1 mb-1">
+    <div class="mb-3">
+      <label for="reqFiles" class="form-label">Загрузите файлы приложений</label>
+      <input class="form-control form-control-lg" type="file" id="reqFiles" name="reqFiles" multiple>
+    </div>  
+  </div>
+  </form>
+  <div class="row g-1">
+    <div class="mb-3">
+      <label for="nameFiles" class="form-label">Список файлов для загрузки:</label>
+      <div id="nameFiles"></div>
+    </div>  
+  </div> 
+
+  <div class="row g-2 mb-3">
+    <div class="col-md mb-1">
+      <button type="button" id="upload" class="btn btn-primary btn-lg">Загрузить файлы</button>   
+    </div>
+  </div>
+</div>';   
+} else {
+  echo '<div id="noForUpload" class="bd-callout bd-callout-info">
+  Нет запросов для загрузки файлов
+</div>';
+}
+?>      
+
+<div class="row mb-3">
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Value  -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center gx-0">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2 card-title">
+                      Запросов поступило
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h2 mb-0 card-head">
+                      20
+                    </span>
+
+                    <!-- Badge -->
+                    <span class="badge bg-success mt-n1">
+                      +10 сегодня
+                    </span>
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <i class="h2 bi bi-activity text-muted mb-0"></i>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
           </div>
-        </div>        
-      </div>
-      <div class="row g-1 mb-1">
-        <div class="mb-3">
-          <label for="reqFiles" class="form-label">Загрузите файлы приложений</label>
-          <input class="form-control form-control-lg" type="file" id="reqFiles" name="reqFiles" multiple>
-        </div>  
-      </div>
-      </form>
-      <div class="row g-1 mb-3">
-        <div class="mb-3">
-          <label for="nameFiles" class="form-label">Список файлов для загрузки:</label>
-          <div id="nameFiles"></div>
-        </div>  
-      </div> 
+          <div class="col-12 col-lg-6 col-xl">
 
-      <div class="row g-2 mb-3">
-        <div class="col-md mb-1">
-          <button type="button" id="upload" class="btn btn-primary btn-lg">Загрузить файлы</button>   
+            <!-- Hours -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center gx-0">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2 card-title">
+                      Запросов в работе
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h2 mb-0 card-head">
+                      19
+                    </span>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <i class="bi bi-arrow-repeat h2 text-muted mb-0"></i>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Exit -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center gx-0">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2 card-title">
+                      Обработано с нарушением срока, %
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h2 mb-0 card-head">
+                      0.10
+                    </span>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <i class="bi bi-graph-up h2 text-muted mb-0"></i>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
+          <div class="col-12 col-lg-6 col-xl">
+
+            <!-- Time -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row align-items-center gx-0">
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h6 class="text-uppercase text-muted mb-2 card-title">
+                      Среднее время обработки запроса, ч
+                    </h6>
+
+                    <!-- Heading -->
+                    <span class="h2 mb-0 card-head">
+                      2:37
+                    </span>
+
+                  </div>
+                  <div class="col-auto">
+
+                    <!-- Icon -->
+                    <i class="bi bi-stopwatch h2 text-muted mb-0"></i>
+
+                  </div>
+                </div> <!-- / .row -->
+              </div>
+            </div>
+
+          </div>
         </div>
+
+        <!-- Line chart -->
+<div class="row mb-3">
+        <h6 class="display-6">Поступление за неделю</h6>
+        <canvas id="line-chart" height="350"></canvas>
+</div>
+
+<div class="row mb-3">
+  <h6 class="display-6">Сформировать журналы</h6>
+  <div class="row g-3">
+    <div class="col-md-3">
+      <div class="form-floating">
+        <input type="Date" class="form-control" id="inDate" name="reqOutDate" placeholder="Укажите дату" value="">
+        <label for="reqOutDate">Укажите дату</label>
       </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-floating d-grid gap-2 mx-auto">
+        <button style="height: 58px;" type="button" id="printIn" class="btn btn-success btn-lg">Печать входящего журнала</button>
+      </div>
+    </div>                             
+  </div> 
+  <div class="row g-3 mb-3">
+    <div class="col-md-3">
+      <div class="form-floating">
+        <input type="Date" class="form-control" id="outDate" name="reqOutDate" placeholder="Укажите дату" value="">
+        <label for="reqOutDate">Укажите дату</label>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-floating d-grid gap-2 mx-auto">
+        <button style="height: 58px;" type="button" id="printOut" class="btn btn-success btn-lg">Печать исходящего журнала</button>
+      </div>
+    </div>                             
+  </div>           
+</div>
 
 <div style="display: none;" id="toast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
 <div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
@@ -154,5 +324,6 @@ if (isset($_GET['success']) || isset($_GET['error'])) {
 </html>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script type="text/javascript" src="js/dashboard.js"></script>
     <script type="text/javascript" src="js/common.js"></script>    

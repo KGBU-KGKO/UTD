@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 include 'config.php';
 
 if (isset($_GET["status"])) {
@@ -15,10 +14,12 @@ try {
     while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
       echo "<tr>";
       echo "<td class=\"col-md-1\"><a class=\"reqLink\">" . $rows['reqNum'] . "</a></td>";
+      echo "<td class=\"col-md-1\" style=\"width: 44px;\">" . $rows['type'] . "</td>";
       echo "<td class=\"col-md-2\">" . $rows['name'] . "</td>";
       echo "<td class=\"col-md-2\">" . $rows['reqObjAddress'] . "</td>";
       echo "<td>" . $rows['svc'] . "</td>";
       if ($status == 'В работе') {
+        echo "<td>" . $rows['status'] . "</td>";
         echo "<td>" . $rows['performer'] . "</td>";
         echo "<td>" . $rows['dateDue'] . "</td>";
       }

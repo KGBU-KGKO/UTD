@@ -68,6 +68,7 @@
       <thead>
     <tr>
       <th scope="col">№ запроса</th>
+      <th scope="col">Тип</th>
       <th scope="col">Заявитель</th>
       <th scope="col">Объект недвижимости</th>
       <th scope="col">Вид услуги</th>
@@ -116,9 +117,11 @@
       <thead>
     <tr>
       <th scope="col">№ запроса</th>
+      <th scope="col">Тип</th>
       <th scope="col">Заявитель</th>
       <th scope="col">Объект недвижимости</th>
       <th scope="col">Вид услуги</th>
+      <th scope="col">Статус</th>
       <th scope="col">Исполнитель</th>
       <th scope="col">Дата исполнения</th>
     </tr>
@@ -146,12 +149,41 @@
             <input type="Date" class="form-control" id="reqOutDate" name="reqOutDate" placeholder="Дата исходящего" value="">
             <label for="reqOutDate">Дата исходящего</label>
           </div>
-        </div>                
+        </div>
+        <div class="col-md-3">
+          <div class="form-floating">
+            <select class="form-select" id="performerInWork" aria-label="Floating label select">
+              <option selected>---</option>
+              <option value="1">Батышева А.М.</option>
+              <option value="2">Понамарёва К.С.</option>
+              <option value="3">Кондратьева Н.В.</option>
+              <option value="4">Захарова Е.А.</option>
+            </select>
+            <label for="performerInWork">Выберите исполнителя</label>
+          </div>
+        </div>    
+      </div>
+      <div class="row g-3 mb-3">           
+        <div class="col-md-3">
+          <div class="form-floating d-grid gap-2 mx-auto">
+            <button style="height: 58px;" type="button" id="Paid" class="btn btn-warning btn-lg">Оплачен</button>
+          </div>
+        </div>      
+        <div class="col-md-3">
+          <div class="form-floating d-grid gap-2 mx-auto">
+            <button style="height: 58px;" type="button" id="Issue" class="btn btn-warning btn-lg">На выдачу</button>
+          </div>
+        </div> 
+        <div class="col-md-3">
+          <div class="form-floating d-grid gap-2 mx-auto">
+            <button style="height: 58px;" type="button" id="Cancel" class="btn btn-danger btn-lg">Отказ</button>
+          </div>
+        </div> 
         <div class="col-md-3">
           <div class="form-floating d-grid gap-2 mx-auto">
             <button style="height: 58px;" type="button" id="Complete" class="btn btn-success btn-lg">Закрыть запрос</button>
           </div>
-        </div>                 
+        </div>                                    
       </div> 
 
 </div>

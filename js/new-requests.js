@@ -6,7 +6,7 @@ $.when($.ready).then(function() {
     $.ajax({
         url: 'data/new-request.php',
         method: 'GET',
-        data: { getNumLog: "true" },
+        data: { getNumLog: "request" },
         success: function(data){
             $('#reqNum').val(data);
             $('#numTitle').html(data);

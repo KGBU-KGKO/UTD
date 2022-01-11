@@ -1,23 +1,11 @@
 <?php
 error_reporting(E_ALL);
 include 'config.php';
+include 'getLastNum.php';
 
-function getLastNum() {
-    global $conn;
-    $query = "SELECT numLog FROM request WHERE ID = (SELECT max(ID) FROM request)";
-    $stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
-    $stmt->execute();
-    $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-    $num = intval(explode('/', $rows['numLog'])[1]+1);
-    $zeros = '';
-    for ($i = 0; $i < (4 - strlen(strval($num))); $i++) { 
-      $zeros = $zeros.'0';
-    }
-    return '02-22/'.$zeros.strval($num);
-}
 
 if (isset($_GET['getNumLog'])) {
-    echo getLastNum();
+    echo getLastNum($_GET['getNumLog']);
 } 
 
 if (isset($_GET['decType'])) {
@@ -32,7 +20,7 @@ if (isset($_GET['decType'])) {
     } while ($i <= 11);
     $svc = substr($svc, 1);    
 
-    $reqNum = getLastNum();
+    $reqNum = getLastNum('request');
     $reqDate = date( "Y-m-d", strtotime($_GET["reqDate"]));
     $reqObjAddress = $_GET["reqObjAddress"];
     $reqComment = $_GET["reqComment"];

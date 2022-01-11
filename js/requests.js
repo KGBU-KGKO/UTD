@@ -51,6 +51,14 @@ $("#newReqTable").on('click','tr',function(){
 
 $("#inworkReqTable").on('click','tr',function(){
     $('#reqNumWork').val($(this).find('td').eq(0).text());
+    $.ajax({
+        url: 'data/new-reply.php',
+        method: 'GET',
+        data: { getNumLog: "reply" },
+        success: function(data){
+            $('#reqOutNum').val(data);
+        }
+    });      
 });
 
 $("#inWork").click(function() {
@@ -72,7 +80,6 @@ $("#inWork").click(function() {
       type: 'GET',
       data: { status: "В работе", num: $('#reqNumNew').val(), performer: $('#performer option:selected').text() },
       success: function(data){
-        console.log(data);
         window.location.replace("requests.php");
       }
   }); 
@@ -80,10 +87,12 @@ $("#inWork").click(function() {
 
 $("#Complete").click(function() {
   $('#reqNumWork').removeClass('is-invalid');
-  $('#reqOutNum').removeClass('is-invalid');  
+  $('#reqOutNum').removeClass('is-invalid');    
+  $('#reqOutDate').removeClass('is-invalid');
+  $('#performerInWork').removeClass('is-invalid');  
 
   if ($('#reqNumWork').val() == '') {
-  $('#reqNumWork').addClass('is-invalid');
+    $('#reqNumWork').addClass('is-invalid');
   return;
   }
 
@@ -91,12 +100,102 @@ $("#Complete").click(function() {
   $('#reqOutNum').addClass('is-invalid');
   return;
   }  
+
+  if ($('#reqOutDate').val() == '') {
+  $('#reqOutDate').addClass('is-invalid');
+  return;
+  }  
+
+  if ($('#performerInWork option:selected').text() == '---') {
+  $('#performerInWork').addClass('is-invalid');
+  return;
+  }
+
+  $.ajax({
+      url: 'data/new-reply.php',
+      type: 'GET',
+      data: { status: "Выполнен", reqNum: $('#reqNumWork').val(), repNum: $('#reqOutNum').val(), repDate: $('#reqOutDate').val(), repPerformer: $('#performerInWork option:selected').text() },
+      success: function(data){
+        window.location.replace("requests.php");
+      }
+  }); 
+});
+
+$("#Paid").click(function() {
+  $('#reqNumWork').removeClass('is-invalid');
+
+  if ($('#reqNumWork').val() == '') {
+  $('#reqNumWork').addClass('is-invalid');
+  return;
+  }
+ 
   $.ajax({
       url: 'data/changeStatus.php',
       type: 'GET',
-      data: { status: "Выполнен", num: $('#reqNumWork').val(), reqOutNum: $('#reqOutNum').val(), reqOutNum: $('#reqOutDate').val() },
+      data: { status: "Оплачен", num: $('#reqNumWork').val()},
       success: function(data){
-        console.log(data);
+        if (data == 'done') {
+          window.location.replace("requests.php");
+        } else {
+          console.log('Ошибка: '+data);
+        }
+      }
+  }); 
+});
+
+$("#Issue").click(function() {
+  $('#reqNumWork').removeClass('is-invalid');
+
+  if ($('#reqNumWork').val() == '') {
+  $('#reqNumWork').addClass('is-invalid');
+  return;
+  }
+ 
+  $.ajax({
+      url: 'data/changeStatus.php',
+      type: 'GET',
+      data: { status: "Ожидает выдачи", num: $('#reqNumWork').val()},
+      success: function(data){
+        if (data == 'done') {
+          window.location.replace("requests.php");
+        } else {
+          console.log('Ошибка: '+data);
+        }
+      }
+  }); 
+});
+
+$("#Cancel").click(function() {
+  $('#reqNumWork').removeClass('is-invalid');
+  $('#reqOutNum').removeClass('is-invalid');    
+  $('#reqOutDate').removeClass('is-invalid');
+  $('#performerInWork').removeClass('is-invalid');  
+
+  if ($('#reqNumWork').val() == '') {
+    $('#reqNumWork').addClass('is-invalid');
+  return;
+  }
+
+  if ($('#reqOutNum').val() == '') {
+  $('#reqOutNum').addClass('is-invalid');
+  return;
+  }  
+
+  if ($('#reqOutDate').val() == '') {
+  $('#reqOutDate').addClass('is-invalid');
+  return;
+  }  
+
+  if ($('#performerInWork option:selected').text() == '---') {
+  $('#performerInWork').addClass('is-invalid');
+  return;
+  }
+
+  $.ajax({
+      url: 'data/new-reply.php',
+      type: 'GET',
+      data: { status: "Отказано", reqNum: $('#reqNumWork').val(), repNum: $('#reqOutNum').val(), repDate: $('#reqOutDate').val(), repPerformer: $('#performerInWork option:selected').text() },
+      success: function(data){
         window.location.replace("requests.php");
       }
   }); 
