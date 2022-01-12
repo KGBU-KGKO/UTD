@@ -14,7 +14,12 @@ try {
     while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
       echo "<tr>";
       echo "<td class=\"col-md-1\"><a class=\"reqLink\">" . $rows['reqNum'] . "</a></td>";
-      echo "<td class=\"col-md-1\" style=\"width: 44px;\">" . $rows['type'] . "</td>";
+      if ($rows['type'] == 'OGV') {
+        $type = $rows['type']."<br>".$rows['smevNum'];
+      } else {
+        $type = $rows['type'];
+      }
+      echo "<td class=\"col-md-1\" style=\"width: 44px;\">" . $type . "</td>";
       echo "<td class=\"col-md-2\">" . $rows['name'] . "</td>";
       echo "<td class=\"col-md-2\">" . $rows['reqObjAddress'] . "</td>";
       echo "<td>" . $rows['svc'] . "</td>";

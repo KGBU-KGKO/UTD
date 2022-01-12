@@ -47,18 +47,16 @@ function addModalInfo(num) {
 
 $("#newReqTable").on('click','tr',function(){
     $('#reqNumNew').val($(this).find('td').eq(0).text());
+    $('html, body').animate({
+        scrollTop: $("#reqNumNew").offset().top
+    }, 50);     
 });
 
 $("#inworkReqTable").on('click','tr',function(){
     $('#reqNumWork').val($(this).find('td').eq(0).text());
-    $.ajax({
-        url: 'data/new-reply.php',
-        method: 'GET',
-        data: { getNumLog: "reply" },
-        success: function(data){
-            $('#reqOutNum').val(data);
-        }
-    });      
+    $('html, body').animate({
+        scrollTop: $("#reqNumWork").offset().top
+    }, 50);       
 });
 
 $("#inWork").click(function() {
@@ -87,7 +85,6 @@ $("#inWork").click(function() {
 
 $("#Complete").click(function() {
   $('#reqNumWork').removeClass('is-invalid');
-  $('#reqOutNum').removeClass('is-invalid');    
   $('#reqOutDate').removeClass('is-invalid');
   $('#performerInWork').removeClass('is-invalid');  
 
@@ -95,11 +92,6 @@ $("#Complete").click(function() {
     $('#reqNumWork').addClass('is-invalid');
   return;
   }
-
-  if ($('#reqOutNum').val() == '') {
-  $('#reqOutNum').addClass('is-invalid');
-  return;
-  }  
 
   if ($('#reqOutDate').val() == '') {
   $('#reqOutDate').addClass('is-invalid');
@@ -116,6 +108,8 @@ $("#Complete").click(function() {
       type: 'GET',
       data: { status: "Выполнен", reqNum: $('#reqNumWork').val(), repNum: $('#reqOutNum').val(), repDate: $('#reqOutDate').val(), repPerformer: $('#performerInWork option:selected').text() },
       success: function(data){
+        data = $.parseJSON(data);
+        window.open("/tpl/printReply.php?numLog="+data.numLog+"&ID="+data.ID, "_blank");
         window.location.replace("requests.php");
       }
   }); 
@@ -167,7 +161,6 @@ $("#Issue").click(function() {
 
 $("#Cancel").click(function() {
   $('#reqNumWork').removeClass('is-invalid');
-  $('#reqOutNum').removeClass('is-invalid');    
   $('#reqOutDate').removeClass('is-invalid');
   $('#performerInWork').removeClass('is-invalid');  
 
@@ -175,11 +168,6 @@ $("#Cancel").click(function() {
     $('#reqNumWork').addClass('is-invalid');
   return;
   }
-
-  if ($('#reqOutNum').val() == '') {
-  $('#reqOutNum').addClass('is-invalid');
-  return;
-  }  
 
   if ($('#reqOutDate').val() == '') {
   $('#reqOutDate').addClass('is-invalid');
@@ -196,6 +184,8 @@ $("#Cancel").click(function() {
       type: 'GET',
       data: { status: "Отказано", reqNum: $('#reqNumWork').val(), repNum: $('#reqOutNum').val(), repDate: $('#reqOutDate').val(), repPerformer: $('#performerInWork option:selected').text() },
       success: function(data){
+        data = $.parseJSON(data);
+        window.open("/tpl/printReply.php?numLog="+data.numLog+"&ID="+data.ID, "_blank");        
         window.location.replace("requests.php");
       }
   }); 

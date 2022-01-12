@@ -140,17 +140,11 @@
         </div>  
         <div class="col-md-3">
           <div class="form-floating">
-            <input type="text" class="form-control" id="reqOutNum" name="reqOutNum" placeholder="Исходящий рег. номер" value="">
-            <label for="reqOutNum">Исходящий рег. номер</label>
-          </div>
-        </div>   
-        <div class="col-md-3">
-          <div class="form-floating">
-            <input type="Date" class="form-control" id="reqOutDate" name="reqOutDate" placeholder="Дата исходящего" value="">
+            <input type="Date" class="form-control" id="reqOutDate" name="reqOutDate" placeholder="Дата исходящего" value="" readonly>
             <label for="reqOutDate">Дата исходящего</label>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
           <div class="form-floating">
             <select class="form-select" id="performerInWork" aria-label="Floating label select">
               <option selected>---</option>

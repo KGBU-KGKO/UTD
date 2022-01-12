@@ -3,15 +3,6 @@ $.when($.ready).then(function() {
     localStorage.setItem("listAgents", "");
     localStorage.setItem("listUL", "");
     localStorage.setItem("listOGV", "");
-    $.ajax({
-        url: 'data/new-request.php',
-        method: 'GET',
-        data: { getNumLog: "request" },
-        success: function(data){
-            $('#reqNum').val(data);
-            $('#numTitle').html(data);
-        }
-    });
 
     let today = new Date();
     $('#reqDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth()+1)).slice(-2)  + "-" + ('0' + today.getDate()).slice(-2));
@@ -124,9 +115,6 @@ $('#likeAddress').change(function() {
     }
 })
 
-$('#reqNum').on('input', function() {
-    $('#numTitle').html($('#reqNum').val());
-})
 
 // function getRef(referenceType, declarantType, storageName, inputName, haveDUL, listAttr) {
 //     let listRef = [];
@@ -301,6 +289,9 @@ $.ajax({
     data: param,
     success: function(data){
         data = $.parseJSON(data);
+        if (decType != 'OGV') {
+            window.open("/tpl/form"+decType+".php?numLog="+data.numLog, "_blank"); 
+        }
         window.location.replace("new-request.php?toast="+data.numLog+"&ID="+data.ID+"&decType="+decType);
     }
 });

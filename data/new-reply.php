@@ -2,13 +2,13 @@
 include 'config.php';
 include 'getLastNum.php';
 
-if (isset($_GET['getNumLog'])) {
-    echo getLastNum($_GET['getNumLog']);
-} 
+// if (isset($_GET['getNumLog'])) {
+//     echo getLastNum($_GET['getNumLog']);
+// } 
 
 if (isset($_GET['status'])) {
 $reqNum = $_GET["reqNum"];
-$repNum = $_GET["repNum"];
+$repNum = getNum('reply');
 $repDate = $_GET["repDate"];
 $repPerformer = $_GET["repPerformer"];
 $Status = $_GET["status"];

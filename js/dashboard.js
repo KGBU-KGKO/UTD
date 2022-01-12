@@ -47,6 +47,9 @@ new Chart(document.getElementById("line-chart"), {
 $("#waitUploadTable").on('click','tr',function(){
     $('#numReq').removeClass('is-invalid');
     $('#numReq').val($(this).find('td').eq(0).text());
+    $('html, body').animate({
+        scrollTop: $("#numReq").offset().top
+    }, 50);    
 });
 
 $("#waitUploadTable").on('click','a',function(){
@@ -103,3 +106,29 @@ $("#upload").click(function() {
     });
 
 });
+
+$("#remove").click(function() {
+  $('#numReq').removeClass('is-invalid');
+  if ($('#numReq').val() == '') {
+  $('#numReq').addClass('is-invalid');
+  return;
+  }    
+  let removeAlertModal = new bootstrap.Modal($('#removeAlert'), {});
+  $('#numForDelete').html($('#numReq').val());
+  removeAlertModal.show();
+});    
+
+$("#deleteReq").click(function() {
+  $.ajax({
+      url: 'data/changeStatus.php',
+      type: 'GET',
+      data: { status: "Удалён-Свободен", num: $('#numForDelete').html() },
+      success: function(data){
+        if (data == 'done') {
+          window.location.replace("index.php");
+        } else {
+          console.log('Ошибка: '+data); //тут сделать тост
+        }
+      }
+  }); 
+});  

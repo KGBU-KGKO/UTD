@@ -3,11 +3,6 @@ error_reporting(E_ALL);
 include 'config.php';
 include 'getLastNum.php';
 
-
-if (isset($_GET['getNumLog'])) {
-    echo getLastNum($_GET['getNumLog']);
-} 
-
 if (isset($_GET['decType'])) {
 
     $svc = '';
@@ -20,13 +15,13 @@ if (isset($_GET['decType'])) {
     } while ($i <= 11);
     $svc = substr($svc, 1);    
 
-    $reqNum = getLastNum('request');
+    $reqNum = getNum('request');
     $reqDate = date( "Y-m-d", strtotime($_GET["reqDate"]));
     $reqObjAddress = $_GET["reqObjAddress"];
     $reqComment = $_GET["reqComment"];
     $delivery = $_GET["delivery"];
     $attachList = $_GET["attachList"];
-    $path = 'files/'.explode('/', $_GET["reqNum"])[1];
+    $path = 'files/'.explode('/', $reqNum)[1];
 
     if ($_GET['decType'] == 'FL') {
         if (isset($_GET["agentFLSwitch"])) {

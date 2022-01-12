@@ -106,9 +106,12 @@ if ($res['count'] != '0') {
   </div> 
 
   <div class="row g-2 mb-3">
-    <div class="col-md mb-1">
+    <div class="col-md-2 mb-1">
       <button type="button" id="upload" class="btn btn-primary btn-lg">Загрузить файлы</button>   
     </div>
+    <div class="col-md-2 mb-1">
+      <button type="button" id="remove" class="btn btn-danger btn-lg">Удалить запрос</button>   
+    </div>    
   </div>
 </div>';   
 } else {
@@ -261,6 +264,12 @@ if ($res['count'] != '0') {
       </div>
     </div>
     <div class="col-md-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="numIn" name="numIn" placeholder="Укажите номер запроса" value="">
+        <label for="numIn">Укажите номер запроса</label>
+      </div>
+    </div>      
+    <div class="col-md-3">
       <div class="form-floating d-grid gap-2 mx-auto">
         <button style="height: 58px;" type="button" id="printIn" class="btn btn-success btn-lg">Печать входящего журнала</button>
       </div>
@@ -273,6 +282,12 @@ if ($res['count'] != '0') {
         <label for="reqOutDate">Укажите дату</label>
       </div>
     </div>
+    <div class="col-md-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="numOut" name="numOut" placeholder="Укажите номер запроса" value="">
+        <label for="numOut">Укажите номер запроса</label>
+      </div>
+    </div>    
     <div class="col-md-3">
       <div class="form-floating d-grid gap-2 mx-auto">
         <button style="height: 58px;" type="button" id="printOut" class="btn btn-success btn-lg">Печать исходящего журнала</button>
@@ -294,6 +309,23 @@ if ($res['count'] != '0') {
 
 </div>
 
+<div class="modal fade" id="removeAlert" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" id="removeAlertContent">
+<div class="modal-header">
+        <h5 class="modal-title">Подтвердите удаление запроса</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+</div>
+<div class="modal-body" id="removeAlertBody">
+<p>Ты уверена, что хочешь удалить запрос №<span id="numForDelete"></span>?</p>
+</div>      
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+  <button type="button" class="btn btn-danger" id="deleteReq">Да, удалить</button>
+</div>
+    </div>
+  </div>
+</div>
 
 <?php 
 

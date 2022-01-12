@@ -63,7 +63,7 @@
   </header>
   <body>
     <div class="container mb-5">
-      <h1 class="display-3 mb-3">Новый запрос №<span id="numTitle"></span></h1>
+      <h1 class="display-3 mb-3">Новый запрос</h1>
       <h6 class="display-6">Сведения о заявителе</h6>
       <div class="row g-1 mb-3">
         <div class="col-md">
@@ -301,20 +301,6 @@
       </div>   
       <h6 class="display-6">Сведения о запросе</h6>
       <form id="reqInfo">
-      <div class="row g-2 mb-3">
-        <div class="col-md">
-          <div class="form-floating">
-            <input type="text" class="form-control" id="reqNum" name="reqNum" placeholder="Регистрационный номер" value="">
-            <label for="reqNum">Регистрационный номер</label>
-          </div>
-        </div>  
-        <div class="col-md">
-          <div class="form-floating">
-            <input type="date" class="form-control" id="reqDate" name="reqDate" placeholder="Дата регистрации" value="">
-            <label for="reqDate">Дата регистрации</label>
-          </div>
-        </div>
-      </div> 
       <div class="row g-3 mb-3 d-none">
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" role="switch" name="likeAddress" id="likeAddress">
@@ -322,12 +308,18 @@
         </div>                
       </div> 
       <div class="row g-1 mb-3">
-        <div class="col-md">
+        <div class="col-md-8">
           <div class="form-floating">
             <input type="text" class="form-control address" id="reqObjAddress" name="reqObjAddress" placeholder="Адрес объекта недвижимости" value="">
             <label for="reqObjAddress">Адрес объекта недвижимости</label>
           </div>
         </div>  
+        <div class="col-md-4">
+          <div class="form-floating">
+            <input type="date" class="form-control" id="reqDate" name="reqDate" placeholder="Дата регистрации" value="" readonly>
+            <label for="reqDate">Дата регистрации</label>
+          </div>
+        </div>        
       </div>      
       <div class="row g-1 mb-3">
         <div class="form-floating">
