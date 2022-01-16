@@ -15,7 +15,7 @@ try {
       echo "<tr>";
       echo "<td class=\"col-md-1\"><a class=\"reqLink\">" . $rows['reqNum'] . "</a></td>";
       if ($rows['type'] == 'OGV') {
-        $type = $rows['type']."<br>".$rows['smevNum'];
+        $type = $rows['type']." <br>".$rows['smevNum'];
       } else {
         $type = $rows['type'];
       }

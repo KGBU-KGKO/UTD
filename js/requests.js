@@ -47,16 +47,20 @@ function addModalInfo(num) {
 
 $("#newReqTable").on('click','tr',function(){
     $('#reqNumNew').val($(this).find('td').eq(0).text());
-    $('html, body').animate({
-        scrollTop: $("#reqNumNew").offset().top
-    }, 50);     
+    if (event.target.nodeName != 'A') {
+      $('html, body').animate({
+          scrollTop: $("#reqNumNew").offset().top
+      }, 50);         
+    }      
 });
 
 $("#inworkReqTable").on('click','tr',function(){
     $('#reqNumWork').val($(this).find('td').eq(0).text());
-    $('html, body').animate({
-        scrollTop: $("#reqNumWork").offset().top
-    }, 50);       
+    if (event.target.nodeName != 'A') {
+      $('html, body').animate({
+          scrollTop: $("#reqNumWork").offset().top
+      }, 50);         
+    }    
 });
 
 $("#inWork").click(function() {

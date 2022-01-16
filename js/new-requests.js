@@ -48,6 +48,39 @@ $.when($.ready).then(function() {
 
 });
 
+ $('#services input[type=checkbox]').change(function() {
+    $('#services input[type=checkbox]').each(function() {
+        $(this).prop('required', false);
+    });
+ });
+
+  $('#delivery input[type=checkbox]').change(function() {
+    $('#delivery input[type=checkbox]').each(function() {
+        $(this).prop('required', false);
+    });
+ });
+
+function validate() {
+    let check = true;
+    $(".groupCheck").each(function() {
+        if(!$('#'+$(this).attr('id')+' input[type=checkbox]:checked').length) { 
+            $('#'+$(this).attr('id')+' input[type=checkbox]').prop('required', true);
+        }
+    });
+    $("form:visible").each(function() {
+        $('#'+$(this).attr('id')).addClass('was-validated');
+        if ($(this)[0].checkValidity() === false) {
+            check = false;
+        }
+    });
+    if (!check){
+        $('html, body').animate({
+            scrollTop: $(".invalid-feedback:visible:first").offset().top-100
+        }, 50);    
+    }
+    return check;
+}
+
 $( "#dFLName" ).on( "autocompleteselect", function( event, ui ) {
     //console.log(ui.item.value);
     //console.log(ui.item.label);
@@ -68,11 +101,11 @@ $( "#dFLAgentName" ).on( "autocompleteselect", function( event, ui ) {
     agID = ui.item.label.split(" | ")[3];
     listAgents = $.parseJSON(localStorage.getItem("listAgents"));
     index = listAgents.findIndex(x => x.ID === agID);
-    $('#dFLPhone').val(listAgents[index].tel);
+    $('#dFLAgentPhone').val(listAgents[index].tel);
     $('#dFLAgentAddress').val(listAgents[index].address);
-    $('#dFLNumDUL').val(listAgents[index].dulNum);
-    $('#dFLDateDUL').val(listAgents[index].dulDate);
-    $('#dFLWhoDUL').val(listAgents[index].dulOrg);
+    $('#dFLAgentNumDUL').val(listAgents[index].dulNum);
+    $('#dFLAgentDateDUL').val(listAgents[index].dulDate);
+    $('#dFLAgentWhoDUL').val(listAgents[index].dulOrg);
 } );
 
 // собственые подсказки из базы по юрлицам
@@ -102,8 +135,14 @@ $( "#dULAgentName" ).on( "autocompleteselect", function( event, ui ) {
 $('#agentFLSwitch').change(function() {
     if ($(this).prop('checked')) {
         $('#agentFLForm').show();
+        $('.decDataGroup').hide();
+        $('.decData').prop('required', false);
+        $('.decData').prop('disabled', true);
     } else {
         $('#agentFLForm').hide();
+        $('.decDataGroup').show();
+        $('.decData').prop('required', true);
+        $('.decData').prop('disabled', false);
     }
 })
 
@@ -154,7 +193,7 @@ $('#declarantType').on('change', function() {
     switch (this.value) {
         case 'FL':
             $('#declarantFL').show();
-            $('input[name="delivery"][value="При личном обращении в КГБУ «КГКО»"]').prop('checked', true);
+            checkItem('delivery', 'foot');
             $('#likeAddress').parents().eq(1).removeClass('d-none');
             //getRef('declarant', this.value, 'listFL', 'dFLName', 'True', ['name', 'dulNum', 'dateBirth', 'ID']);
             $.ajax({
@@ -197,7 +236,7 @@ $('#declarantType').on('change', function() {
             break;
         case 'UL':
             $('#declarantUL').show();
-            $('input[name="delivery"][value="При личном обращении в КГБУ «КГКО»"]').prop('checked', true);
+            checkItem('delivery', 'foot');
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
@@ -233,7 +272,7 @@ $('#declarantType').on('change', function() {
             break;
         case 'OGV':
             $('#declarantOGV').show();
-            $('input[name="delivery"][value="СМЭВ"]').prop('checked', true);
+            checkItem('delivery', 'smev');
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
@@ -266,12 +305,18 @@ $(".attach button").click(function() {
 });
 
 $("#send").click(function() {
+    if (!validate()) {
+        return false;
+    }
     let decType = $('#declarantType').val();
     let decInfo = '';
     let param = '';
     switch (decType) {
         case 'FL':
             decInfo = $('#reqFL').serialize();
+            if ($('#agentFLSwitch').prop('checked')) {
+                decInfo = decInfo +'&'+$('#agentFLForm').serialize();
+            }
             break;
         case 'UL':
             decInfo = $('#reqUL').serialize();
@@ -296,11 +341,13 @@ $.ajax({
     }
 });
 
-
-
-
 });
 
 $("#clearForms").click(function() {
     $('form').trigger("reset");
 });
+
+function checkItem(group, item) {
+    $('#'+group+' input[type=checkbox]').prop('checked', false);
+    $('input[name="'+item+'"]').prop('checked', true);
+}

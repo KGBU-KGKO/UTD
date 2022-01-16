@@ -47,13 +47,15 @@ new Chart(document.getElementById("line-chart"), {
 $("#waitUploadTable").on('click','tr',function(){
     $('#numReq').removeClass('is-invalid');
     $('#numReq').val($(this).find('td').eq(0).text());
-    $('html, body').animate({
-        scrollTop: $("#numReq").offset().top
-    }, 50);    
+    if (event.target.nodeName != 'A') {
+      $('html, body').animate({
+          scrollTop: $("#numReq").offset().top
+      }, 50);         
+    }
 });
 
 $("#waitUploadTable").on('click','a',function(){
-    window.open('/tpl/form'+$(this).parents().find('td').eq(1).text()+'.php?numLog='+$(this).html(), '_blank');
+    window.open('/tpl/form'+$(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]+'.php?numLog='+$(this).html(), '_blank');
 });
 
 $("input[name=reqFiles]").change(function() {
@@ -131,4 +133,8 @@ $("#deleteReq").click(function() {
         }
       }
   }); 
+});  
+
+$("#printIn").click(function() {
+  window.open('/tpl/inLog.php?logDateStart='+$('#inDate').val(), '_blank');
 });  

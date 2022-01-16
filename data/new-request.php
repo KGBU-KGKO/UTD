@@ -19,29 +19,35 @@ if (isset($_GET['decType'])) {
     $reqDate = date( "Y-m-d", strtotime($_GET["reqDate"]));
     $reqObjAddress = $_GET["reqObjAddress"];
     $reqComment = $_GET["reqComment"];
-    $delivery = $_GET["delivery"];
+    $delivery = deliveryConcat();
     $attachList = $_GET["attachList"];
     $path = 'files/'.explode('/', $reqNum)[1];
 
     if ($_GET['decType'] == 'FL') {
         if (isset($_GET["agentFLSwitch"])) {
             $agentFLSwitch = $_GET["agentFLSwitch"];
+            $NumDUL = $_GET["dFLAgentNumDUL"];
+            $DateDUL = $_GET["dFLAgentDateDUL"];
+            $WhoDUL = $_GET["dFLAgentWhoDUL"];    
+            $Phone = $_GET["dFLAgentPhone"];
+            $Email = $_GET["dFLAgentEmail"];       
+            $AgentName = $_GET["dFLAgentName"];
+            $AgentAddress = $_GET["dFLAgentAddress"];
+            $AgentDoc = $_GET["dFLAgentDoc"];
         } else {
             $agentFLSwitch = 'off';
+            $NumDUL = $_GET["dFLNumDUL"];
+            $DateDUL = $_GET["dFLDateDUL"];
+            $WhoDUL = $_GET["dFLWhoDUL"];    
+            $Phone = $_GET["dFLPhone"];
+            $Email = $_GET["dFLEmail"];   
+            $AgentName = '';
+            $AgentAddress = '';
+            $AgentDoc = '';            
         }
-
         $Name = $_GET["dFLName"];
         $BDay = $_GET["dFLBD"];
-        $Phone = $_GET["dFLPhone"];
-        $Email = $_GET["dFLEmail"];
         $Address = $_GET["dFLAddress"];
-        $NumDUL = $_GET["dFLNumDUL"];
-        $DateDUL = $_GET["dFLDateDUL"];
-        $WhoDUL = $_GET["dFLWhoDUL"];
-        $AgentName = $_GET["dFLAgentName"];
-        $AgentAddress = $_GET["dFLAgentAddress"];
-        $AgentDoc = $_GET["dFLAgentDoc"];
-
 
         //отправляем запрос, получаем 0 или 1
         try {
@@ -159,6 +165,17 @@ if (isset($_GET['decType'])) {
 
 $stmt = null;
 $conn = null;
+
+function deliveryConcat() {
+    global $delivery;
+    $deliveryTypes = array('smev', 'post', 'email', 'foot');
+    foreach ($deliveryTypes as $type) {
+        if (isset($_GET[$type])) {
+            $delivery = $delivery.", ".$_GET[$type];
+        }
+    }
+    return substr($delivery, 1);
+}
 ?>
 
 

@@ -259,14 +259,14 @@ if ($res['count'] != '0') {
   <div class="row g-3">
     <div class="col-md-3">
       <div class="form-floating">
-        <input type="Date" class="form-control" id="inDate" name="reqOutDate" placeholder="Укажите дату" value="">
-        <label for="reqOutDate">Укажите дату</label>
+        <input type="Date" class="form-control" id="inDate" name="inDate" placeholder="Укажите дату" value="">
+        <label for="inDate">Укажите дату</label>
       </div>
     </div>
     <div class="col-md-3">
       <div class="form-floating">
-        <input type="text" class="form-control" id="numIn" name="numIn" placeholder="Укажите номер запроса" value="">
-        <label for="numIn">Укажите номер запроса</label>
+        <input type="text" class="form-control" id="inNum" name="inNum" placeholder="Укажите номер запроса" value="">
+        <label for="inNum">Укажите номер запроса</label>
       </div>
     </div>      
     <div class="col-md-3">
@@ -278,14 +278,14 @@ if ($res['count'] != '0') {
   <div class="row g-3 mb-3">
     <div class="col-md-3">
       <div class="form-floating">
-        <input type="Date" class="form-control" id="outDate" name="reqOutDate" placeholder="Укажите дату" value="">
-        <label for="reqOutDate">Укажите дату</label>
+        <input type="Date" class="form-control" id="outDate" name="outDate" placeholder="Укажите дату" value="">
+        <label for="outDate">Укажите дату</label>
       </div>
     </div>
     <div class="col-md-3">
       <div class="form-floating">
-        <input type="text" class="form-control" id="numOut" name="numOut" placeholder="Укажите номер запроса" value="">
-        <label for="numOut">Укажите номер запроса</label>
+        <input type="text" class="form-control" id="outNum" name="outNum" placeholder="Укажите номер запроса" value="">
+        <label for="outNum">Укажите номер запроса</label>
       </div>
     </div>    
     <div class="col-md-3">
