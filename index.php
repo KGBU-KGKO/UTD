@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/utd.css">
     <title>ИС УТД - Инф. панель</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
@@ -69,19 +70,23 @@ if ($res['count'] != '0') {
   <h4 id="asynchronous-methods-and-transitions">Загрузите файлы в данные запросы</h4>
   <p>Сначала укажите запрос для загрузки файлов, после чего с помощью кнопки "Выберите файлы" укажите файлы, которые относятся к данному запросу и нажмите кнопку "Загрузить файлы". После успешной загрузки вы увидите уведомление, а запрос больше не будет отображаться в таблице.</p>
   </div>
-  <table class="table table-hover">
+<div class="mb-4" >
+  <table id="uploadTable" class="table table-hover"   
+  data-show-columns="true"
+  data-custom-sort="customSort"
+  data-page-list="[10, 25, 50, 100, all]">
       <thead>
     <tr>
-      <th scope="col">№ запроса</th>
-      <th scope="col">Тип</th>
-      <th scope="col">Заявитель</th>
-      <th scope="col">Объект запроса</th>
-      <th scope="col">Вид запроса</th>
+      <th data-field="reqNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
+      <th data-field="type" data-sortable="true" >Тип</th>
+      <th data-field="name" data-sortable="true" >Заявитель</th>
+      <th data-field="objAddress" data-sortable="true" >Объект запроса</th>
+      <th data-field="svc" data-sortable="true" >Услуга</th>
     </tr>
   </thead>
-  <tbody id="waitUploadTable">
-  </tbody>
   </table>
+</div>
+<div>
   <form id="formFiles" enctype="multipart/form-data">
   <div class="row g-1 mb-3">
     <div class="col-md">
@@ -112,6 +117,7 @@ if ($res['count'] != '0') {
     <div class="col-md-2 mb-1">
       <button type="button" id="remove" class="btn btn-danger btn-lg">Удалить запрос</button>   
     </div>    
+  </div>
   </div>
 </div>';   
 } else {
@@ -356,6 +362,8 @@ if (isset($_GET['success']) || isset($_GET['error'])) {
 </html>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.19.1/locale/bootstrap-table-ru-RU.min.js" integrity="sha512-VWiWx34Bykw/3DL8PNzXeMvGKA9osnJ4Hf9uplXFNa2ln+YS3Swup4K8SdHzFxVPYlf1r2B/OpPVWsG2pfmenA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script type="text/javascript" src="js/dashboard.js"></script>
     <script type="text/javascript" src="js/common.js"></script>    

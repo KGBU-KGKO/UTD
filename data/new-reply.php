@@ -2,10 +2,6 @@
 include 'config.php';
 include 'getLastNum.php';
 
-// if (isset($_GET['getNumLog'])) {
-//     echo getLastNum($_GET['getNumLog']);
-// } 
-
 if (isset($_GET['status'])) {
 $reqNum = $_GET["reqNum"];
 $repNum = getNum('reply');

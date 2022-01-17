@@ -5,7 +5,14 @@ $.when($.ready).then(function() {
       type: 'GET',
       data: { status: "Ожидает загрузки" },
       success: function(data){
-         $('#waitUploadTable').html(data);
+         let uploadTable = $('#uploadTable');
+         let dataTbl = '';
+         dataTbl = $.parseJSON(data);
+         uploadTable.bootstrapTable({
+           data: dataTbl,
+           pagination: true,
+           search: true,
+         })         
       }
   }); 
 
@@ -44,17 +51,36 @@ new Chart(document.getElementById("line-chart"), {
 
 });
 
-$("#waitUploadTable").on('click','tr',function(){
+function numFormatter(value) {
+    return '<a href="#">' + value + '</a>';
+}
+
+function customSort(sortName, sortOrder, data) {
+  var order = sortOrder === 'desc' ? -1 : 1
+  data.sort(function (a, b) {
+    var aa = +((a[sortName] + '').replace(/[^\d]/g, ''))
+    var bb = +((b[sortName] + '').replace(/[^\d]/g, ''))
+    if (aa < bb) {
+      return order * -1
+    }
+    if (aa > bb) {
+      return order
+    }
+    return 0
+  })
+}
+
+$("#uploadTable").on('click','tr',function(){
     $('#numReq').removeClass('is-invalid');
     $('#numReq').val($(this).find('td').eq(0).text());
-    if (event.target.nodeName != 'A') {
-      $('html, body').animate({
-          scrollTop: $("#numReq").offset().top
-      }, 50);         
-    }
+    // if (event.target.nodeName != 'A') {
+    //   $('html, body').animate({
+    //       scrollTop: $("#numReq").offset().top-100
+    //   }, 50);         
+    // }
 });
 
-$("#waitUploadTable").on('click','a',function(){
+$("#uploadTable").on('click','a',function(){
     window.open('/tpl/form'+$(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]+'.php?numLog='+$(this).html(), '_blank');
 });
 

@@ -333,11 +333,18 @@ $.ajax({
     method: 'GET',
     data: param,
     success: function(data){
-        data = $.parseJSON(data);
-        if (decType != 'OGV') {
-            window.open("/tpl/form"+decType+".php?numLog="+data.numLog, "_blank"); 
+        if (data.split(" ")[0] == 'Error') {
+            console.log(data);
+            let notifyModal = new bootstrap.Modal($('#notify'), {});
+            $('#txtInfo').html(data);
+            notifyModal.show();            
+        } else {
+            data = $.parseJSON(data);
+            if (decType != 'OGV') {
+                window.open("/tpl/form"+decType+".php?numLog="+data.numLog, "_blank"); 
+            }
+            window.location.replace("new-request.php?toast="+data.numLog+"&ID="+data.ID+"&decType="+decType);            
         }
-        window.location.replace("new-request.php?toast="+data.numLog+"&ID="+data.ID+"&decType="+decType);
     }
 });
 

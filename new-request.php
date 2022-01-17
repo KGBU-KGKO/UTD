@@ -560,6 +560,25 @@
       </div>
     </div>
 
+<div class="modal fade" id="notify" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+<div class="modal-header">
+        <h5 class="modal-title">Ошибка</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+</div>
+<div class="modal-body">
+<p>Возникла ошибка при создании запроса. Обратитесь в отдел ИТ.</p>
+<p>Текст ошибки: </p>
+<p id="txtInfo"></p>
+</div>      
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Понятно</button>
+</div>
+    </div>
+  </div>
+</div>
+
 <?php 
 
 if (isset($_GET['toast'])) {

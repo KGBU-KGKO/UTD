@@ -7,26 +7,24 @@ $num = $_GET['num'];
 $paid = '';
 $issue = '';
 $performer = '';
-$outinfo = '';
 
 if ($status == 'В работе') {
 	$performer = ", performer = '".$_GET['performer']."' ";	
-}
-
-if ($status == 'Выполнен') {
-	$outinfo = ", logOutNum = '".$_GET['reqOutNum']."', logOutDate = '".$_GET['reqOutDate']."'";
+	$status = "status = '".$_GET['status']."'";
 }
 
 if ($status == 'Оплачен') {
-	$paid = ", datePayment = GETDATE()";
+	$paid = "datePayment = GETDATE()";
+	$status = "";
 }
 
-if ($status == 'Ожидает выдачи') {
+if ($status == 'Выполнен') {
 	$issue = ", dateIssue = GETDATE()";
+	$status = "status = '".$_GET['status']."'";
 }
 
 try {
-    $query = "update request set status = '$status'$paid$issue$performer$outinfo where numLog = '$num'";
+    $query = "update request set $status$paid$issue$performer where numLog = '$num'";
 	$stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 	$stmt->execute();
 	echo 'done';

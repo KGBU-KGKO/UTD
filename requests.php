@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/utd.css">
     <title>ИС УТД - Запросы</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
@@ -64,19 +65,22 @@
       <h6 class="display-6">Новые запросы</h6>
 
 <div class="newRequests">
-  <table class="table table-hover">
-      <thead>
-    <tr>
-      <th scope="col">№ запроса</th>
-      <th scope="col">Тип</th>
-      <th scope="col">Заявитель</th>
-      <th scope="col">Объект недвижимости</th>
-      <th scope="col">Вид услуги</th>
-    </tr>
-  </thead>
-  <tbody id="newReqTable">
-  </tbody>
-  </table>
+  <div class="mb-4" >
+    <table id="newReqTable" class="table table-hover"   
+    data-show-columns="true"
+    data-custom-sort="customSort"
+    data-page-list="[10, 25, 50, 100, all]">
+        <thead>
+      <tr>
+        <th data-field="reqNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
+        <th data-field="type" data-sortable="true" >Тип</th>
+        <th data-field="name" data-sortable="true" >Заявитель</th>
+        <th data-field="objAddress" data-sortable="true" >Объект запроса</th>
+        <th data-field="svc" data-sortable="true" >Услуга</th>
+      </tr>
+    </thead>
+    </table>
+  </div>  
       <h3>Взять запрос в работу</h3>
       <div class="row g-3 mb-3">
         <div class="col-md-3">
@@ -113,23 +117,26 @@
       <h6 class="display-6 mt-5">Запросы в работе</h6>
 
 <div class="newRequests">
-  <table class="table table-hover">
-      <thead>
-    <tr>
-      <th scope="col">№ запроса</th>
-      <th scope="col">Тип</th>
-      <th scope="col">Заявитель</th>
-      <th scope="col">Объект недвижимости</th>
-      <th scope="col">Вид услуги</th>
-      <th scope="col">Статус</th>
-      <th scope="col">Исполнитель</th>
-      <th scope="col">Дата исполнения</th>
-    </tr>
-  </thead>
-  <tbody id="inworkReqTable">
-  </tbody>
-
-  </table>
+  <div class="mb-4" >
+    <table id="inworkReqTable" class="table table-hover"   
+    data-show-columns="true"
+    data-custom-sort="customSort"
+    data-page-list="[10, 25, 50, 100, all]">
+        <thead>
+      <tr>
+        <th data-field="reqNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
+        <th data-field="type" data-sortable="true" >Тип</th>
+        <th data-field="name" data-sortable="true" >Заявитель</th>
+        <th data-field="objAddress" data-sortable="true" >Объект запроса</th>
+        <th data-field="svc" data-sortable="true" >Услуга</th>
+        <th data-field="status" data-sortable="true" >Статус</th>
+        <th data-field="performer" data-sortable="true" >Исполнитель</th>
+        <th data-field="datePay" data-sortable="true" data-formatter="payFormatter">Оплата</th>
+        <th data-field="dateDue" data-sortable="true" >Дата исполнения</th>
+      </tr>
+    </thead>
+    </table>
+  </div>  
       <h3>Закрыть запрос</h3>
       <div class="row g-3 mb-3">
         <div class="col-md-3">
@@ -165,17 +172,17 @@
         </div>      
         <div class="col-md-3">
           <div class="form-floating d-grid gap-2 mx-auto">
-            <button style="height: 58px;" type="button" id="Issue" class="btn btn-warning btn-lg">На выдачу</button>
-          </div>
-        </div> 
-        <div class="col-md-3">
-          <div class="form-floating d-grid gap-2 mx-auto">
             <button style="height: 58px;" type="button" id="Cancel" class="btn btn-danger btn-lg">Отказ</button>
           </div>
         </div> 
         <div class="col-md-3">
           <div class="form-floating d-grid gap-2 mx-auto">
-            <button style="height: 58px;" type="button" id="Complete" class="btn btn-success btn-lg">Закрыть запрос</button>
+            <button style="height: 58px;" type="button" id="Answer" class="btn btn-success btn-lg">Ответ</button>
+          </div>
+        </div> 
+        <div class="col-md-3">
+          <div class="form-floating d-grid gap-2 mx-auto">
+            <button style="height: 58px;" type="button" id="Issue" class="btn btn-success btn-lg">Выдан</button>
           </div>
         </div>                                    
       </div> 
@@ -196,5 +203,7 @@
 </html>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.19.1/locale/bootstrap-table-ru-RU.min.js" integrity="sha512-VWiWx34Bykw/3DL8PNzXeMvGKA9osnJ4Hf9uplXFNa2ln+YS3Swup4K8SdHzFxVPYlf1r2B/OpPVWsG2pfmenA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
     <script type="text/javascript" src="js/requests.js"></script>
     <script type="text/javascript" src="js/common.js"></script>       

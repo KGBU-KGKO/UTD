@@ -8,7 +8,14 @@ $.when($.ready).then(function() {
       type: 'GET',
       data: { status: "Новый" },
       success: function(data){
-         $('#newReqTable').html(data);
+         let newReqTable = $('#newReqTable');
+         let dataTbl = '';
+         dataTbl = $.parseJSON(data);
+         newReqTable.bootstrapTable({
+           data: dataTbl,
+           pagination: true,
+           search: true,
+         })            
       }
   });  
   $.ajax({
@@ -16,11 +23,45 @@ $.when($.ready).then(function() {
       type: 'GET',
       data: { status: "В работе" },
       success: function(data){
-         $('#inworkReqTable').html(data);
+         let inworkReqTable = $('#inworkReqTable');
+         let dataTbl = '';
+         dataTbl = $.parseJSON(data);
+         inworkReqTable.bootstrapTable({
+           data: dataTbl,
+           pagination: true,
+           search: true,
+         })            
       }
   }); 
 
 });
+
+function numFormatter(value) {
+  if (value) {
+    return '<a href="#">' + value + '</a>';
+  }
+}
+
+function payFormatter(value) {
+  if (value) {
+    return '<p class="text-center m-0"><i class="bi bi-check2-square text-success fs-2" ></i></p>';
+  }
+}
+
+function customSort(sortName, sortOrder, data) {
+  let order = sortOrder === 'desc' ? -1 : 1
+  data.sort(function (a, b) {
+    let aa = +((a[sortName] + '').replace(/[^\d]/g, ''))
+    let bb = +((b[sortName] + '').replace(/[^\d]/g, ''))
+    if (aa < bb) {
+      return order * -1
+    }
+    if (aa > bb) {
+      return order
+    }
+    return 0
+  })
+}
 
 $("#newReqTable").on('click','a',function(){
   let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
@@ -47,20 +88,20 @@ function addModalInfo(num) {
 
 $("#newReqTable").on('click','tr',function(){
     $('#reqNumNew').val($(this).find('td').eq(0).text());
-    if (event.target.nodeName != 'A') {
-      $('html, body').animate({
-          scrollTop: $("#reqNumNew").offset().top
-      }, 50);         
-    }      
+    // if (event.target.nodeName != 'A') {
+    //   $('html, body').animate({
+    //       scrollTop: $("#reqNumNew").offset().top
+    //   }, 50);         
+    // }      
 });
 
 $("#inworkReqTable").on('click','tr',function(){
     $('#reqNumWork').val($(this).find('td').eq(0).text());
-    if (event.target.nodeName != 'A') {
-      $('html, body').animate({
-          scrollTop: $("#reqNumWork").offset().top
-      }, 50);         
-    }    
+    // if (event.target.nodeName != 'A') {
+    //   $('html, body').animate({
+    //       scrollTop: $("#reqNumWork").offset().top
+    //   }, 50);         
+    // }    
 });
 
 $("#inWork").click(function() {
@@ -87,7 +128,7 @@ $("#inWork").click(function() {
   }); 
 });
 
-$("#Complete").click(function() {
+$("#Answer").click(function() {
   $('#reqNumWork').removeClass('is-invalid');
   $('#reqOutDate').removeClass('is-invalid');
   $('#performerInWork').removeClass('is-invalid');  
@@ -110,7 +151,7 @@ $("#Complete").click(function() {
   $.ajax({
       url: 'data/new-reply.php',
       type: 'GET',
-      data: { status: "Выполнен", reqNum: $('#reqNumWork').val(), repNum: $('#reqOutNum').val(), repDate: $('#reqOutDate').val(), repPerformer: $('#performerInWork option:selected').text() },
+      data: { status: "На выдачу (Ответ)", reqNum: $('#reqNumWork').val(), repNum: $('#reqOutNum').val(), repDate: $('#reqOutDate').val(), repPerformer: $('#performerInWork option:selected').text() },
       success: function(data){
         data = $.parseJSON(data);
         window.open("/tpl/printReply.php?numLog="+data.numLog+"&ID="+data.ID, "_blank");
@@ -152,7 +193,7 @@ $("#Issue").click(function() {
   $.ajax({
       url: 'data/changeStatus.php',
       type: 'GET',
-      data: { status: "Ожидает выдачи", num: $('#reqNumWork').val()},
+      data: { status: "Выполнен", num: $('#reqNumWork').val()},
       success: function(data){
         if (data == 'done') {
           window.location.replace("requests.php");
@@ -186,7 +227,7 @@ $("#Cancel").click(function() {
   $.ajax({
       url: 'data/new-reply.php',
       type: 'GET',
-      data: { status: "Отказано", reqNum: $('#reqNumWork').val(), repNum: $('#reqOutNum').val(), repDate: $('#reqOutDate').val(), repPerformer: $('#performerInWork option:selected').text() },
+      data: { status: "На выдачу (Отказ)", reqNum: $('#reqNumWork').val(), repNum: $('#reqOutNum').val(), repDate: $('#reqOutDate').val(), repPerformer: $('#performerInWork option:selected').text() },
       success: function(data){
         data = $.parseJSON(data);
         window.open("/tpl/printReply.php?numLog="+data.numLog+"&ID="+data.ID, "_blank");        
