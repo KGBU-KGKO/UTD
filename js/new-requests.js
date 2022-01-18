@@ -21,6 +21,11 @@ $.when($.ready).then(function() {
         }
     });
 
+    $("#dFLWhoDUL").suggestions({
+        token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
+        type: "fms_unit"
+    });
+
     $("#dULINN").suggestions({
         token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
         type: "PARTY",
@@ -47,6 +52,10 @@ $.when($.ready).then(function() {
     });    
 
 });
+
+$('#dOGVName').on("input", function() {
+    $(this).val($.trim($(this).val()));
+})
 
  $('#services input[type=checkbox]').change(function() {
     $('#services input[type=checkbox]').each(function() {
@@ -273,6 +282,8 @@ $('#declarantType').on('change', function() {
         case 'OGV':
             $('#declarantOGV').show();
             checkItem('delivery', 'smev');
+            let today = new Date();
+            $('#dOGVSenderDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth()+1)).slice(-2)  + "-" + ('0' + today.getDate()).slice(-2));
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
@@ -340,9 +351,7 @@ $.ajax({
             notifyModal.show();            
         } else {
             data = $.parseJSON(data);
-            if (decType != 'OGV') {
-                window.open("/tpl/form"+decType+".php?numLog="+data.numLog, "_blank"); 
-            }
+            window.open("/tpl/form"+decType+".php?numLog="+data.numLog, "_blank"); 
             window.location.replace("new-request.php?toast="+data.numLog+"&ID="+data.ID+"&decType="+decType);            
         }
     }
@@ -357,4 +366,4 @@ $("#clearForms").click(function() {
 function checkItem(group, item) {
     $('#'+group+' input[type=checkbox]').prop('checked', false);
     $('input[name="'+item+'"]').prop('checked', true);
-}
+}    

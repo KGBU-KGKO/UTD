@@ -5,10 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap-table/bootstrap-table.min.css">
     <link rel="stylesheet" type="text/css" href="css/utd.css">
     <title>ИС УТД - Инф. панель</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
@@ -114,7 +113,13 @@ if ($res['count'] != '0') {
     <div class="col-md-2 mb-1">
       <button type="button" id="upload" class="btn btn-primary btn-lg">Загрузить файлы</button>   
     </div>
-    <div class="col-md-2 mb-1">
+    <div class="col-md-2 mb-1 align-self-center">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" name="isPaid" id="isPaid">
+        <label class="form-check-label" for="isPaid">Запрос оплачен</label>
+      </div>                
+    </div>   
+    <div class="col-md mb-1 text-end">
       <button type="button" id="remove" class="btn btn-danger btn-lg">Удалить запрос</button>   
     </div>    
   </div>
@@ -334,7 +339,6 @@ if ($res['count'] != '0') {
 </div>
 
 <?php 
-
 if (isset($_GET['success'])) {
   $text = $_GET['success'];
   $class = 'success';
@@ -344,7 +348,6 @@ if (isset($_GET['error'])) {
   $text = $_GET['error'];
   $class = 'danger';
 } 
-
 if (isset($_GET['success']) || isset($_GET['error'])) {
   echo '
   <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
@@ -356,14 +359,13 @@ if (isset($_GET['success']) || isset($_GET['error'])) {
   </div>
   </div>';
 }
-
 ?>    
   </body>
 </html>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.19.1/locale/bootstrap-table-ru-RU.min.js" integrity="sha512-VWiWx34Bykw/3DL8PNzXeMvGKA9osnJ4Hf9uplXFNa2ln+YS3Swup4K8SdHzFxVPYlf1r2B/OpPVWsG2pfmenA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap/bootstrap.bundle.min.js" ></script>
+    <script type="text/javascript" src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-table/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-table/bootstrap-table-ru-RU.min.js" ></script>
+    <script type="text/javascript" src="lib/chart/Chart.min.js"></script>
     <script type="text/javascript" src="js/dashboard.js"></script>
     <script type="text/javascript" src="js/common.js"></script>    

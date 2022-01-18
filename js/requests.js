@@ -15,7 +15,11 @@ $.when($.ready).then(function() {
            data: dataTbl,
            pagination: true,
            search: true,
-         })            
+         })         
+         if (newReqTable.bootstrapTable('getData').length == '0') {
+            $('#newReqData').addClass('d-none');
+            $('#newReqDataEmpty').removeClass('d-none');
+         }
       }
   });  
   $.ajax({
@@ -44,7 +48,19 @@ function numFormatter(value) {
 
 function payFormatter(value) {
   if (value) {
-    return '<p class="text-center m-0"><i class="bi bi-check2-square text-success fs-2" ></i></p>';
+    return '<p class="text-center m-0"><i class="bi bi-check2-square text-success fs-5" ></i></p>';
+  }
+}
+
+//<i class="bi bi-exclamation-circle"></i>
+function deadlineFormatter(value) {
+  let dateDue = new Date(value);
+  let dateNow = new Date();
+  let diff = dateDue.getDate() - dateNow.getDate();
+  if (diff < 4) {
+    return value + ' <i class="bi bi-exclamation-circle-fill text-danger fs-5"></i>';
+  } else {
+    return value;
   }
 }
 
@@ -65,21 +81,21 @@ function customSort(sortName, sortOrder, data) {
 
 $("#newReqTable").on('click','a',function(){
   let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
-  addModalInfo($(this).html());
+  addModalInfo($(this).html(), $(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]);
   reqInfoModal.show();
 });
 
 $("#inworkReqTable").on('click','a',function(){
   let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
-  addModalInfo($(this).html());
+  addModalInfo($(this).html(), $(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]);
   reqInfoModal.show();
 });
 
-function addModalInfo(num) {
+function addModalInfo(num, type) {
   $.ajax({
       url: 'data/getRequestInfo.php',
       type: 'GET',
-      data: { numLog: num },
+      data: { numLog: num, typeDec: type },
       success: function(data){
          $('#reqInfoContent').html(data);
       }
@@ -176,7 +192,9 @@ $("#Paid").click(function() {
         if (data == 'done') {
           window.location.replace("requests.php");
         } else {
-          console.log('Ошибка: '+data);
+            let notifyModal = new bootstrap.Modal($('#notify'), {});
+            $('#txtInfo').html(data);
+            notifyModal.show();
         }
       }
   }); 
@@ -198,7 +216,9 @@ $("#Issue").click(function() {
         if (data == 'done') {
           window.location.replace("requests.php");
         } else {
-          console.log('Ошибка: '+data);
+            let notifyModal = new bootstrap.Modal($('#notify'), {});
+            $('#txtInfo').html(data);
+            notifyModal.show();
         }
       }
   }); 

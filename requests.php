@@ -5,10 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap-table/bootstrap-table.min.css">
     <link rel="stylesheet" type="text/css" href="css/utd.css">
     <title>ИС УТД - Запросы</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
@@ -62,58 +61,63 @@
   </header>
   <body>
     <div class="container mb-5">
-      <h6 class="display-6">Новые запросы</h6>
-
-<div class="newRequests">
-  <div class="mb-4" >
-    <table id="newReqTable" class="table table-hover"   
-    data-show-columns="true"
-    data-custom-sort="customSort"
-    data-page-list="[10, 25, 50, 100, all]">
-        <thead>
-      <tr>
-        <th data-field="reqNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
-        <th data-field="type" data-sortable="true" >Тип</th>
-        <th data-field="name" data-sortable="true" >Заявитель</th>
-        <th data-field="objAddress" data-sortable="true" >Объект запроса</th>
-        <th data-field="svc" data-sortable="true" >Услуга</th>
-      </tr>
-    </thead>
-    </table>
-  </div>  
-      <h3>Взять запрос в работу</h3>
-      <div class="row g-3 mb-3">
-        <div class="col-md-3">
-          <div class="form-floating">
-            <input type="text" class="form-control" id="reqNumNew" name="reqNumNew" placeholder="Регистрационный номер" value="">
-            <label for="reqNumNew">Регистрационный номер</label>
-          </div>
-        </div>  
-       <div class="col-md-3">
-          <div class="form-floating">
-            <select class="form-select" id="performer" aria-label="Floating label select">
-              <option selected>---</option>
-              <option value="1">Батышева А.М.</option>
-              <option value="2">Понамарёва К.С.</option>
-              <option value="3">Кондратьева Н.В.</option>
-              <option value="4">Захарова Е.А.</option>
-            </select>
-            <label for="performer">Выберите исполнителя</label>
-          </div>
+<div id="newReqData">
+  <h6 class="display-6">Новые запросы</h6>
+  <div class="newRequests">
+    <div class="mb-4" >
+      <table id="newReqTable" class="table table-hover"   
+        data-show-columns="true"
+        data-custom-sort="customSort"
+        data-page-list="[10, 25, 50, 100, all]">
+          <thead>
+        <tr>
+          <th data-field="reqNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
+          <th data-field="type" data-sortable="true" >Тип</th>
+          <th data-field="name" data-sortable="true" >Заявитель</th>
+          <th data-field="objAddress" data-sortable="true" >Объект запроса</th>
+          <th data-field="svc" data-sortable="true" >Услуга</th>
+        </tr>
+      </thead>
+      </table>
+    </div>  
+        <h3>Взять запрос в работу</h3>
+        <div class="row g-3 mb-3">
+          <div class="col-md-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="reqNumNew" name="reqNumNew" placeholder="Регистрационный номер" value="">
+              <label for="reqNumNew">Регистрационный номер</label>
+            </div>
+          </div>  
+         <div class="col-md-3">
+            <div class="form-floating">
+              <select class="form-select" id="performer" aria-label="Floating label select">
+                <option selected>---</option>
+                <option value="1">Батышева А.М.</option>
+                <option value="2">Понамарёва К.С.</option>
+                <option value="3">Кондратьева Н.В.</option>
+                <option value="4">Захарова Е.А.</option>
+              </select>
+              <label for="performer">Выберите исполнителя</label>
+            </div>
+          </div> 
+          <div class="col-md-3">
+            <div class="form-floating d-grid gap-2 mx-auto">
+              <button style="height: 58px;" type="button" id="inWork" class="btn btn-primary btn-lg">Взять в работу</button>
+            </div>
+          </div>   
+          <div class="col-md-3">
+            <div class="form-floating d-grid gap-2 mx-auto">
+              <button style="height: 58px;" type="button" id="printList" class="btn btn-success btn-lg">Печать реестра</button>
+            </div>
+          </div>                             
         </div> 
-        <div class="col-md-3">
-          <div class="form-floating d-grid gap-2 mx-auto">
-            <button style="height: 58px;" type="button" id="inWork" class="btn btn-primary btn-lg">Взять в работу</button>
-          </div>
-        </div>   
-        <div class="col-md-3">
-          <div class="form-floating d-grid gap-2 mx-auto">
-            <button style="height: 58px;" type="button" id="printList" class="btn btn-success btn-lg">Печать реестра</button>
-          </div>
-        </div>                             
-      </div> 
+  </div>
 </div>
-
+<div id="newReqDataEmpty" class="d-none">
+  <div id="noForUpload" class="bd-callout bd-callout-info">
+    Нет новых запросов
+  </div>
+</div>
       <h6 class="display-6 mt-5">Запросы в работе</h6>
 
 <div class="newRequests">
@@ -132,7 +136,7 @@
         <th data-field="status" data-sortable="true" >Статус</th>
         <th data-field="performer" data-sortable="true" >Исполнитель</th>
         <th data-field="datePay" data-sortable="true" data-formatter="payFormatter">Оплата</th>
-        <th data-field="dateDue" data-sortable="true" >Дата исполнения</th>
+        <th data-field="dateDue" data-sortable="true" data-formatter="deadlineFormatter">Дата исполнения</th>
       </tr>
     </thead>
     </table>
@@ -186,10 +190,7 @@
           </div>
         </div>                                    
       </div> 
-
 </div>
-
-
     </div>
 
 <div class="modal fade" id="reqInfo" tabindex="-1" aria-labelledby="reqInfoLabel" aria-hidden="true">
@@ -199,11 +200,26 @@
   </div>
 </div>
 
+<div class="modal fade" id="notify" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Информация</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <p id="txtInfo"></p>
+        <div class="text-end"><button type="button" class="btn btn-danger" data-bs-dismiss="modal">Понятно</button></div>
+      </div>      
+    </div>
+  </div>
+</div>
+
   </body>
 </html>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.19.1/locale/bootstrap-table-ru-RU.min.js" integrity="sha512-VWiWx34Bykw/3DL8PNzXeMvGKA9osnJ4Hf9uplXFNa2ln+YS3Swup4K8SdHzFxVPYlf1r2B/OpPVWsG2pfmenA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+    <script type="text/javascript" src="lib/bootstrap/bootstrap.bundle.min.js" ></script>
+    <script type="text/javascript" src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-table/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap-table/bootstrap-table-ru-RU.min.js" ></script>  
     <script type="text/javascript" src="js/requests.js"></script>
     <script type="text/javascript" src="js/common.js"></script>       

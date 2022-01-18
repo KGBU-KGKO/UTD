@@ -81,7 +81,7 @@ $("#uploadTable").on('click','tr',function(){
 });
 
 $("#uploadTable").on('click','a',function(){
-    window.open('/tpl/form'+$(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]+'.php?numLog='+$(this).html(), '_blank');
+    window.open('/tpl/form'+$(this).parents().eq(1).find('td').eq(1).text()+'.php?numLog='+$(this).html(), '_blank');
 });
 
 $("input[name=reqFiles]").change(function() {
@@ -111,11 +111,13 @@ $("#upload").click(function() {
 
     // upload files
     let num = $('#numReq').val();
+    let isPaid = $('#isPaid').prop('checked');
     let data = new FormData();
     $.each($('#reqFiles')[0].files, function(i, file) {
         data.append('file[]', file);
     });
     data.append('num', num);
+    data.append('isPaid', isPaid);
 
     $.ajax({
         url: 'data/upload.php',

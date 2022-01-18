@@ -5,12 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="lib/jquery/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="lib/suggestions/suggestions.min.css">
     <link rel="stylesheet" type="text/css" href="css/utd.css">
-    <link href="css/suggestions.min.css" rel="stylesheet" />
     <title>ИС УТД - Создать запрос</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   </head>
@@ -580,11 +579,7 @@
 </div>
 
 <?php 
-
 if (isset($_GET['toast'])) {
-
-
-
   echo '
   <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
   <div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
@@ -598,12 +593,11 @@ if (isset($_GET['toast'])) {
   </div>';
 }
 ?>
-
   </body>
 </html>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script type="text/javascript" src="lib/bootstrap/bootstrap.bundle.min.js" ></script>
+    <script type="text/javascript" src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="lib/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="lib/suggestions/jquery.suggestions.min.js"></script>  
     <script type="text/javascript" src="js/new-requests.js"></script>
     <script type="text/javascript" src="js/common.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@21.8.0/dist/js/jquery.suggestions.min.js"></script>    
