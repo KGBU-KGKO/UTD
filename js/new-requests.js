@@ -53,10 +53,6 @@ $.when($.ready).then(function() {
 
 });
 
-$('#dOGVName').on("input", function() {
-    $(this).val($.trim($(this).val()));
-})
-
  $('#services input[type=checkbox]').change(function() {
     $('#services input[type=checkbox]').each(function() {
         $(this).prop('required', false);
@@ -333,6 +329,7 @@ $("#send").click(function() {
             decInfo = $('#reqUL').serialize();
             break;
         case 'OGV':
+            $('#dOGVName').val($.trim($('#dOGVName').val()));
             decInfo = $('#reqOGV').serialize();
             break;
     }

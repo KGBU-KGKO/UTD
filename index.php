@@ -307,15 +307,13 @@ if ($res['count'] != '0') {
   </div>           
 </div>
 
-<div style="display: none;" id="toast" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-<div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
-  <div class="d-flex">
-    <div class="toast-body">
-      Привет, мир! Это тост-сообщение.
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="notifyToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="10000">
+    <div class="d-flex">
+      <div id="notifyToastBody" class="toast-body"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
-    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
   </div>
-</div>
 </div>
 
 </div>
@@ -336,30 +334,7 @@ if ($res['count'] != '0') {
 </div>
     </div>
   </div>
-</div>
-
-<?php 
-if (isset($_GET['success'])) {
-  $text = $_GET['success'];
-  $class = 'success';
-} 
-
-if (isset($_GET['error'])) {
-  $text = $_GET['error'];
-  $class = 'danger';
-} 
-if (isset($_GET['success']) || isset($_GET['error'])) {
-  echo '
-  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div class="toast bg-'.$class.' text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body">'.$text.'</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
-    </div>
-  </div>
-  </div>';
-}
-?>    
+</div>  
   </body>
 </html>
     <script type="text/javascript" src="lib/bootstrap/bootstrap.bundle.min.js" ></script>

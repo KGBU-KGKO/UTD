@@ -4,10 +4,11 @@ include 'config.php';
 $status = $_GET['status'];
 $num = $_GET['num'];
 
+
 $paid = '';
 $issue = '';
 $performer = '';
-$status = "status = '$status'";
+$statusRow = "status = '$status'";
 
 if ($status == 'В работе') {
 	$performer = ", performer = '".$_GET['performer']."' ";	
@@ -19,13 +20,13 @@ if ($status == 'Оплачен') {
 		die();
 	} else {
 		$paid = "datePayment = GETDATE()";
-		$status = "";
+		$statusRow = "";
 	}
 }
 
 if ($status == 'Выполнен') {
-	if (empty(isPaid($num))) {
-		echo 'Запрос не оплачен. Сначала нужно оплатить запрос. ';
+	if (empty(isPaid($num)) || empty(forDelivery($num))) {
+		echo 'Запрос не оплачен или не на выдаче. Сначала нужно оплатить запрос и сформировать ответ/отказ ';
 		die();
 	} else {
 	$issue = ", dateIssue = GETDATE()";
@@ -33,7 +34,7 @@ if ($status == 'Выполнен') {
 }
 
 try {
-    $query = "update request set $status$paid$issue$performer where numLog = '$num'";
+    $query = "update request set $statusRow$paid$issue$performer where numLog = '$num'";
 	$stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 	$stmt->execute();
 	echo 'done';
@@ -54,6 +55,19 @@ function isPaid($num) {
 		return 'Оплачен';
 	} else {
 		return $rows['datePayment'];
+	}
+}
+
+function forDelivery($num) {
+	global $conn;
+	$query = "select request.status, declarant.type from request INNER JOIN declarant ON request.IDd = declarant.ID  where numLog = '$num'";
+	$stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+	$stmt->execute();	
+	$rows = $stmt->fetch(PDO::FETCH_ASSOC);
+	if (substr($rows["status"], 0, 17) == "На выдачу") {
+		return "На выдачу";
+	} else {
+		return null;
 	}
 }
 

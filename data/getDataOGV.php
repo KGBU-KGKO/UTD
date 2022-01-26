@@ -1,7 +1,7 @@
 <?php
 	include '../data/config.php';
 	if (isset($_GET['numLog'])) {
-		$query = "select request.numLog, request.dateReq, request.Comment, declarant.name, request.realEstate, request.IDs, request.senderNum, request.senderDate, request.smevNum, request.delivery, request.attachList from request INNER JOIN declarant ON request.IDd = declarant.ID WHERE numLog = '".$_GET['numLog']."'";
+		$query = "select request.numLog, request.dateReq, request.Comment, declarant.name, request.realEstate, request.IDs, request.senderNum, request.senderDate, request.smevNum, request.delivery, request.attachList, request.logOutNum, request.logOutDate, request.performer from request INNER JOIN declarant ON request.IDd = declarant.ID WHERE numLog = '".$_GET['numLog']."'";
 		$stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
     	$stmt->execute();
     	$rowsRequest = $stmt->fetch(PDO::FETCH_ASSOC);

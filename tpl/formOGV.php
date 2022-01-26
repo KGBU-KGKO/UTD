@@ -26,7 +26,7 @@
 	<table class="table table-bordered border-dark">
   		<tbody>
   			<tr>
-      			<th scope="row" colspan="2" class="text-center fw-weight-bold">Сведения о заявителе - юридическом лице</th>
+      			<th scope="row" colspan="2" class="text-center fw-weight-bold">Сведения о заявителе - органе государственной власти</th>
     	 	</tr>
 		    <tr>
 		      <td scope="row">Наименование учреждения</td>

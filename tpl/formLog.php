@@ -18,19 +18,7 @@
 
 		<table class="table table-bordered border-dark">
 	  		<tbody class="text-center align-middle">
-			    <tr class="text-center align-middle">
-			      <th>Регистрационный номер</th>
-			      <th>Дата регистрации</th>
-			      <th>Исходящий номер отправителя</th>
-			      <th>Дата исходящего отправителя</th>
-			      <th>Номер СМЭВ</th>
-			      <th>Заявитель</th>
-			      <th>Содержание запроса</th>
-			      <th>Услуга</th>
-			      <th>Исполнитель</th>
-			      <th>Количество листов</th>
-			    </tr>
-			    <?php include '../data/getDataLogIn.php'; ?>
+			   <?=$tpl?>
 			</tbody>
 		</table>
 

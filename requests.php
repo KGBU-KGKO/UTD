@@ -215,6 +215,60 @@
   </div>
 </div>
 
+<div class="modal fade" id="deny" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Отказ в предоставлении данных на запрос №<span id="denyNum"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <h6 class="display-6">Укажите причину отказа</h6>
+        <div class="row g-1 mb-3">
+          <div class="col-md">
+            <div class="form-floating">
+              <select class="form-select" id="denyTxtSelect" aria-label="Floating label select">
+                <option selected>---</option>
+                <option value="1">отсутствием инвентарного дела</option>
+              </select>
+              <label for="denyTxtSelect">Выберите шаблон причины отказа</label>
+            </div>
+          </div>
+        </div> 
+        <div class="row g-1 mb-3">
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="denyTxt" name="denyTxt" style="height: 200px"></textarea>
+            <label for="denyTxt">Причина отказа на запрос</label>
+          </div> 
+        </div> 
+        <div class="text-end">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+          <button type="button" class="btn btn-danger" id="denyReq">Да, отказать</button>          
+        </div>
+      </div>      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="reply" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">В запросе №<span id="replyNumTitle">02-22/0117</span> найдено несколько услуг</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="mb-3">Укажите резолюцию по каждой услуге запроса:</h5>
+        <div id="replyBody"></div>
+        <div class="text-end mt-3">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="button" class="btn btn-success" id="multiReply">Подтвердить</button>          
+        </div>
+      </div>      
+    </div>
+  </div>
+</div>
+
   </body>
 </html>
     <script type="text/javascript" src="lib/bootstrap/bootstrap.bundle.min.js" ></script>

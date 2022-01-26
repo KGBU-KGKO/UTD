@@ -1,21 +1,12 @@
-$.when($.ready).then(function() {
-
-  $.ajax({
-      url: 'data/showRequests.php',
-      type: 'GET',
-      data: { status: "Ожидает загрузки" },
-      success: function(data){
-         let uploadTable = $('#uploadTable');
-         let dataTbl = '';
-         dataTbl = $.parseJSON(data);
-         uploadTable.bootstrapTable({
-           data: dataTbl,
+let notifyToast = bootstrap.Toast.getOrCreateInstance($('#notifyToast'));
+let uploadTable = $('#uploadTable').bootstrapTable({
            pagination: true,
            search: true,
-         })         
-      }
-  }); 
+         });
 
+
+$.when($.ready).then(function() {
+  uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
 new Chart(document.getElementById("line-chart"), {
   type: 'line',
   data: {
@@ -50,6 +41,25 @@ new Chart(document.getElementById("line-chart"), {
 });
 
 });
+
+function getDataTable(dataStatus) {
+  dataTbl = $.ajax({
+      url: 'data/showRequests.php',
+      type: 'GET',
+      async : false,
+      data: { status: dataStatus },
+      success: function(data){
+         return data;
+      }
+  }); 
+  return $.parseJSON(dataTbl.responseText)
+}
+
+function notify(status, text) {
+  $('#notifyToastBody').html(text);
+  $('#notifyToast').addClass('bg-'+status);
+  notifyToast.show();
+}
 
 function numFormatter(value) {
     return '<a href="#">' + value + '</a>';
@@ -128,9 +138,13 @@ $("#upload").click(function() {
         method: 'POST',
         success: function(data){
             if (data.split(" ")[0] == 'Ошибка') {
-                window.location.replace("index.php?error="+data);
+                $('#numReq').val('');
+                uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
+                notify('danger', data);
             } else {
-                window.location.replace("index.php?success="+data);
+                $('#numReq').val('');
+                uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
+                notify('success', data);
             }
         }
     });

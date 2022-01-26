@@ -13,14 +13,10 @@
 		    $stmt->bindParam(2, $logNumStart, PDO::PARAM_STR);
 		    $stmt->bindParam(3, $logType, PDO::PARAM_STR);
 		    $stmt->execute();
-		    
-		    if ($logType = 'in') {
-		    	$title = '02-22 Журнал входящих'
-		    } else {
-		    	$title = '02-23 Журнал исходящих'
-		    }
+		   
 		    switch ($logType) {
     				case "in":
+    						$title = '02-22 Журнал входящих';
     						$tpl = "
     							<tr class=\"text-center align-middle\">
 	    							<th>Регистрационный номер</th>
@@ -35,9 +31,10 @@
 								    <th>Количество листов</th>
 							    </tr>
 							    <tr style=\"page-break-after: auto; page-break-before: auto; page-break-inside: avoid;\">
-    						"
+    						";
     					break;
     				case "out":
+    						$title = '02-23 Журнал исходящих';
     						$tpl = "
     							<tr class=\"text-center align-middle\">
 							      <th>Регистрационный номер</th> 
@@ -49,33 +46,39 @@
 							      <th>Исполнитель</th>
 							    </tr>
 							    <tr style=\"page-break-after: auto; page-break-before: auto; page-break-inside: avoid;\">
-    						"
+    						";
     					break;
     			}	
-
 
 		    while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		    	switch ($logType) {
     				case "in":
-    						$tpl = $tpl + "
-
-    						"
+    						$tpl = $tpl . "
+    							<td>" . $rows['numLogReq'] . "</td>
+    							<td>" .$rows['dateReq'] . "</td>
+    							<td>" .$rows['senderNum'] . "</td>
+    							<td>" .$rows['senderDate'] . "</td>
+    							<td>" .$rows['smevNum'] . "</td>
+    							<td>" .$rows['name'] . "</td>
+    							<td>" .$rows['realEstate'] . "</td>
+    							<td>" .$rows['svc'] . "</td>
+    							<td nowrap>" .$rows['performer'] . "</td>
+    							<td></td>
+    						";
     					break;
     				case "out":
+    						$tpl = $tpl . "
+    							<td>" .$rows['numLogRep'] . "</td>
+    							<td>" .$rows['dateReply'] . "</td>
+    							<td>" .$rows['numLogReq'] . "</td>
+    							<td>" .$rows['name'] . "</td>
+    							<td>" .$rows['smevNum'] . "</td>    							
+    							<td>" .$rows['svc'] . "</td>
+    							<td nowrap>" .$rows['performer'] . "</td>
+    						";
     					break;
     			}
-		    	$tpl = "<tr style=\"page-break-after: auto; page-break-before: auto; page-break-inside: avoid;\">" .
-		    	echo "<td>" . $rows['numLog'] . "</td>";
-		    	echo "<td>" . $rows['dateReq'] . "</td>";
-		    	echo "<td>" . $rows['senderNum'] . "</td>";
-		    	echo "<td>" . $rows['senderDate'] . "</td>";
-		    	echo "<td>" . $rows['smevNum'] . "</td>";
-		    	echo "<td>" . $rows['name'] . "</td>";
-		    	echo "<td>" . $rows['realEstate'] . "</td>";
-		    	echo "<td>" . $rows['svc'] . "</td>";
-		    	echo "<td nowrap>" . $rows['performer'] . "</td>";
-		    	echo "<td></td>";
-
+    			$tpl = $tpl . "</tr>";
 		    }
 		} catch(PDOException $e) {
 		    die("Error executing stored procedure: ".$e->getMessage());
