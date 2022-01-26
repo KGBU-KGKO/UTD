@@ -178,5 +178,8 @@ $("#deleteReq").click(function() {
 });  
 
 $("#printIn").click(function() {
-  window.open('/tpl/inLog.php?logDateStart='+$('#inDate').val(), '_blank');
+  logDate = $("#logDate").val();
+  logNum = $("#logNum").val();
+  logType = $("#logType option:selected").val();
+  window.open(`/tpl/formLog.php?logDateStart=${logDate}&logNumStart=${logNum}&logType=${logType}`, '_blank');
 });  

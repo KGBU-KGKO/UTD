@@ -266,45 +266,35 @@ if ($res['count'] != '0') {
 </div>
 
 <div class="row mb-3">
-  <h6 class="display-6">Сформировать журналы</h6>
+  <h6 class="display-6">Сформировать журнал</h6>
   <div class="row g-3">
     <div class="col-md-3">
       <div class="form-floating">
-        <input type="Date" class="form-control" id="inDate" name="inDate" placeholder="Укажите дату" value="">
-        <label for="inDate">Укажите дату</label>
+        <input type="Date" class="form-control" id="logDate" name="logDate" placeholder="Укажите дату" value="">
+        <label for="logDate">Укажите дату начала</label>
       </div>
     </div>
     <div class="col-md-3">
       <div class="form-floating">
-        <input type="text" class="form-control" id="inNum" name="inNum" placeholder="Укажите номер запроса" value="">
-        <label for="inNum">Укажите номер запроса</label>
+        <input type="text" class="form-control" id="logNum" name="logNum" placeholder="Укажите номер запроса" value="">
+        <label for="logNum">Укажите номер запроса</label>
       </div>
-    </div>      
+    </div> 
+    <div class="col-md-3">
+      <div class="form-floating">
+        <select class="form-select" id="logType" aria-label="Floating label select">
+          <option value="in" selected>Входящий журнал</option>
+          <option value="out">Исходящий журнал</option>
+        </select>
+        <label for="logType">Выберите вид заявителя</label>
+      </div>
+    </div>
     <div class="col-md-3">
       <div class="form-floating d-grid gap-2 mx-auto">
-        <button style="height: 58px;" type="button" id="printIn" class="btn btn-success btn-lg">Печать входящего журнала</button>
+        <button style="height: 58px;" type="button" id="printIn" class="btn btn-success btn-lg">Печать журнала</button>
       </div>
     </div>                             
   </div> 
-  <div class="row g-3 mb-3">
-    <div class="col-md-3">
-      <div class="form-floating">
-        <input type="Date" class="form-control" id="outDate" name="outDate" placeholder="Укажите дату" value="">
-        <label for="outDate">Укажите дату</label>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="form-floating">
-        <input type="text" class="form-control" id="outNum" name="outNum" placeholder="Укажите номер запроса" value="">
-        <label for="outNum">Укажите номер запроса</label>
-      </div>
-    </div>    
-    <div class="col-md-3">
-      <div class="form-floating d-grid gap-2 mx-auto">
-        <button style="height: 58px;" type="button" id="printOut" class="btn btn-success btn-lg">Печать исходящего журнала</button>
-      </div>
-    </div>                             
-  </div>           
 </div>
 
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
