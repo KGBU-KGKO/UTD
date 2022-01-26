@@ -177,6 +177,7 @@ $("#Issue").click(function() {
       }
   }); 
 });
+
 $("#Cancel").click(function() {
   if (!validateForm(['reqNumWork', 'select:performerInWork'])) {
     return;

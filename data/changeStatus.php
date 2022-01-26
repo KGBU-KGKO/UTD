@@ -51,7 +51,7 @@ function isPaid($num) {
 	$stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 	$stmt->execute();	
 	$rows = $stmt->fetch(PDO::FETCH_ASSOC);
-	if ($rows['type'] == 'OGV') {
+	if ($rows['type'] == 'OGV' || $rows['status'] == 'На выдачу (Отказ)') {
 		return 'Оплачен';
 	} else {
 		return $rows['datePayment'];
