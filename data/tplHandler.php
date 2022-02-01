@@ -15,7 +15,10 @@ $listServices = array(
     11 => "Справка о собственности"
 );
 
-checkTemplate(getServices($numInLog), $numInLog, $numOutLog);
+$request = checkTemplate(getServices($numInLog), $numInLog, $numOutLog);
+
+
+
 
 function checkTemplate($services, $numInLog, $numOutLog) {
 	//var_dump($services);
@@ -28,8 +31,7 @@ function checkTemplate($services, $numInLog, $numOutLog) {
     foreach ($services as $item) {
 		switch ($item) {
 		    case 1:
-		        //echo getData($numInLog, $item);
-		    	echo "Шаблон для услуги $item еще не создан, вот тебе пока только номер для ответа. <br>Регистрационный номер: $numOutLog<br>";
+		        return getData($numInLog, $item);
 		        break;
 		    case 2:
 		    case 3:
@@ -57,23 +59,30 @@ function getServices($num) {
 }
 
 function getData($num, $tpl) {
-	echo $tpl."|".$num;
-	// global $conn;
-	// $query = "select request.IDs from request where numLog = '$num'";
-	// $stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
-	// $stmt->execute();	
-	// $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-	// return explode (";", $rows['IDs']);
-
-	$logOutDate = '';
-	$logOutNum = '';
-	$dateReq = '';
-	$name = '';
-	$realEstate = '';
-	$performer = 'Батышева Анастасия Михайловна';
-	$performer2 = '';
-	$title = 'Документовед';
-
+	$request = new Request(new Declarant(), new Performer());
+	//echo $tpl."|".$num;
+	global $conn;
+	$query = "select reply.dateReply as 'logOutDate', reply.numLog as 'logOutNum', request.numLog as 'logInNum', request.dateReq as 'logInDate', declarant.name, declarant.address, declarant.email, request.realEstate, reply.status as 'answer', reply.reason, request.performer from request  
+			inner join reply on request.ID = reply.IDr
+			inner join declarant on request.IDd = declarant.ID
+			where request.numLog = '$num'";
+	$stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+	$stmt->execute();	
+	$rows = $stmt->fetch(PDO::FETCH_ASSOC);
+	$request->logInNum = $rows["logInNum"];
+	$request->logOutNum = $rows["logOutNum"];
+	$request->logInDate = $rows["logInDate"];
+	$request->logOutDate = $rows["logOutDate"];
+	$request->declarant->name = $rows["name"];
+	$request->declarant->address = $rows["address"];
+	$request->declarant->email = $rows["email"];
+	$request->realEstate = $rows["realEstate"];
+	$request->answer = $rows["answer"];
+	$request->reason = $row["reason"];
+	$request->performer->name = $rows["performer"];
+	$request->performer->shortName = $rows["performer"];
+	$request->performer->title = "Документовед";
+	return $request;
 }
 
 ?>

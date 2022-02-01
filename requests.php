@@ -71,10 +71,10 @@
         data-page-list="[10, 25, 50, 100, all]">
           <thead>
         <tr>
-          <th data-field="reqNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
-          <th data-field="type" data-sortable="true" >Тип</th>
-          <th data-field="name" data-sortable="true" >Заявитель</th>
-          <th data-field="objAddress" data-sortable="true" >Объект запроса</th>
+          <th data-field="logInNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
+          <th data-field="declarant" data-sortable="true" data-formatter="typeFormatter" >Тип</th>
+          <th data-field="declarant" data-sortable="true" data-formatter="decFormatter">Заявитель</th>
+          <th data-field="realEstate" data-sortable="true" >Объект запроса</th>
           <th data-field="svc" data-sortable="true" >Услуга</th>
         </tr>
       </thead>
@@ -128,13 +128,13 @@
     data-page-list="[10, 25, 50, 100, all]">
         <thead>
       <tr>
-        <th data-field="reqNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
-        <th data-field="type" data-sortable="true" >Тип</th>
-        <th data-field="name" data-sortable="true" >Заявитель</th>
-        <th data-field="objAddress" data-sortable="true" >Объект запроса</th>
+        <th data-field="logInNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
+        <th data-field="declarant" data-sortable="true" data-formatter="typeFormatter">Тип</th>
+        <th data-field="declarant" data-sortable="true" data-formatter="decFormatter">Заявитель</th>
+        <th data-field="realEstate" data-sortable="true" >Объект запроса</th>
         <th data-field="svc" data-sortable="true" >Услуга</th>
         <th data-field="status" data-sortable="true" >Статус</th>
-        <th data-field="performer" data-sortable="true" >Исполнитель</th>
+        <th data-field="performer" data-sortable="true" data-formatter="perfFormatter">Исполнитель</th>
         <th data-field="datePay" data-sortable="true" data-formatter="payFormatter">Оплата</th>
         <th data-field="dateDue" data-sortable="true" data-formatter="deadlineFormatter">Дата исполнения</th>
       </tr>

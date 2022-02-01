@@ -1,17 +1,6 @@
 <?php
 include 'config.php';
-
-class Request
-{
-    public $reqNum;
-    public $type;
-    public $name;
-    public $objAddress;
-    public $svc;
-    public $status;
-    public $performer;
-    public $dateDue;
-}
+include 'classRequest.php';
 
 $requests = [];
 
@@ -26,20 +15,20 @@ try {
     $stmt->execute();
 
     while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $req = new Request();
+      $req = new Request(new Declarant(), new Performer());
       if ($rows['type'] == 'OGV') {
         $type = $rows['type']." <br>".$rows['smevNum'];
       } else {
         $type = $rows['type'];
       }
-      $req->reqNum = $rows['reqNum'];
-      $req->type = $type;
-      $req->name = $rows['name'];
-      $req->objAddress = $rows['reqObjAddress'];
+      $req->logInNum = $rows['reqNum'];
+      $req->declarant->type = $type;
+      $req->declarant->name = $rows['name'];
+      $req->realEstate = $rows['reqObjAddress'];
       $req->svc = $rows['svc'];
       if ($status == 'В работе') {
         $req->status = $rows['status'];
-        $req->performer = $rows['performer'];
+        $req->performer->name = $rows['performer'];
         $req->datePay = $rows['datePayment'];
         $req->dateDue = $rows['dateDue'];
       }

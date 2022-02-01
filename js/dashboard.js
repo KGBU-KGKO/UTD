@@ -65,6 +65,15 @@ function numFormatter(value) {
     return '<a href="#">' + value + '</a>';
 }
 
+function typeFormatter(value) {
+    return value.type;
+}
+
+function decFormatter(value) {
+    return value.name;
+}
+
+
 function customSort(sortName, sortOrder, data) {
   var order = sortOrder === 'desc' ? -1 : 1
   data.sort(function (a, b) {
@@ -181,5 +190,6 @@ $("#printIn").click(function() {
   logDate = $("#logDate").val();
   logNum = $("#logNum").val();
   logType = $("#logType option:selected").val();
+  logType == "in" ? logNum = "02-22/"+logNum : logNum = "02-23/"+logNum;
   window.open(`/tpl/formLog.php?logDateStart=${logDate}&logNumStart=${logNum}&logType=${logType}`, '_blank');
 });  

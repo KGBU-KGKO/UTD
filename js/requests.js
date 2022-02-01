@@ -67,6 +67,18 @@ function deadlineFormatter(value) {
   }
 }
 
+function typeFormatter(value) {
+    return value.type;
+}
+
+function decFormatter(value) {
+    return value.name;
+}
+
+function perfFormatter(value) {
+    return value.name;
+}
+
 function customSort(sortName, sortOrder, data) {
   let order = sortOrder === 'desc' ? -1 : 1
   data.sort(function (a, b) {
@@ -133,6 +145,10 @@ $("#inWork").click(function() {
       type: 'GET',
       data: { status: "В работе", num: $('#reqNumNew').val(), performer: $('#performer option:selected').text() },
       success: function(data){
+        if (data == 'done') {
+        } else {
+            showNotifyModal(data);
+        }
         newReqTable.bootstrapTable('load', getDataTable("Новый"));
         inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
         $('#reqNumNew').val('');
@@ -151,10 +167,10 @@ $("#Paid").click(function() {
       data: { status: "Оплачен", num: $('#reqNumWork').val()},
       success: function(data){
         if (data == 'done') {
-          inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
         } else {
             showNotifyModal(data);
         }
+        inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
       }
   }); 
 });
@@ -169,11 +185,11 @@ $("#Issue").click(function() {
       data: { status: "Выполнен", num: $('#reqNumWork').val()},
       success: function(data){
         if (data == 'done') {
-          $('#reqNumWork').val("");
-          inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
         } else {
             showNotifyModal(data);
         }
+        $('#reqNumWork').val("");
+        inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
       }
   }); 
 });

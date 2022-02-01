@@ -12,7 +12,7 @@
     	$stmt->execute();
     	$rowsRequest = $stmt->fetch(PDO::FETCH_ASSOC);
     	$svc = $rowsRequest['IDs'];
-
+    	$dateBirth = date( "d.m.Y", strtotime($rowsRequest['dateBirth']));
     	if (!is_null($rowsRequest['aFIO'])) {
     		$FIO = $rowsRequest['aFIO'];
     		$address = $rowsRequest['aAddress'];

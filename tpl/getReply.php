@@ -4,17 +4,10 @@ error_reporting(E_ALL);
 $numInLog = $_GET['numInLog'];
 $numOutLog = $_GET['numOutLog'];
 //проверка, есть ли шаблон под данную услугу
+include '../data/classRequest.php';
 include '../data/tplHandler.php';
 //если нету, то выдавать заглушку, вот вам номер и дата
 //если есть, то отдать шаблон
-
-
-
-
-
-
-
-/*
 
 
 include_once('../lib/tbs/tbs_class.php');
@@ -38,20 +31,23 @@ $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload]
 // );
 // $TBS->MergeBlock('c', $data);
 
-$logOutDate = '';
-$logOutNum = '';
-$numLog = '';
-$dateReq = '';
-$name = '';
-$realEstate = '';
-$performer = 'Батышева Анастасия Михайловна';
-$performer2 = '';
-$title = 'Документовед';
+ $logOutDate = explode(' ', $request->logOutDate)[0];
+ $logOutNum = $request->logOutNum;
+ $logInNum = $request->logInNum;
+ $logInDate = explode(' ', $request->logInDate)[0];
+ $name = $request->declarant->name;
+ $realEstate = $request->realEstate;
+ $answer = $request->answer; //тут нжно понимать ответ/отказ и разный текст подставлять в шаблон
+ $address = $request->declarant->address;
+ $email = $request->declarant->email;
+ $performer = $request->performer->name;
+ $performer2 = $request->performer->shortName;
+ $title = $request->performer->title;
 
 //заполняем ответ
 // switch ($answer) {
 //     case "yes":
-         $answer = 'направляем копию учетно-технической документации на указанный объект';
+//         $answer = 'направляем копию учетно-технической документации на указанный объект';
 //         break;
 //     case "no":
 //         $answer = $_GET['denyTxt'];
@@ -72,5 +68,5 @@ if ($save_as==='') {
     // The script can continue.
     exit("File [$output_file_name] has been created.");
 }
-*/
+
 ?>

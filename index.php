@@ -76,10 +76,10 @@ if ($res['count'] != '0') {
   data-page-list="[10, 25, 50, 100, all]">
       <thead>
     <tr>
-      <th data-field="reqNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
-      <th data-field="type" data-sortable="true" >Тип</th>
-      <th data-field="name" data-sortable="true" >Заявитель</th>
-      <th data-field="objAddress" data-sortable="true" >Объект запроса</th>
+      <th data-field="logInNum" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
+      <th data-field="declarant" data-sortable="true" data-formatter="typeFormatter">Тип</th>
+      <th data-field="declarant" data-sortable="true" data-formatter="decFormatter">Заявитель</th>
+      <th data-field="realEstate" data-sortable="true" >Объект запроса</th>
       <th data-field="svc" data-sortable="true" >Услуга</th>
     </tr>
   </thead>
@@ -276,7 +276,7 @@ if ($res['count'] != '0') {
     </div>
     <div class="col-md-3">
       <div class="form-floating">
-        <input type="text" class="form-control" id="logNum" name="logNum" placeholder="Укажите номер запроса" value="">
+        <input type="text" class="form-control" id="logNum" name="logNum" placeholder="Укажите номер запроса" value="0001">
         <label for="logNum">Укажите номер запроса</label>
       </div>
     </div> 

@@ -22,7 +22,7 @@
 		</div>
 	<br>
 	<p class="text-center my-0 py-0">ЗАПРОС №<?=$rowsRequest['numLog'];?></p>
-	<p class="text-center">о предоставлении копий учетно-технической документации и (или)<br>содержащихся в ней сведений</p>
+	<p class="text-center">о предоставлении копий учетно-технической документации и (или) содержащихся в ней сведений</p>
 	<table class="table table-bordered border-dark">
   		<tbody>
   			<tr>
@@ -77,9 +77,8 @@
 		    </tr>
 		</tbody>
 	</table>
-	<br style="page-break-after: always;">
 	<p> Прошу предоставить копию(и) учетно-технической документации:</p>
-	<table class="table table-bordered border-dark">	
+	<table class="table table-bordered border-dark mb-0">	
   		<tbody>
   			<tr>
   				<th scope="row" class="text-center">№</th>
@@ -90,7 +89,7 @@
 		</tbody>
 	</table>
 	<br>
-	<table class="table table-bordered border-dark">
+	<table class="table table-bordered border-dark mb-0">
   		<tbody>
   			<tr>
       			<th scope="row" colspan="2" class="text-center fw-weight-bold">Способ получения копий учетно-технической документации и (или) содержащихся в ней сведений, уведомлений</th>
@@ -101,7 +100,7 @@
 		</tbody>
 	</table>
 	<br>
-	<table class="table table-bordered border-dark">
+	<table class="table table-bordered border-dark mb-0">
   		<tbody>
   			<tr>
       			<th scope="row" colspan="2" class="text-center fw-weight-bold">Перечень прилагаемых документов </th>
@@ -112,7 +111,7 @@
 		</tbody>
 	</table>
 	<br>
-	<table class="table table-bordered border-dark" style="page-break-after: always;">
+	<table class="table table-bordered border-dark mb-0" style="page-break-after: always;">
   		<tbody>
   			<tr>
       			<th scope="row" colspan="2" class="text-center fw-weight-bold">Комментарий</th>
