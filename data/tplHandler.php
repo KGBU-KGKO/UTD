@@ -18,9 +18,11 @@ function checkTemplate($services, $numInLog, $numOutLog) {
 		        if ($request->answer == "Ответ") {
 		        	$request->answerText = "направляет копию технического паспорта";
 		        	$request->attach = "Приложение: Копия технического паспорта на 0 л. в 1 экз.";
+		        	$request->subject = "Предоставление";
 		        }
 		        if ($request->answer == "Отказ") {
 		        	$request->answerText = "отказывает в её предоставлении в связи с ".$request->reason;
+		        	$request->subject = "Отказ в предоставлении";
 		        }
 		        return $request;
 		        break;
@@ -51,11 +53,16 @@ function getServices($num) {
 
 function getData($num, $tpl) {
 	$request = new Request(new Declarant(), new Performer());
-	//echo $tpl."|".$num;
+	$str = file_get_contents("../data/template.json");
+	$data = json_decode($str);
 	global $conn;
-	$query = "select reply.dateReply as 'logOutDate', reply.numLog as 'logOutNum', request.numLog as 'logInNum', request.dateReq as 'logInDate', declarant.name, declarant.type, declarant.address, declarant.email, request.realEstate, reply.status as 'answer', reply.reason, request.performer from request  
+	$query = "select reply.dateReply as 'logOutDate', reply.numLog as 'logOutNum', request.numLog as 'logInNum', request.dateReq as 'logInDate', 
+		declarant.name, declarant.type, declarant.address, declarant.email, request.realEstate, reply.status as 'answer', request.senderNum, request.senderDate,
+		reply.reason, request.performer, request.smevNum, users.shortFIO, users.FIO, users.jobTitle, users.imgPath
+		from request  
 			inner join reply on request.ID = reply.IDr
 			inner join declarant on request.IDd = declarant.ID
+			inner join users on request.performer = users.shortFIO
 			where request.numLog ='$num'";
 	$stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 	$stmt->execute();	
@@ -64,25 +71,30 @@ function getData($num, $tpl) {
 	$request->logOutNum = $rows["logOutNum"];
 	$request->logInDate = $rows["logInDate"];
 	$request->logOutDate = $rows["logOutDate"];
+	$request->senderNum = $rows["senderNum"];
+	$request->senderDate = $rows["senderDate"];
+	$request->smev = $rows["smevNum"];
 	$request->declarant->name = $rows["name"];
 	$request->declarant->address = $rows["address"] ?? '';
-	$request->declarant->address = $rows["email"] ?? '';
+	$request->declarant->email = $rows["email"] ?? '';
 	$request->realEstate = $rows["realEstate"];
-	$request->answer = $rows["answer"];
+	$answer = $rows["answer"];
+	$type = $rows["type"];
+	$request->answer = $answer;
 	$request->reason = $rows["reason"];
-	$request->performer->name = $rows["performer"];
-	$request->performer->shortName = $rows["performer"];
-	$request->performer->title = "Документовед";
+
+	if ($data->{$tpl}->answer->$answer->decType->$type->signName == 'self') {
+		$request->performer->shortName = $rows["shortFIO"];
+		$request->performer->title = $rows["jobTitle"]; 
+		$request->performer->name = $rows["FIO"]; 
+		$request->performer->pathIMG = $rows["imgPath"];
+	} else {
+		$request->performer->shortName = $data->{$tpl}->answer->$answer->decType->$type->signName;
+		$request->performer->title = $data->{$tpl}->answer->$answer->decType->$type->signTitle;
+		$request->performer->name = $rows["FIO"]; 
+	}
+
 	return $request;
 }
-
-// function getData($num, $svc, $type, $answer) {
-// 	$svc = "svc".$svc;
-// 	$str = file_get_contents("template.json");
-// 	$data = json_decode($str);
-// 	$foo = $data->$svc->answer->$answer->decType->$type;
-// 	var_dump($data);
-// 	var_dump($foo);
-// }
 
 ?>

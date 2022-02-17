@@ -147,13 +147,13 @@ if ($res['count'] != '0') {
                     </h6>
 
                     <!-- Heading -->
-                    <div class="py-auto">
-                      <span class="h2 mb-0 card-head" id="reqAll">
+                    <div>
+                      <span class="h2 card-head align-middle" id="reqAll">
                         20
                       </span>
 
                     <!-- Badge -->
-                      <span class="badge bg-success mt-n1" id="reqToday">
+                      <span class="badge bg-success align-middle" id="reqToday">
                        +10 сегодня
                       </span>
                     </div>
@@ -264,13 +264,96 @@ if ($res['count'] != '0') {
 
         <!-- Line chart -->
 <div class="row mb-3">
-        <h6 class="display-6">Поступление за неделю</h6>
-        <canvas id="first-chart" height="350"></canvas>
+  <h6 class="display-6">Поступление за неделю</h6>
+  <div class="row justify-content-md-end mb-2">
+    <div class="col-md-2">
+      <div class="form-floating d-grid gap-2 mx-auto">
+        <button type="button" id="first-chart-filter" class="btn btn-primary">Фильтр</button>
+      </div>
+    </div>    
+    <div class="col-md-2">        
+      <input class="form-control" id="first-chart-date-from" type="date" placeholder="from" aria-label="date from">  
+    </div>    
+    <div class="col-md-2">        
+      <input class="form-control" id="first-chart-date-to" type="date" placeholder="to" aria-label="date to">  
+    </div>
+    <div class="btn-group col-3" role="group" aria-label="Basic radio toggle button group">
+      <input type="radio" class="btn-check" name="first-chart-btnradio" id="first-chart-btnradio1" autocomplete="off" checked>
+      <label class="btn btn-outline-primary" for="first-chart-btnradio1">Неделя</label>
+
+      <input type="radio" class="btn-check" name="first-chart-btnradio" id="first-chart-btnradio2" autocomplete="off">
+      <label class="btn btn-outline-primary" for="first-chart-btnradio2">Месяц</label>
+
+      <input type="radio" class="btn-check" name="first-chart-btnradio" id="first-chart-btnradio3" autocomplete="off">
+      <label class="btn btn-outline-primary" for="first-chart-btnradio3">Квартал</label>      
+
+      <input type="radio" class="btn-check" name="first-chart-btnradio" id="first-chart-btnradio4" autocomplete="off">
+      <label class="btn btn-outline-primary" for="first-chart-btnradio4">Год</label>
+    </div>
+  </div>
+  <canvas id="first-chart" height="350"></canvas>
 </div>
 
 <div class="row mb-3">
-        <h6 class="display-6">Количество исполненных запросов</h6>
-        <canvas id="third-chart" height="350"></canvas>
+  <h6 class="display-6">Количество запросов по видам</h6>
+  <div class="row justify-content-md-end mb-2">
+    <div class="col-md-2">
+      <div class="form-floating d-grid gap-2 mx-auto">
+        <button type="button" id="second-chart-filter" class="btn btn-primary">Фильтр</button>
+      </div>
+    </div>    
+    <div class="col-md-2">        
+      <input class="form-control" id="second-chart-date-from" type="date" placeholder="from" aria-label="date from">  
+    </div>    
+    <div class="col-md-2">        
+      <input class="form-control" id="second-chart-date-to" type="date" placeholder="to" aria-label="date to">  
+    </div>
+    <div class="btn-group col-3" role="group" aria-label="Basic radio toggle button group">
+      <input type="radio" class="btn-check" name="second-chart-btnradio" id="second-chart-btnradio1" autocomplete="off" checked>
+      <label class="btn btn-outline-primary" for="second-chart-btnradio1">Неделя</label>
+
+      <input type="radio" class="btn-check" name="second-chart-btnradio" id="second-chart-btnradio2" autocomplete="off">
+      <label class="btn btn-outline-primary" for="second-chart-btnradio2">Месяц</label>
+
+      <input type="radio" class="btn-check" name="second-chart-btnradio" id="second-chart-btnradio3" autocomplete="off">
+      <label class="btn btn-outline-primary" for="second-chart-btnradio3">Квартал</label>      
+
+      <input type="radio" class="btn-check" name="second-chart-btnradio" id="second-chart-btnradio4" autocomplete="off">
+      <label class="btn btn-outline-primary" for="second-chart-btnradio4">Год</label>
+    </div>
+  </div> 
+  <canvas id="second-chart" height="350"></canvas>
+</div>
+
+<div class="row mb-3">
+  <h6 class="display-6">Количество исполненных запросов</h6>
+  <div class="row justify-content-md-end mb-2">
+    <div class="col-md-2">
+      <div class="form-floating d-grid gap-2 mx-auto">
+        <button type="button" id="third-chart-filter" class="btn btn-primary">Фильтр</button>
+      </div>
+    </div>    
+    <div class="col-md-2">        
+      <input class="form-control" id="third-chart-date-from" type="date" placeholder="from" aria-label="date from">  
+    </div>    
+    <div class="col-md-2">        
+      <input class="form-control" id="third-chart-date-to" type="date" placeholder="to" aria-label="date to">  
+    </div>
+    <div class="btn-group col-3" role="group" aria-label="Basic radio toggle button group">
+      <input type="radio" class="btn-check" name="third-chart-btnradio" id="third-chart-btnradio1" autocomplete="off" checked>
+      <label class="btn btn-outline-primary" for="third-chart-btnradio1">Неделя</label>
+
+      <input type="radio" class="btn-check" name="third-chart-btnradio" id="third-chart-btnradio2" autocomplete="off">
+      <label class="btn btn-outline-primary" for="third-chart-btnradio2">Месяц</label>
+
+      <input type="radio" class="btn-check" name="third-chart-btnradio" id="third-chart-btnradio3" autocomplete="off">
+      <label class="btn btn-outline-primary" for="third-chart-btnradio3">Квартал</label>      
+
+      <input type="radio" class="btn-check" name="third-chart-btnradio" id="third-chart-btnradio4" autocomplete="off">
+      <label class="btn btn-outline-primary" for="third-chart-btnradio4">Год</label>
+    </div>
+  </div>         
+  <canvas id="third-chart" height="350"></canvas>
 </div>
 
 <div class="row mb-3">

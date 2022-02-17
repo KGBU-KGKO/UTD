@@ -5,18 +5,19 @@ $.when($.ready).then(function() {
     localStorage.setItem("listOGV", "");
 
     let today = new Date();
-    $('#reqDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth()+1)).slice(-2)  + "-" + ('0' + today.getDate()).slice(-2));
+    $('#reqDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth() + 1)).slice(-2) + "-" + ('0' + today.getDate()).slice(-2));
 
     //Enable tooltips everywhere
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
+    let tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 
     $(".address").suggestions({
         token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
         type: "ADDRESS",
         onSelect: function(suggestion) {
+            $(this).val(suggestion.unrestricted_value);
             //console.log(suggestion);
         }
     });
@@ -30,63 +31,63 @@ $.when($.ready).then(function() {
         token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
         type: "PARTY",
         onSelect: function(suggestion) {
-          let data = suggestion.data;
-          if (!data)
-            return;
-        $("#dULName").val(data.name.short_with_opf);
-        $("#dULINN").val(data.inn);
-        $("#dULOGRN").val(data.ogrn);
-        if (data.address)
-        $("#dULAddress").val(data.address.value);
-        $("#dULEmail").val('');
-        $("#dULPhone").val('')
-/* нету в бесплатном тарифе dadata
-        if (data.emails) {
-            $("#dULEmail").val(data.emails[0].value);    
+            let data = suggestion.data;
+            if (!data)
+                return;
+            $("#dULName").val(data.name.short_with_opf);
+            $("#dULINN").val(data.inn);
+            $("#dULOGRN").val(data.ogrn);
+            if (data.address)
+                $("#dULAddress").val(data.address.value);
+            $("#dULEmail").val('');
+            $("#dULPhone").val('')
+            /* нету в бесплатном тарифе dadata
+                    if (data.emails) {
+                        $("#dULEmail").val(data.emails[0].value);    
+                    }
+                    if (data.phones)
+                    $("#dULPhone").val(data.phones[0].value);
+            */
         }
-        if (data.phones)
-        $("#dULPhone").val(data.phones[0].value);
-*/ 
-        }
-       
-    });    
+
+    });
 
 });
 
- $('#services input[type=checkbox]').change(function() {
+$('#services input[type=checkbox]').change(function() {
     $('#services input[type=checkbox]').each(function() {
         $(this).prop('required', false);
     });
- });
+});
 
-  $('#delivery input[type=checkbox]').change(function() {
+$('#delivery input[type=checkbox]').change(function() {
     $('#delivery input[type=checkbox]').each(function() {
         $(this).prop('required', false);
     });
- });
+});
 
 function validate() {
     let check = true;
     $(".groupCheck").each(function() {
-        if(!$('#'+$(this).attr('id')+' input[type=checkbox]:checked').length) { 
-            $('#'+$(this).attr('id')+' input[type=checkbox]').prop('required', true);
+        if (!$('#' + $(this).attr('id') + ' input[type=checkbox]:checked').length) {
+            $('#' + $(this).attr('id') + ' input[type=checkbox]').prop('required', true);
         }
     });
     $("form:visible").each(function() {
-        $('#'+$(this).attr('id')).addClass('was-validated');
+        $('#' + $(this).attr('id')).addClass('was-validated');
         if ($(this)[0].checkValidity() === false) {
             check = false;
         }
     });
-    if (!check){
+    if (!check) {
         $('html, body').animate({
-            scrollTop: $(".invalid-feedback:visible:first").offset().top-100
-        }, 50);    
+            scrollTop: $(".invalid-feedback:visible:first").offset().top - 100
+        }, 50);
     }
     return check;
 }
 
-$( "#dFLName" ).on( "autocompleteselect", function( event, ui ) {
+$("#dFLName").on("autocompleteselect", function(event, ui) {
     //console.log(ui.item.value);
     //console.log(ui.item.label);
     decID = ui.item.label.split(" | ")[3];
@@ -99,9 +100,9 @@ $( "#dFLName" ).on( "autocompleteselect", function( event, ui ) {
     $('#dFLNumDUL').val(listFL[index].dulNum);
     $('#dFLDateDUL').val(listFL[index].dulDate);
     $('#dFLWhoDUL').val(listFL[index].dulOrg);
-} );
+});
 
-$( "#dFLAgentName" ).on( "autocompleteselect", function( event, ui ) {
+$("#dFLAgentName").on("autocompleteselect", function(event, ui) {
     let listAgents = [];
     agID = ui.item.label.split(" | ")[3];
     listAgents = $.parseJSON(localStorage.getItem("listAgents"));
@@ -111,10 +112,10 @@ $( "#dFLAgentName" ).on( "autocompleteselect", function( event, ui ) {
     $('#dFLAgentNumDUL').val(listAgents[index].dulNum);
     $('#dFLAgentDateDUL').val(listAgents[index].dulDate);
     $('#dFLAgentWhoDUL').val(listAgents[index].dulOrg);
-} );
+});
 
 // собственые подсказки из базы по юрлицам
-$( "#dULName" ).on( "autocompleteselect", function( event, ui ) {
+$("#dULName").on("autocompleteselect", function(event, ui) {
     decID = ui.item.label.split(" | ")[3];
     listUL = $.parseJSON(localStorage.getItem("listUL"));
     index = listUL.findIndex(x => x.ID === decID);
@@ -123,9 +124,9 @@ $( "#dULName" ).on( "autocompleteselect", function( event, ui ) {
     $('#dULAddress').val(listUL[index].address);
     $('#dULEmail').val(listUL[index].email);
     $('#dULPhone').val(listUL[index].tel);
-} );
+});
 
-$( "#dULAgentName" ).on( "autocompleteselect", function( event, ui ) {
+$("#dULAgentName").on("autocompleteselect", function(event, ui) {
     let listAgents = [];
     agID = ui.item.label.split(" | ")[3];
     listAgents = $.parseJSON(localStorage.getItem("listAgents"));
@@ -135,7 +136,7 @@ $( "#dULAgentName" ).on( "autocompleteselect", function( event, ui ) {
     $('#dULNumDUL').val(listAgents[index].dulNum);
     $('#dULDateDUL').val(listAgents[index].dulDate);
     $('#dULWhoDUL').val(listAgents[index].dulOrg);
-} );
+});
 
 $('#agentFLSwitch').change(function() {
     if ($(this).prop('checked')) {
@@ -190,8 +191,8 @@ $('#declarantType').on('change', function() {
     let listFL = [];
     let listUL = [];
     let listOGV = [];
-    let listAgents = []; 
-    let dull = '';   
+    let listAgents = [];
+    let dull = '';
     $('#likeAddress').prop('checked', false);
     $('#likeAddress').parents().eq(1).addClass('d-none');
     $('.declarant').hide();
@@ -205,38 +206,35 @@ $('#declarantType').on('change', function() {
                 url: 'data/getRef.php',
                 method: 'GET',
                 data: { ref: "declarant", decType: this.value },
-                success: function(data){
+                success: function(data) {
                     localStorage.setItem("listFL", data);
                     let obj = $.parseJSON(data);
-                    $.each(obj, function(key,value) {
-                      if (value.dulNum) 
-                        {dull = value.dulNum.substring(0,4)+ " " +value.dulNum.substring(4,10);} 
-                      else 
-                        {dull = "-";}
-                      listFL.push({label: value.name + " | " +dull+ " | " + value.dateBirth+ " | " + value.ID, value: value.name});
-                    }); 
+                    $.each(obj, function(key, value) {
+                        if (value.dulNum) { dull = value.dulNum.substring(0, 4) + " " + value.dulNum.substring(4, 10); } else { dull = "-"; }
+                        listFL.push({ label: value.name + " | " + dull + " | " + value.dateBirth + " | " + value.ID, value: value.name });
+                    });
 
-                    $( "#dFLName" ).autocomplete({
-                      source: listFL
+                    $("#dFLName").autocomplete({
+                        source: listFL
                     });
                 }
-            }); 
+            });
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
                 data: { ref: "agent", decType: this.value },
-                success: function(data){
+                success: function(data) {
                     localStorage.setItem("listAgents", data);
                     let obj = $.parseJSON(data);
-                    $.each(obj, function(key,value) {
-                      listAgents.push({label: value.FIO + " | " +value.dulNum.substring(0,4)+ " " +value.dulNum.substring(4,10)+ " | " + value.tel+ " | " + value.ID, value: value.FIO});
-                    }); 
+                    $.each(obj, function(key, value) {
+                        listAgents.push({ label: value.FIO + " | " + value.dulNum.substring(0, 4) + " " + value.dulNum.substring(4, 10) + " | " + value.tel + " | " + value.ID, value: value.FIO });
+                    });
 
-                    $( "#dFLAgentName" ).autocomplete({
-                      source: listAgents
+                    $("#dFLAgentName").autocomplete({
+                        source: listAgents
                     });
                 }
-            });         
+            });
 
             break;
         case 'UL':
@@ -246,56 +244,56 @@ $('#declarantType').on('change', function() {
                 url: 'data/getRef.php',
                 method: 'GET',
                 data: { ref: "declarant", decType: this.value },
-                success: function(data){
+                success: function(data) {
                     localStorage.setItem("listUL", data);
                     let obj = $.parseJSON(data);
-                    $.each(obj, function(key,value) {
-                      listUL.push({label: value.name + " | " +value.INN+ " | " + value.OGRN+ " | " + value.ID, value: value.name});
-                    }); 
+                    $.each(obj, function(key, value) {
+                        listUL.push({ label: value.name + " | " + value.INN + " | " + value.OGRN + " | " + value.ID, value: value.name });
+                    });
 
-                    $( "#dULName" ).autocomplete({
-                      source: listUL
+                    $("#dULName").autocomplete({
+                        source: listUL
                     });
                 }
-            });    
+            });
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
                 data: { ref: "agent", decType: this.value },
-                success: function(data){
+                success: function(data) {
                     localStorage.setItem("listAgents", data);
                     let obj = $.parseJSON(data);
-                    $.each(obj, function(key,value) {
-                      listAgents.push({label: value.FIO + " | " +value.dulNum.substring(0,4)+ " " +value.dulNum.substring(4,10)+ " | " + value.tel+ " | " + value.ID, value: value.FIO});
-                    }); 
+                    $.each(obj, function(key, value) {
+                        listAgents.push({ label: value.FIO + " | " + value.dulNum.substring(0, 4) + " " + value.dulNum.substring(4, 10) + " | " + value.tel + " | " + value.ID, value: value.FIO });
+                    });
 
-                    $( "#dULAgentName" ).autocomplete({
-                      source: listAgents
+                    $("#dULAgentName").autocomplete({
+                        source: listAgents
                     });
                 }
-            });                      
+            });
             break;
         case 'OGV':
             $('#declarantOGV').show();
             checkItem('delivery', 'smev');
             let today = new Date();
-            $('#dOGVSenderDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth()+1)).slice(-2)  + "-" + ('0' + today.getDate()).slice(-2));
+            $('#dOGVSenderDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth() + 1)).slice(-2) + "-" + ('0' + today.getDate()).slice(-2));
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
                 data: { ref: "declarant", decType: this.value },
-                success: function(data){
+                success: function(data) {
                     localStorage.setItem("listOGV", data);
                     let obj = $.parseJSON(data);
-                    $.each(obj, function(key,value) {
-                      listOGV.push({label: value.name + " | " + value.ID, value: value.name});
-                    }); 
+                    $.each(obj, function(key, value) {
+                        listOGV.push({ label: value.name + " | " + value.ID, value: value.name });
+                    });
 
-                    $( "#dOGVName" ).autocomplete({
-                      source: listOGV
+                    $("#dOGVName").autocomplete({
+                        source: listOGV
                     });
                 }
-            });            
+            });
             break;
     }
 });
@@ -322,7 +320,7 @@ $("#send").click(function() {
         case 'FL':
             decInfo = $('#reqFL').serialize();
             if ($('#agentFLSwitch').prop('checked')) {
-                decInfo = decInfo +'&'+$('#agentFLForm').serialize();
+                decInfo = decInfo + '&' + $('#agentFLForm').serialize();
             }
             break;
         case 'UL':
@@ -334,25 +332,25 @@ $("#send").click(function() {
             break;
     }
 
-param = 'decType=' + decType + '&' + decInfo +'&'+ $('#reqInfo').serialize();
+    param = 'decType=' + decType + '&' + decInfo + '&' + $('#reqInfo').serialize();
 
-$.ajax({
-    url: 'data/new-request.php',
-    method: 'GET',
-    data: param,
-    success: function(data){
-        if (data.split(" ")[0] == 'Error') {
-            console.log(data);
-            let notifyModal = new bootstrap.Modal($('#notify'), {});
-            $('#txtInfo').html(data);
-            notifyModal.show();            
-        } else {
-            data = $.parseJSON(data);
-            window.open("/tpl/form"+decType+".php?numLog="+data.numLog, "_blank"); 
-            window.location.replace("new-request.php?toast="+data.numLog+"&ID="+data.ID+"&decType="+decType);            
+    $.ajax({
+        url: 'data/new-request.php',
+        method: 'GET',
+        data: param,
+        success: function(data) {
+            if (data.split(" ")[0] == 'Error') {
+                console.log(data);
+                let notifyModal = new bootstrap.Modal($('#notify'), {});
+                $('#txtInfo').html(data);
+                notifyModal.show();
+            } else {
+                data = $.parseJSON(data);
+                window.open("/tpl/form" + decType + ".php?numLog=" + data.numLog, "_blank");
+                window.location.replace("new-request.php?toast=" + data.numLog + "&ID=" + data.ID + "&decType=" + decType);
+            }
         }
-    }
-});
+    });
 
 });
 
@@ -361,6 +359,6 @@ $("#clearForms").click(function() {
 });
 
 function checkItem(group, item) {
-    $('#'+group+' input[type=checkbox]').prop('checked', false);
-    $('input[name="'+item+'"]').prop('checked', true);
-}    
+    $('#' + group + ' input[type=checkbox]').prop('checked', false);
+    $('input[name="' + item + '"]').prop('checked', true);
+}

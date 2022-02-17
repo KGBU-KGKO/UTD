@@ -1,7 +1,7 @@
 <?php 
 error_reporting(E_ALL);
 include '../data/config.php';
-$status = 'В работе';
+$status = 'Только в работе';
 ?>
 <!DOCTYPE html>
 <html lang="en" style="font-size: 12px;">

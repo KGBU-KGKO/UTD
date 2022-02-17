@@ -3,7 +3,7 @@ include 'config.php';
 $info = $_GET["info"];
 
 switch ($info) {
-    case "one":
+    case "cards":
         try {
             $query = "{call InformationBoard1()}";
             $stmt = $conn->prepare($query);
@@ -21,33 +21,71 @@ switch ($info) {
             die("Error executing stored procedure: ".$e->getMessage());
         }
         break;
-    case "two":
+    case "first":
+        $from = $_GET["from"];
+        $to = $_GET["to"];
+        $labels = [];
+        $data = [];
+        $FL = [];
+        $UL = [];
+        $OGV = [];     
         try {
-            $query = "{call InformationBoard1()}";
+            $query = "{call InformationBoardTypes(?, ?)}";
             $stmt = $conn->prepare($query);
+            $stmt->bindParam(1, $from, PDO::PARAM_STR);
+            $stmt->bindParam(2, $to, PDO::PARAM_STR);
             $stmt->execute();
-            $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
+              array_push($labels, date("d.m.Y", strtotime($rows['Date'])));
+              array_push($FL, intval($rows['FL']));
+              array_push($UL, intval($rows['UL']));
+              array_push($OGV, intval($rows['OGV']));
+            }
             $info = (object) array(
-              'reqAll' => $rows['reqRecieved'], 
-              'reqToday' => $rows['reqRecievedToday'], 
-              'inWork' => $rows['reqInWork'], 
-              'exp' => $rows['percentOfExp'], 
-              'time' => $rows['timeAverage']
+              'labels' => $labels, 
+              'data' => (object) array(
+                  'FL' => $FL,
+                  'UL' => $UL,
+                  'OGV' => $OGV
+              )
             );
         } catch(PDOException $e) {
             die("Error executing stored procedure: ".$e->getMessage());
         }
         break;    
-    case "three":
-        $firstDate = "2022-01-01";
-        $secondDate = "2022-02-28";
+    case "second":
+        $from = $_GET["from"];
+        $to = $_GET["to"];
+        $labels = [];
+        $data = [];
+        try {
+            $query = "{call ReportOfTypes(?, ?)}";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(1, $from, PDO::PARAM_STR);
+            $stmt->bindParam(2, $to, PDO::PARAM_STR);
+            $stmt->execute();
+            while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
+              array_push($labels, $rows['sName']);
+              array_push($data, intval($rows['sCount']));
+            }
+            array_push($data, 0);
+            $info = (object) array(
+              'labels' => $labels, 
+              'data' => $data
+            );
+        } catch(PDOException $e) {
+            die("Error executing stored procedure: ".$e->getMessage());
+        }
+        break;
+    case "third":
+        $from = $_GET["from"];
+        $to = $_GET["to"];
         $labels = [];
         $data = [];
         try {
             $query = "SELECT performer, count(performer) as count FROM request
-WHERE DateClose >= '$firstDate' and DateClose <= '$secondDate' and performer <> ''
-GROUP BY performer";
+                        WHERE DateClose >= '$from' and DateClose <= '$to' and performer <> ''
+                        GROUP BY performer";
             $stmt = $conn->prepare($query);
             $stmt->execute();
             while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {

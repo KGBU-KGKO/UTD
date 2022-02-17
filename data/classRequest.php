@@ -21,11 +21,15 @@ class Request
     public $logOutNum = "";
     public $logOutDate = "";
     public $logInDate = "";
+    public $smevNum = "";
+    public $senderNum = "";
+    public $senderDate = "";
     public $declarant;
     public $svc = "";
     public $realEstate = "";
     public $status = "";
     public $answer = "";
+    public $subject = "";
     public $intro = "";
     public $answerText = "";
     public $attach = "";

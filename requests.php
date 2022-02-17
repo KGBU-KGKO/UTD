@@ -231,6 +231,9 @@
                 <select class="form-select" id="denyTxtSelect" aria-label="Floating label select">
                   <option selected>---</option>
                   <option value="1">отсутствием инвентарного дела</option>
+                  <option value="2">ОГВ прислал не по СМЭВ</option>
+                  <option value="3">нет сведений в инвентарном деле</option>
+                  <option value="4">невозможно идентифицировать объект</option>
                 </select>
                 <label for="denyTxtSelect">Выберите шаблон причины отказа</label>
               </div>

@@ -62,7 +62,7 @@ function checkRequest($reqNum) {
     $numOutLog = $rows["numLog"];
 
     if (substr($rows["status"], 0, 17) == "На выдачу") {
-        return array("status" => "yes", "text" => "Ответ на запрос $reqNum уже есть. <br>Номер ответа: <a href='/tpl/getReply.php?numInLog=$reqNum&numOutLog=$numOutLog'>$numOutLog</a>");
+        return array("status" => "yes", "text" => "Ответ на запрос $reqNum уже есть. <br>Номер ответа: <a href='/tpl/getReply.php?numInLog=$reqNum&numOutLog=$numOutLog' target='_blank'>$numOutLog</a>"); 
     } else {
         return array("status" => "no", "text" => "");
     }

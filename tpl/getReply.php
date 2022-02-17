@@ -36,20 +36,26 @@ if (isset($request)) {
      $logOutNum = $request->logOutNum;
      $logInNum = $request->logInNum;
      $logInDate = date("d.m.Y", strtotime($request->logInDate));
+     isset($request->senderNum) ? $senderNum = $request->senderNum : $senderNum = $logInNum;
+     isset($request->senderDate) ? $senderDate = date("d.m.Y", strtotime($request->senderDate)) : $senderDate = $logInDate;
      $name = $request->declarant->name;
      $realEstate = $request->realEstate;
      $answer = $request->answerText; 
      $attach = $request->attach;
-     $address = $request->declarant->address;
+     $addressArr = explode(', ', $request->declarant->address);
+     count($addressArr) < 5 ? $address = $request->declarant->address : $address = getAddress($addressArr);
      $email = $request->declarant->email;
      $performer = $request->performer->name;
      $performer2 = $request->performer->shortName;
      $title = $request->performer->title;
+     $subject = $request->subject;
+     isset($request->smev) ? $smev = "(".$request->smev.")" : $smev = "";
+     $img = $request->performer->pathIMG;;
 
 
     // Define the name of the output file
     $save_as = (isset($_POST['save_as']) && (trim($_POST['save_as'])!=='') && ($_SERVER['SERVER_NAME']=='localhost')) ? trim($_POST['save_as']) : '';
-    $output_file_name = explode('/', $logInNum)[1].'-'.date('Y-m-d').'.docx';
+    $output_file_name = explode('/', $logInNum)[1].$smev.'-'.date('Y-m-d').'.docx';
     if ($save_as==='') {
         // Output the result as a downloadable file (only streaming, no data saved in the server)
         $TBS->Show(OPENTBS_DOWNLOAD, $output_file_name); // Also merges all [onshow] automatic fields.
@@ -61,6 +67,34 @@ if (isset($request)) {
         // The script can continue.
         exit("File [$output_file_name] has been created.");
     }    
+}
+
+function getAddress($arr)
+{
+    $pre = [];
+    switch (count($arr)) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            $newAddress = implode(', ', $arr);
+            break;
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            $post = ", ".$arr[2].", ".$arr[1].", ".$arr[0];
+            foreach($arr as $key=>$value) {
+                if ($key > 2) {
+                    array_push($pre, $value);
+                }
+            }
+            break;
+    }        
+    return implode(', ', $pre).$post;
 }
 
 ?>
