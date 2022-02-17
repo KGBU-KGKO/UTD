@@ -1,24 +1,7 @@
 <?php 
 include 'config.php';
 
-$listServices = array(
-    1 => "Тех. паспорт",
-    2 => "План",
-    3 => "Экспликация",
-    4 => "d",
-    5 => "a",
-    6 => "b",
-    7 => "c",
-    8 => "d",
-    9 => "a",
-    10 => "b",
-    11 => "Справка о собственности"
-);
-
 $request = checkTemplate(getServices($numInLog), $numInLog, $numOutLog);
-
-
-
 
 function checkTemplate($services, $numInLog, $numOutLog) {
 	//var_dump($services);
@@ -31,7 +14,15 @@ function checkTemplate($services, $numInLog, $numOutLog) {
     foreach ($services as $item) {
 		switch ($item) {
 		    case 1:
-		        return getData($numInLog, $item);
+		        $request = getData($numInLog, $item);
+		        if ($request->answer == "Ответ") {
+		        	$request->answerText = "направляет копию технического паспорта";
+		        	$request->attach = "Приложение: Копия технического паспорта на 0 л. в 1 экз.";
+		        }
+		        if ($request->answer == "Отказ") {
+		        	$request->answerText = "отказывает в её предоставлении в связи с ".$request->reason;
+		        }
+		        return $request;
 		        break;
 		    case 2:
 		    case 3:
@@ -62,10 +53,10 @@ function getData($num, $tpl) {
 	$request = new Request(new Declarant(), new Performer());
 	//echo $tpl."|".$num;
 	global $conn;
-	$query = "select reply.dateReply as 'logOutDate', reply.numLog as 'logOutNum', request.numLog as 'logInNum', request.dateReq as 'logInDate', declarant.name, declarant.address, declarant.email, request.realEstate, reply.status as 'answer', reply.reason, request.performer from request  
+	$query = "select reply.dateReply as 'logOutDate', reply.numLog as 'logOutNum', request.numLog as 'logInNum', request.dateReq as 'logInDate', declarant.name, declarant.type, declarant.address, declarant.email, request.realEstate, reply.status as 'answer', reply.reason, request.performer from request  
 			inner join reply on request.ID = reply.IDr
 			inner join declarant on request.IDd = declarant.ID
-			where request.numLog = '$num'";
+			where request.numLog ='$num'";
 	$stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 	$stmt->execute();	
 	$rows = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -74,15 +65,24 @@ function getData($num, $tpl) {
 	$request->logInDate = $rows["logInDate"];
 	$request->logOutDate = $rows["logOutDate"];
 	$request->declarant->name = $rows["name"];
-	$request->declarant->address = $rows["address"];
-	$request->declarant->email = $rows["email"];
+	$request->declarant->address = $rows["address"] ?? '';
+	$request->declarant->address = $rows["email"] ?? '';
 	$request->realEstate = $rows["realEstate"];
 	$request->answer = $rows["answer"];
-	$request->reason = $row["reason"];
+	$request->reason = $rows["reason"];
 	$request->performer->name = $rows["performer"];
 	$request->performer->shortName = $rows["performer"];
 	$request->performer->title = "Документовед";
 	return $request;
 }
+
+// function getData($num, $svc, $type, $answer) {
+// 	$svc = "svc".$svc;
+// 	$str = file_get_contents("template.json");
+// 	$data = json_decode($str);
+// 	$foo = $data->$svc->answer->$answer->decType->$type;
+// 	var_dump($data);
+// 	var_dump($foo);
+// }
 
 ?>

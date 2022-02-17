@@ -223,28 +223,30 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
-        <h6 class="display-6">Укажите причину отказа</h6>
-        <div class="row g-1 mb-3">
-          <div class="col-md">
-            <div class="form-floating">
-              <select class="form-select" id="denyTxtSelect" aria-label="Floating label select">
-                <option selected>---</option>
-                <option value="1">отсутствием инвентарного дела</option>
-              </select>
-              <label for="denyTxtSelect">Выберите шаблон причины отказа</label>
+        <form id="denyModalForm">
+          <h6 class="display-6">Укажите причину отказа</h6>
+          <div class="row g-1 mb-3">
+            <div class="col-md">
+              <div class="form-floating">
+                <select class="form-select" id="denyTxtSelect" aria-label="Floating label select">
+                  <option selected>---</option>
+                  <option value="1">отсутствием инвентарного дела</option>
+                </select>
+                <label for="denyTxtSelect">Выберите шаблон причины отказа</label>
+              </div>
             </div>
-          </div>
-        </div> 
-        <div class="row g-1 mb-3">
-          <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="denyTxt" name="denyTxt" style="height: 200px"></textarea>
-            <label for="denyTxt">Причина отказа на запрос</label>
           </div> 
-        </div> 
-        <div class="text-end">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
-          <button type="button" class="btn btn-danger" id="denyReq">Да, отказать</button>          
-        </div>
+          <div class="row g-1 mb-3">
+            <div class="form-floating">
+              <textarea class="form-control" placeholder="Leave a comment here" id="denyTxt" name="denyTxt" style="height: 200px"></textarea>
+              <label for="denyTxt">Причина отказа на запрос</label>
+            </div> 
+          </div> 
+          <div class="text-end">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+            <button type="button" class="btn btn-danger" id="denyReq">Да, отказать</button>          
+          </div>
+        </form>
       </div>      
     </div>
   </div>

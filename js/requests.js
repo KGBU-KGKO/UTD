@@ -220,6 +220,7 @@ $("#denyReq").click(function() {
   request.replayDate = $('#reqOutDate').val();
   createReply(request);
   denyModal.hide();
+  $('#denyModalForm').trigger("reset");
 });  
 
 $("#multiReply").click(function() {

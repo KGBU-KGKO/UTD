@@ -59,9 +59,10 @@ function checkRequest($reqNum) {
     $stmt = $conn->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
     $stmt->execute();
     $rows = $stmt->fetch(PDO::FETCH_ASSOC);    
+    $numOutLog = $rows["numLog"];
 
     if (substr($rows["status"], 0, 17) == "На выдачу") {
-        return array("status" => "yes", "text" => "Ответ на запрос $reqNum уже есть. <br>Номер ответа: ".$rows["numLog"]);
+        return array("status" => "yes", "text" => "Ответ на запрос $reqNum уже есть. <br>Номер ответа: <a href='/tpl/getReply.php?numInLog=$reqNum&numOutLog=$numOutLog'>$numOutLog</a>");
     } else {
         return array("status" => "no", "text" => "");
     }

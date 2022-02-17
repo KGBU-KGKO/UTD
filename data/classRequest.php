@@ -26,6 +26,9 @@ class Request
     public $realEstate = "";
     public $status = "";
     public $answer = "";
+    public $intro = "";
+    public $answerText = "";
+    public $attach = "";
     public $reason = "";
     public $dateDue = "";
     public $datePay = "";

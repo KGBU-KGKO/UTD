@@ -147,14 +147,17 @@ if ($res['count'] != '0') {
                     </h6>
 
                     <!-- Heading -->
-                    <span class="h2 mb-0 card-head">
-                      20
-                    </span>
+                    <div class="py-auto">
+                      <span class="h2 mb-0 card-head" id="reqAll">
+                        20
+                      </span>
 
                     <!-- Badge -->
-                    <span class="badge bg-success mt-n1">
-                      +10 сегодня
-                    </span>
+                      <span class="badge bg-success mt-n1" id="reqToday">
+                       +10 сегодня
+                      </span>
+                    </div>
+                    
                   </div>
                   <div class="col-auto">
 
@@ -181,7 +184,7 @@ if ($res['count'] != '0') {
                     </h6>
 
                     <!-- Heading -->
-                    <span class="h2 mb-0 card-head">
+                    <span class="h2 mb-0 card-head" id="inWork">
                       19
                     </span>
 
@@ -211,7 +214,7 @@ if ($res['count'] != '0') {
                     </h6>
 
                     <!-- Heading -->
-                    <span class="h2 mb-0 card-head">
+                    <span class="h2 mb-0 card-head" id="exp">
                       0.10
                     </span>
 
@@ -241,7 +244,7 @@ if ($res['count'] != '0') {
                     </h6>
 
                     <!-- Heading -->
-                    <span class="h2 mb-0 card-head">
+                    <span class="h2 mb-0 card-head" id="time">
                       2:37
                     </span>
 
@@ -262,7 +265,12 @@ if ($res['count'] != '0') {
         <!-- Line chart -->
 <div class="row mb-3">
         <h6 class="display-6">Поступление за неделю</h6>
-        <canvas id="line-chart" height="350"></canvas>
+        <canvas id="first-chart" height="350"></canvas>
+</div>
+
+<div class="row mb-3">
+        <h6 class="display-6">Количество исполненных запросов</h6>
+        <canvas id="third-chart" height="350"></canvas>
 </div>
 
 <div class="row mb-3">
