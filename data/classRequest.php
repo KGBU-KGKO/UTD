@@ -5,6 +5,7 @@ class Declarant
 	public $address = "";
 	public $email = "";
 	public $type = "";
+    public $birth = "";
 }
 
 class Performer 
@@ -32,6 +33,7 @@ class Request
     public $subject = "";
     public $intro = "";
     public $answerText = "";
+    public $text = "";
     public $attach = "";
     public $reason = "";
     public $dateDue = "";

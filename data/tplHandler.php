@@ -16,7 +16,7 @@ function checkTemplate($services, $numInLog, $numOutLog) {
 		    case 1:
 		        $request = getData($numInLog, $item);
 		        if ($request->answer == "Ответ") {
-		        	$request->answerText = "направляет копию технического паспорта";
+		        	$request->answerText = "направляет копию учётно-технической документации на указанный объект";
 		        	$request->attach = "Приложение: Копия технического паспорта на 0 л. в 1 экз.";
 		        	$request->subject = "Предоставление";
 		        }
@@ -31,10 +31,35 @@ function checkTemplate($services, $numInLog, $numOutLog) {
 		    case 4:
 		    case 5:
 		    case 6:
+		        $request = getData($numInLog, $item);
+		        $request->svc = '1';
+		        if ($request->answer == "Ответ") {
+		        	$request->answerText = "направляет копию учётно-технической документации на указанный объект";
+		        	$request->attach = "Приложение: Копия правоустанавливающих документов на 0 л. в 1 экз.";
+		        	$request->subject = "Предоставление";
+		        }
+		        if ($request->answer == "Отказ") {
+		        	$request->answerText = "отказывает в её предоставлении в связи с ".$request->reason;
+		        	$request->subject = "Отказ в предоставлении";
+		        }
+		        return $request;
+		        break;		    
 		    case 7:
 		    case 8:
 		    case 9:
 		    case 10:
+		        $request = getData($numInLog, $item);
+		        if ($request->answer == "Ответ") {
+		        	$request->answerText = "имеются сведения о наличии права собственности в отношении объекта недвижимости, расположенного по адресу:";
+		        	$request->text = "\n".$request->text;
+		        }
+		        if ($request->answer == "Отказ") {
+		        	$name = $request->declarant->name;
+		        	$birth = date("d.m.Y", strtotime($request->declarant->birth));
+		        	$request->answerText = "в отношении заявителя ($name, $birth г.р.), отсутствуют сведения о наличии права собственности на объекты недвижимости";
+		        }
+		        return $request;
+		        break;			    
 		    case 11:
 		        echo "Шаблон для услуги $item еще не создан, вот тебе пока только номер для ответа. <br>Регистрационный номер: $numOutLog<br>";
 		        break;
@@ -56,9 +81,8 @@ function getData($num, $tpl) {
 	$str = file_get_contents("../data/template.json");
 	$data = json_decode($str);
 	global $conn;
-	$query = "select reply.dateReply as 'logOutDate', reply.numLog as 'logOutNum', request.numLog as 'logInNum', request.dateReq as 'logInDate', 
-		declarant.name, declarant.type, declarant.address, declarant.email, request.realEstate, reply.status as 'answer', request.senderNum, request.senderDate,
-		reply.reason, request.performer, request.smevNum, users.shortFIO, users.FIO, users.jobTitle, users.imgPath
+	$query = "select reply.dateReply as 'logOutDate', reply.numLog as 'logOutNum', request.numLog as 'logInNum', request.dateReq as 'logInDate', request.IDs,
+		declarant.name, declarant.type, declarant.address, declarant.email, declarant.dateBirth, request.realEstate, reply.status as 'answer', request.senderNum, request.senderDate, reply.reason, request.performer, request.smevNum, users.shortFIO, users.FIO, users.jobTitle, users.imgPath, reply.text
 		from request  
 			inner join reply on request.ID = reply.IDr
 			inner join declarant on request.IDd = declarant.ID
@@ -77,12 +101,16 @@ function getData($num, $tpl) {
 	$request->declarant->name = $rows["name"];
 	$request->declarant->address = $rows["address"] ?? '';
 	$request->declarant->email = $rows["email"] ?? '';
+	$request->declarant->birth = $rows["dateBirth"];
 	$request->realEstate = $rows["realEstate"];
+	$request->text = $rows["text"];
+	$request->svc = $rows["IDs"];
 	$answer = $rows["answer"];
 	$type = $rows["type"];
 	$request->answer = $answer;
 	$request->reason = $rows["reason"];
-
+	// echo $tpl."|"."|".$answer."|".$type;
+	// var_dump($data->{$tpl}->answer->$answer->decType->$type->signName);
 	if ($data->{$tpl}->answer->$answer->decType->$type->signName == 'self') {
 		$request->performer->shortName = $rows["shortFIO"];
 		$request->performer->title = $rows["jobTitle"]; 

@@ -31,6 +31,7 @@ try {
         $req->performer->name = $rows['performer'];
         $req->datePay = $rows['datePayment'];
         $req->dateDue = $rows['dateDue'];
+        $req->logInDate = $rows['reqDate'];
       }
       array_push($requests, $req);
     }

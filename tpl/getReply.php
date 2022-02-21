@@ -3,13 +3,8 @@ error_reporting(E_ALL);
 
 $numInLog = $_GET['numInLog'];
 $numOutLog = $_GET['numOutLog'];
-//$attach = "";
-//проверка, есть ли шаблон под данную услугу
 include '../data/classRequest.php';
 include '../data/tplHandler.php';
-//если нету, то выдавать заглушку, вот вам номер и дата
-//если есть, то отдать шаблон
-
 
 include_once('../lib/tbs/tbs_class.php');
 include_once('../lib/tbs/tbs_plugin_opentbs.php');
@@ -18,11 +13,9 @@ if (isset($request)) {
     $TBS = new clsTinyButStrong;
     $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 
-    $template = 'tpl1.docx';
+    $template = 'tpl'.$request->svc.'.docx';
     $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload] automatic fields (depends of the type of document).
-
-
-    // $yourname = 'qwe';
+    //$TBS->Plugin(OPENTBS_DEBUG_XML_CURRENT, true);
 
     // $data = array(
     //  array('date' => '2013-10-13', 'thin' => 156, 'heavy' => 128, 'total' => 284),
@@ -41,6 +34,7 @@ if (isset($request)) {
      $name = $request->declarant->name;
      $realEstate = $request->realEstate;
      $answer = $request->answerText; 
+     $text = $request->text;
      $attach = $request->attach;
      $addressArr = explode(', ', $request->declarant->address);
      count($addressArr) < 5 ? $address = $request->declarant->address : $address = getAddress($addressArr);

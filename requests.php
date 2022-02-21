@@ -136,7 +136,8 @@
         <th data-field="status" data-sortable="true" >Статус</th>
         <th data-field="performer" data-sortable="true" data-formatter="perfFormatter">Исполнитель</th>
         <th data-field="datePay" data-sortable="true" data-formatter="payFormatter">Оплата</th>
-        <th data-field="dateDue" data-sortable="true" data-formatter="deadlineFormatter">Дата исполнения</th>
+        <th data-field="logInDate" data-sortable="true" >Дата рег.</th>
+        <th data-field="dateDue" data-sortable="true" data-formatter="deadlineFormatter">Дата испол.</th>
       </tr>
     </thead>
     </table>
@@ -215,15 +216,15 @@
   </div>
 </div>
 
-<div class="modal fade" id="deny" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
+<div class="modal fade" id="denyСopies" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Отказ в предоставлении данных на запрос №<span id="denyNum"></span></h5>
+        <h5 class="modal-title">Отказ в предоставлении данных на запрос №<span id="denyСopiesNum"></span></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body">
-        <form id="denyModalForm">
+        <form id="denyСopiesModalForm">
           <h6 class="display-6">Укажите причину отказа</h6>
           <div class="row g-1 mb-3">
             <div class="col-md">
@@ -248,6 +249,31 @@
           <div class="text-end">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
             <button type="button" class="btn btn-danger" id="denyReq">Да, отказать</button>          
+          </div>
+        </form>
+      </div>      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="infoRef" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Текст справки/выписки по запросу №<span id="infoRefNum"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <form id="infoRefModalForm">
+          <div class="row g-1 mb-3">
+            <div class="form-floating">
+              <textarea class="form-control" placeholder="Leave a comment here" id="textRef" name="denyTxt" style="height: 200px"></textarea>
+              <label for="textRef">Укажите текст справки/выписки</label>
+            </div> 
+          </div> 
+          <div class="text-end">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+            <button type="button" class="btn btn-success" id="createRef">Сформировать справку</button>          
           </div>
         </form>
       </div>      

@@ -15,17 +15,20 @@ if (isset($_GET['status'])) {
     $repNum = getNum('reply');
     $repDate = $_GET["repDate"];
     $repPerformer = $_GET["repPerformer"];
-    if (substr($_GET["status"], 0, 10) == "Отказ") {
-        $reason = $_GET["reason"];
-    } else {
-        $reason = "";
-    }
+    $reason = (substr($_GET["status"], 0, 10) == "Отказ") ? $_GET["reason"] : "";
+    // if (substr($_GET["status"], 0, 10) == "Отказ") {
+    //     $reason = $_GET["reason"];
+    // } else {
+    //     $reason = "";
+    // }
     $statusReq = "На выдачу (".$_GET["status"].")";
-    if ($_GET["statusRep"]) {
-        $statusRep = $_GET["statusRep"];
-    } else {
-        $statusRep = $_GET["status"];
-    }
+    $statusRep = ($_GET["statusRep"] == "") ? $_GET["status"] : $_GET["statusRep"];
+    // if ($_GET["statusRep"]) {
+    //     $statusRep = $_GET["statusRep"];
+    // } else {
+    //     $statusRep = $_GET["status"];
+    // }
+    $text = $_GET["text"] ?? "";
 
     $check = checkRequest($reqNum);
     if ($check["status"] == "yes") {
@@ -34,7 +37,7 @@ if (isset($_GET['status'])) {
     }
 
     try {
-        $query = "{call AddReply(?, ?, ?, ?, ?, ?, ?)}";
+        $query = "{call AddReply(?, ?, ?, ?, ?, ?, ?, ?)}";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(1, $reqNum, PDO::PARAM_STR);
         $stmt->bindParam(2, $repNum, PDO::PARAM_STR);
@@ -43,6 +46,7 @@ if (isset($_GET['status'])) {
         $stmt->bindParam(5, $statusReq, PDO::PARAM_STR);            
         $stmt->bindParam(6, $statusRep, PDO::PARAM_STR); 
         $stmt->bindParam(7, $reason, PDO::PARAM_STR); 
+        $stmt->bindParam(8, $text, PDO::PARAM_STR);
         $stmt->execute();
         $rows = $stmt->fetch(PDO::FETCH_ASSOC);
         echo json_encode($rows);

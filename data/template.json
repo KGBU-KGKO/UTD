@@ -63,5 +63,135 @@
                 }
             }
         }
-    }
+    },
+    "6":
+    {
+        "id": 6,
+        "nameShort": "ПД",
+        "nameLong": "Правоустанавливающие документы",
+        "answer":
+        {
+            "Ответ":
+            {
+                "name": "Ответ",
+                "decType":
+                {
+                    "FL":
+                    {
+                        "name": "FL",
+                        "intro": "",
+                        "signTitle": "Начальник отдела обеспечения деятельности",
+                        "signName": "Э.О. Задорожняя"
+                    },
+                    "UL":
+                    {
+                        "name": "UL",
+                        "intro": "",
+                        "signTitle": "Начальник отдела обеспечения деятельности",
+                        "signName": "Э.О. Задорожняя"
+                    },
+                    "OGV":
+                    {
+                        "name": "OGV",
+                        "intro": "",
+                        "signTitle": "self",
+                        "signName": "self"
+                    }
+                }
+            },
+            "Отказ":
+            {
+                "name": "Отказ",
+                "decType":
+                {
+                    "FL":
+                    {
+                        "name": "FL",
+                        "intro": "",
+                        "signTitle": "Начальник отдела обеспечения деятельности",
+                        "signName": "Э.О. Задорожняя"
+                    },
+                    "UL":
+                    {
+                        "name": "UL",
+                        "intro": "",
+                        "signTitle": "Начальник отдела обеспечения деятельности",
+                        "signName": "Э.О. Задорожняя"
+                    },
+                    "OGV":
+                    {
+                        "name": "OGV",
+                        "intro": "",
+                        "signTitle": "self",
+                        "signName": "self"
+                    }
+                }
+            }
+        }
+    },
+    "10":
+    {
+        "id": 10,
+        "nameShort": "Справка о собственности",
+        "nameLong": "Справка, содержащая сведения о наличии/отсутствии права собственности на объекты недвижимости (до 2000 года)",
+        "answer":
+        {
+            "Ответ":
+            {
+                "name": "Ответ",
+                "decType":
+                {
+                    "FL":
+                    {
+                        "name": "FL",
+                        "intro": "",
+                        "signTitle": "Руководитель",
+                        "signName": "А.П. Ващилко"
+                    },
+                    "UL":
+                    {
+                        "name": "UL",
+                        "intro": "",
+                        "signTitle": "Руководитель",
+                        "signName": "А.П. Ващилко"
+                    },
+                    "OGV":
+                    {
+                        "name": "OGV",
+                        "intro": "",
+                        "signTitle": "self",
+                        "signName": "self"
+                    }
+                }
+            },
+            "Отказ":
+            {
+                "name": "Отказ",
+                "decType":
+                {
+                    "FL":
+                    {
+                        "name": "FL",
+                        "intro": "",
+                        "signTitle": "Руководитель",
+                        "signName": "А.П. Ващилко"
+                    },
+                    "UL":
+                    {
+                        "name": "UL",
+                        "intro": "",
+                        "signTitle": "Руководитель",
+                        "signName": "А.П. Ващилко"
+                    },
+                    "OGV":
+                    {
+                        "name": "OGV",
+                        "intro": "",
+                        "signTitle": "self",
+                        "signName": "self"
+                    }
+                }
+            }
+        }
+    }        
 }
