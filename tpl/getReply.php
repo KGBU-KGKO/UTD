@@ -31,7 +31,8 @@ if (isset($request)) {
      $logInDate = date("d.m.Y", strtotime($request->logInDate));
      isset($request->senderNum) ? $senderNum = $request->senderNum : $senderNum = $logInNum;
      isset($request->senderDate) ? $senderDate = date("d.m.Y", strtotime($request->senderDate)) : $senderDate = $logInDate;
-     $name = $request->declarant->name;
+     $name = ($request->declarant->type == 'FL') ? substr(explode(' ', $request->declarant->name)[1],0,2) . '. ' . substr(explode(' ', $request->declarant->name)[2],0,2) . '. '. explode(' ', $request->declarant->name)[0] : $request->declarant->name;
+     //$name = $request->declarant->name;
      $realEstate = $request->realEstate;
      $answer = $request->answerText; 
      $text = $request->text;
@@ -43,13 +44,13 @@ if (isset($request)) {
      $performer2 = $request->performer->shortName;
      $title = $request->performer->title;
      $subject = $request->subject;
-     isset($request->smev) ? $smev = "(".$request->smev.")" : $smev = "";
+     isset($request->smev) ? $smev = $request->smev."-" : $smev = "";
      $img = $request->performer->pathIMG;;
 
 
     // Define the name of the output file
     $save_as = (isset($_POST['save_as']) && (trim($_POST['save_as'])!=='') && ($_SERVER['SERVER_NAME']=='localhost')) ? trim($_POST['save_as']) : '';
-    $output_file_name = explode('/', $logInNum)[1].$smev.'-'.date('Y-m-d').'.docx';
+    $output_file_name = $smev.explode('/', $logInNum)[1].'.docx';
     if ($save_as==='') {
         // Output the result as a downloadable file (only streaming, no data saved in the server)
         $TBS->Show(OPENTBS_DOWNLOAD, $output_file_name); // Also merges all [onshow] automatic fields.

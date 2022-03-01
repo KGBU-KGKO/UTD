@@ -26,10 +26,6 @@ function checkTemplate($services, $numInLog, $numOutLog) {
 		        }
 		        return $request;
 		        break;
-		    case 2:
-		    case 3:
-		    case 4:
-		    case 5:
 		    case 6:
 		        $request = getData($numInLog, $item);
 		        $request->svc = '1';
@@ -44,23 +40,20 @@ function checkTemplate($services, $numInLog, $numOutLog) {
 		        }
 		        return $request;
 		        break;		    
-		    case 7:
-		    case 8:
-		    case 9:
 		    case 10:
 		        $request = getData($numInLog, $item);
 		        if ($request->answer == "Ответ") {
 		        	$request->answerText = "имеются сведения о наличии права собственности в отношении объекта недвижимости, расположенного по адресу:";
-		        	$request->text = "\n".$request->text;
+		        	$request->text = "\n\"".$request->text."\"";
 		        }
 		        if ($request->answer == "Отказ") {
 		        	$name = $request->declarant->name;
 		        	$birth = date("d.m.Y", strtotime($request->declarant->birth));
-		        	$request->answerText = "в отношении заявителя ($name, $birth г.р.), отсутствуют сведения о наличии права собственности на объекты недвижимости";
+		        	$request->answerText = "в отношении заявителя: \n$name, $birth г.р., \nотсутствуют сведения о наличии права собственности на объекты недвижимости";
 		        }
 		        return $request;
 		        break;			    
-		    case 11:
+    		default:
 		        echo "Шаблон для услуги $item еще не создан, вот тебе пока только номер для ответа. <br>Регистрационный номер: $numOutLog<br>";
 		        break;
 		}
@@ -99,6 +92,7 @@ function getData($num, $tpl) {
 	$request->senderDate = $rows["senderDate"];
 	$request->smev = $rows["smevNum"];
 	$request->declarant->name = $rows["name"];
+	$request->declarant->type = $rows["type"];
 	$request->declarant->address = $rows["address"] ?? '';
 	$request->declarant->email = $rows["email"] ?? '';
 	$request->declarant->birth = $rows["dateBirth"];
@@ -106,7 +100,7 @@ function getData($num, $tpl) {
 	$request->text = $rows["text"];
 	$request->svc = $rows["IDs"];
 	$answer = $rows["answer"];
-	$type = $rows["type"];
+	$type = $request->declarant->type;
 	$request->answer = $answer;
 	$request->reason = $rows["reason"];
 	// echo $tpl."|"."|".$answer."|".$type;

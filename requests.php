@@ -66,6 +66,7 @@
   <div class="newRequests">
     <div class="mb-4" >
       <table id="newReqTable" class="table table-hover"   
+        data-search="true"
         data-show-columns="true"
         data-custom-sort="customSort"
         data-page-list="[10, 25, 50, 100, all]">
@@ -118,13 +119,24 @@
     Нет новых запросов
   </div>
 </div>
-      <h6 class="display-6 mt-5">Запросы в работе</h6>
+<h6 class="display-6 mt-5">Запросы в работе</h6>     
+
+<div id="toolbar" class="row">
+  <div class="col mt-2">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" name="onlyDelivery" id="onlyDelivery" checked>
+        <label class="form-check-label" for="onlyDelivery">На выдачу</label>
+      </div>                
+  </div>
+</div>
 
 <div class="newRequests">
   <div class="mb-4" >
     <table id="inworkReqTable" class="table table-hover"   
+    data-search="true"
     data-show-columns="true"
     data-custom-sort="customSort"
+    data-toolbar="#toolbar"
     data-page-list="[10, 25, 50, 100, all]">
         <thead>
       <tr>

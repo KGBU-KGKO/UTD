@@ -1,11 +1,10 @@
 let newReqTable = $('#newReqTable').bootstrapTable({
     pagination: true,
-    search: true,
 });
 let inworkReqTable = $('#inworkReqTable').bootstrapTable({
     pagination: true,
-    search: true,
 });
+let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
 let denyСopiesModal = new bootstrap.Modal($('#denyСopies'), {});
 let infoRefModal = new bootstrap.Modal($('#infoRef'), {});
 let notifyModal = new bootstrap.Modal($('#notify'), {});
@@ -24,6 +23,13 @@ $.when($.ready).then(function() {
         $('#newReqDataEmpty').removeClass('d-none');
     }
 
+});
+
+$("#onlyDelivery").change(function() {
+    let statusList = $(this).prop('checked') ? ["На выдачу (Ответ)", "На выдачу (Отказ)", "На выдачу (Отказ/Ответ)"] : ["В работе"];
+    inworkReqTable.bootstrapTable('filterBy', {
+        status: statusList
+      });
 });
 
 function getDataTable(dataStatus) {
@@ -96,13 +102,11 @@ function customSort(sortName, sortOrder, data) {
 }
 
 $("#newReqTable").on('click', 'a', function() {
-    let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
     addModalInfo($(this).html(), $(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]);
     reqInfoModal.show();
 });
 
 $("#inworkReqTable").on('click', 'a', function() {
-    let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
     addModalInfo($(this).html(), $(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]);
     reqInfoModal.show();
 });

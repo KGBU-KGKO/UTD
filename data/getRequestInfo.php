@@ -66,25 +66,17 @@ switch ($type) {
         break;
 }
 
-if ($rowsRequest['realEstate']) {
-  $realEstate = $rowsRequest['realEstate'];
-} else {
-  $realEstate = 'не указан';
-}
+$realEstate = ($rowsRequest['realEstate']) ? $rowsRequest['realEstate'] : 'не указан';
+$Comment = ($rowsRequest['Comment']) ? $rowsRequest['Comment'] : 'отсутствует';
 
-if ($rowsRequest['Comment']) {
-  $Comment = $rowsRequest['Comment'];
-} else {
-  $Comment = 'отсутствует';
-}
 
-echo '<h6 class="display-6">Запрос</h6>
-        <p class="ps-4">
-          <b>Объект:</b> '.$realEstate.' <br>
-          <b>Комментарий:</b> '.$Comment.' <br>
-          <b>Услуги:</b> '.preg_replace('/[0-9]+/', '<br>- ', $rowsSvc['svcConcat']).' <br>
-          <b>Способ получения:</b> '.$rowsRequest['delivery'].'
-        </p>';
+echo "<h6 class='display-6'>Запрос</h6>
+        <p class='ps-4'>
+          <b>Объект:</b> $realEstate <br>
+          <b>Комментарий:</b> $Comment <br>
+          <b>Услуги:</b> ".preg_replace('/[0-9]+/', '<br>- ', $rowsSvc['svcConcat'])." <br>
+          <b>Способ получения:</b> ".$rowsRequest['delivery']."
+        </p>";
 
 if (getListAttachments($rowsRequest['attachList'])) {
   echo '<h6 class="display-6">Список приложений</h6>
@@ -101,5 +93,3 @@ echo '</div>';
 $stmt = null;
 $conn = null;
 ?>
-
-

@@ -7,7 +7,7 @@ let now = new Date();
 let quarterCount = Math.floor((now.getMonth() / 3));
 let quarterBeginFull = new Date(now.getFullYear(), quarterCount * 3, 1);
 let today = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2) + "-" + ('0' + now.getDate()).slice(-2);
-let weekAgo = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2) + "-" + ('0' + (now.getDate() - 7)).slice(-2);
+let weekAgo = getDateWeekAgo();
 //let monthAgo = now.getFullYear() + "-" + (now.getMonth() == 0 ? '12': '0' + now.getMonth()).slice(-2) + "-" + ('0' + now.getDate()).slice(-2);
 let monthBegin = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2) + "-01";
 let quarterBegin = quarterBeginFull.getFullYear() + "-" + ('0' + (quarterBeginFull.getMonth() + 1)).slice(-2) + "-" + ('0' + quarterBeginFull.getDate()).slice(-2);
@@ -46,6 +46,18 @@ $.when($.ready).then(function() {
     loadThirdChart(thirdchart, weekAgo, today);
 
 });
+
+function getDateWeekAgo() {
+    let needDate;
+    let countDays = [31,28,31,30,31,30,31,31,30,31,30,31];
+    if ((now.getDate() - 7) < 0) {
+        needDate = now.getFullYear() + "-" + ('0' + now.getMonth()).slice(-2) + "-" + ('0' + (countDays[now.getMonth()-1] + (now.getDate() - 7))).slice(-2);
+        return needDate
+    } else {
+        needDate = now.getFullYear() + "-" + ('0' + (now.getMonth() + 1)).slice(-2) + "-" + ('0' + (now.getDate() - 7)).slice(-2);
+        return needDate;
+    }
+}
 
 $('input[name$="-chart-btnradio"]').click(function() {
     //console.log($(this).attr('id').split('-')[0] + ' ' + $(this).attr('id').split('btnradio')[1]);

@@ -16,18 +16,8 @@ if (isset($_GET['status'])) {
     $repDate = $_GET["repDate"];
     $repPerformer = $_GET["repPerformer"];
     $reason = (substr($_GET["status"], 0, 10) == "Отказ") ? $_GET["reason"] : "";
-    // if (substr($_GET["status"], 0, 10) == "Отказ") {
-    //     $reason = $_GET["reason"];
-    // } else {
-    //     $reason = "";
-    // }
     $statusReq = "На выдачу (".$_GET["status"].")";
     $statusRep = ($_GET["statusRep"] == "") ? $_GET["status"] : $_GET["statusRep"];
-    // if ($_GET["statusRep"]) {
-    //     $statusRep = $_GET["statusRep"];
-    // } else {
-    //     $statusRep = $_GET["status"];
-    // }
     $text = $_GET["text"] ?? "";
 
     $check = checkRequest($reqNum);

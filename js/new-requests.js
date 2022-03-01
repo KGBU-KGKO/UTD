@@ -17,8 +17,8 @@ $.when($.ready).then(function() {
         token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
         type: "ADDRESS",
         onSelect: function(suggestion) {
-            $(this).val(suggestion.unrestricted_value);
-            //console.log(suggestion);
+            let fullAddress = suggestion.unrestricted_value.replace(' г ', ' г. ').replace(' д ', ' д. ').replace(' ул ', ' ул. ').replace(' кв ', ' кв. ');
+            $(this).val(fullAddress);
         }
     });
 
