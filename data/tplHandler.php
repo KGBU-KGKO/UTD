@@ -16,9 +16,9 @@ function checkTemplate($services, $numInLog, $numOutLog) {
 		    case 1:
 		        $request = getData($numInLog, $item);
 		        if ($request->answer == "Ответ") {
-		        	$request->answerText = "направляет копию учётно-технической документации на указанный объект";
-		        	$request->attach = "Приложение: Копия технического паспорта на 0 л. в 1 экз.";
-		        	$request->subject = "Предоставление";
+		        	$request->answerText = "направляет Вам копии учётно-технической документации на указанный объект";
+		        	$request->attach = "Приложение: копия технического паспорта на 0 л. в 1 экз.";
+		        	$request->subject = "О предоставлении";
 		        }
 		        if ($request->answer == "Отказ") {
 		        	$request->answerText = "отказывает в её предоставлении в связи с ".$request->reason;
@@ -30,9 +30,9 @@ function checkTemplate($services, $numInLog, $numOutLog) {
 		        $request = getData($numInLog, $item);
 		        $request->svc = '1';
 		        if ($request->answer == "Ответ") {
-		        	$request->answerText = "направляет копию учётно-технической документации на указанный объект";
-		        	$request->attach = "Приложение: Копия правоустанавливающих документов на 0 л. в 1 экз.";
-		        	$request->subject = "Предоставление";
+		        	$request->answerText = "направляет Вам копии учётно-технической документации на указанный объект";
+		        	$request->attach = "Приложение: копия правоустанавливающих документов на 0 л. в 1 экз.";
+		        	$request->subject = "О предоставлении";
 		        }
 		        if ($request->answer == "Отказ") {
 		        	$request->answerText = "отказывает в её предоставлении в связи с ".$request->reason;
@@ -43,13 +43,13 @@ function checkTemplate($services, $numInLog, $numOutLog) {
 		    case 10:
 		        $request = getData($numInLog, $item);
 		        if ($request->answer == "Ответ") {
-		        	$request->answerText = "имеются сведения о наличии права собственности в отношении объекта недвижимости, расположенного по адресу:";
+		        	$request->answerText = " имеются сведения о наличии права собственности в отношении объекта недвижимости, расположенного по адресу:";
 		        	$request->text = "\n\"".$request->text."\"";
 		        }
 		        if ($request->answer == "Отказ") {
 		        	$name = $request->declarant->name;
 		        	$birth = date("d.m.Y", strtotime($request->declarant->birth));
-		        	$request->answerText = "в отношении заявителя: \n$name, $birth г.р., \nотсутствуют сведения о наличии права собственности на объекты недвижимости";
+		        	$request->answerText = ", в отношении заявителя: \n$name, $birth года рождения, \nотсутствуют сведения о наличии права собственности на объекты недвижимости";
 		        }
 		        return $request;
 		        break;			    

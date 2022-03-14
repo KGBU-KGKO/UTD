@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="lib/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="lib/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/jquery/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="lib/suggestions/suggestions.min.css">
     <link rel="stylesheet" type="text/css" href="css/utd.css">
     <title>ИС УТД - Инф. панель</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
@@ -41,7 +43,7 @@
         </ul>
 
         <form class="col-12 col-lg-auto w-50 mb-3 mb-lg-0 me-lg-3">
-          <input type="search" class="form-control" placeholder="Поиск..." aria-label="Search">
+          <input id="gSearch" type="search" class="form-control" placeholder="Поиск..." aria-label="Search">
         </form>
 
         <div class="dropdown text-end">
@@ -423,5 +425,7 @@ if ($res['count'] != '0') {
     <script type="text/javascript" src="lib/bootstrap-table/bootstrap-table.min.js"></script>
     <script type="text/javascript" src="lib/bootstrap-table/bootstrap-table-ru-RU.min.js" ></script>
     <script type="text/javascript" src="lib/chart/Chart.min.js"></script>
+    <script type="text/javascript" src="lib/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="lib/suggestions/jquery.suggestions.min.js"></script>  
     <script type="text/javascript" src="js/dashboard.js"></script>
     <script type="text/javascript" src="js/common.js"></script>    

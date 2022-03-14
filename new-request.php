@@ -42,7 +42,7 @@
         </ul>
 
         <div class="col-12 col-lg-auto w-50 mb-3 mb-lg-0 me-lg-3">
-          <input type="search" class="form-control" placeholder="Поиск..." aria-label="Search">
+          <input id="gSearch" type="search" class="form-control" placeholder="Поиск..." aria-label="Search">
         </div>
 
         <div class="dropdown text-end">

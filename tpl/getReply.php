@@ -31,8 +31,7 @@ if (isset($request)) {
      $logInDate = date("d.m.Y", strtotime($request->logInDate));
      isset($request->senderNum) ? $senderNum = $request->senderNum : $senderNum = $logInNum;
      isset($request->senderDate) ? $senderDate = date("d.m.Y", strtotime($request->senderDate)) : $senderDate = $logInDate;
-     $name = ($request->declarant->type == 'FL') ? substr(explode(' ', $request->declarant->name)[1],0,2) . '. ' . substr(explode(' ', $request->declarant->name)[2],0,2) . '. '. explode(' ', $request->declarant->name)[0] : $request->declarant->name;
-     //$name = $request->declarant->name;
+     $name = ($request->declarant->type == 'FL') ? explode(' ', $request->declarant->name)[0].' '.substr(explode(' ', $request->declarant->name)[1],0,2) . '. ' . substr(explode(' ', $request->declarant->name)[2],0,2) . '. ' : $request->declarant->name;
      $realEstate = $request->realEstate;
      $answer = $request->answerText; 
      $text = $request->text;
