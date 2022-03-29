@@ -4,14 +4,12 @@ let newReqTable = $('#newReqTable').bootstrapTable({
 let inworkReqTable = $('#inworkReqTable').bootstrapTable({
     pagination: true,
 });
-let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
 let denyСopiesModal = new bootstrap.Modal($('#denyСopies'), {});
 let infoRefModal = new bootstrap.Modal($('#infoRef'), {});
 let notifyModal = new bootstrap.Modal($('#notify'), {});
 let replyModal = new bootstrap.Modal($('#reply'), {});
 
 $.when($.ready).then(function() {
-
     let today = new Date();
     $('#reqOutDate').val(today.getFullYear() + "-" + ('0' + (today.getMonth() + 1)).slice(-2) + "-" + ('0' + today.getDate()).slice(-2));
 
@@ -75,7 +73,17 @@ function deadlineFormatter(value) {
 }
 
 function typeFormatter(value) {
-    return value.type;
+    switch (value.type.substring(0, 2)) {
+        case 'FL':
+            return 'ФЛ';
+            break;
+        case 'UL':
+            return 'ЮЛ';
+            break;
+        case 'OG':
+            return value.type.replace(/OGV/gi, 'ОГВ');
+            break;
+    }
 }
 
 function decFormatter(value) {
@@ -102,25 +110,14 @@ function customSort(sortName, sortOrder, data) {
 }
 
 $("#newReqTable").on('click', 'a', function() {
-    addModalInfo($(this).html(), $(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]);
+    addModalInfo($(this).html());
     reqInfoModal.show();
 });
 
 $("#inworkReqTable").on('click', 'a', function() {
-    addModalInfo($(this).html(), $(this).parents().eq(1).find('td').eq(1).text().split(" ")[0]);
+    addModalInfo($(this).html());
     reqInfoModal.show();
 });
-
-function addModalInfo(num, type) {
-    $.ajax({
-        url: 'data/getRequestInfo.php',
-        type: 'GET',
-        data: { numLog: num, typeDec: type },
-        success: function(data) {
-            $('#reqInfoContent').html(data);
-        }
-    });
-}
 
 $("#newReqTable").on('click', 'tr', function() {
     $('#reqNumNew').val($(this).find('td').eq(0).text());

@@ -5,18 +5,12 @@ $info = $_GET["info"];
 switch ($info) {
     case "cards":
         try {
+            $conn->setAttribute(PDO::SQLSRV_ATTR_FORMAT_DECIMALS, true);
+            $conn->setAttribute(PDO::SQLSRV_ATTR_DECIMAL_PLACES, 2);
             $query = "{call InformationBoard1()}";
             $stmt = $conn->prepare($query);
             $stmt->execute();
-            $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            $info = (object) array(
-              'reqAll' => $rows['reqRecieved'], 
-              'reqToday' => $rows['reqRecievedToday'], 
-              'inWork' => $rows['reqInWork'], 
-              'exp' => $rows['percentOfExp'], 
-              'time' => $rows['timeAverage']
-            );
+            $info = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(PDOException $e) {
             die("Error executing stored procedure: ".$e->getMessage());
         }

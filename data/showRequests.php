@@ -3,10 +3,7 @@ include 'config.php';
 include 'classRequest.php';
 
 $requests = [];
-
-if (isset($_GET["status"])) {
-  $status = $_GET["status"];
-}
+$status = (isset($_GET["status"])) ? $_GET["status"] : die('Не указан статус запроса'); 
 
 try {
     $query = "{call showRequests(?)}";
@@ -15,13 +12,9 @@ try {
     $stmt->execute();
 
     while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $req = new Request(new Declarant(), new Performer());
-      if ($rows['type'] == 'OGV') {
-        $type = $rows['type']." <br>".$rows['smevNum'];
-      } else {
-        $type = $rows['type'];
-      }
-      $req->logInNum = $rows['reqNum'];
+      $req = new Request();
+      $type = ($rows['type'] == 'OGV') ? $rows['type']." <br>".$rows['smevNum'] : $rows['type'];
+      $req->num = $rows['reqNum'];
       $req->declarant->type = $type;
       $req->declarant->name = $rows['name'];
       $req->realEstate = $rows['reqObjAddress'];
@@ -31,7 +24,7 @@ try {
         $req->performer->name = $rows['performer'];
         $req->datePay = $rows['datePayment'];
         $req->dateDue = $rows['dateDue'];
-        $req->logInDate = $rows['reqDate'];
+        $req->date = $rows['reqDate'];
       }
       array_push($requests, $req);
     }

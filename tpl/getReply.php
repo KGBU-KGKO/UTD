@@ -1,9 +1,7 @@
 <?php
 error_reporting(E_ALL);
 
-$numInLog = $_GET['numInLog'];
-$numOutLog = $_GET['numOutLog'];
-include '../data/classRequest.php';
+$num = $_GET['numInLog'];
 include '../data/tplHandler.php';
 
 include_once('../lib/tbs/tbs_class.php');
@@ -13,7 +11,7 @@ if (isset($request)) {
     $TBS = new clsTinyButStrong;
     $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 
-    $template = 'tpl'.$request->svc.'.docx';
+    $template = 'tpl'.$request->tpl->number.'.docx';
     $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload] automatic fields (depends of the type of document).
     //$TBS->Plugin(OPENTBS_DEBUG_XML_CURRENT, true);
 
@@ -25,25 +23,25 @@ if (isset($request)) {
     // );
     // $TBS->MergeBlock('c', $data);
 
-     $logOutDate = date("d.m.Y", strtotime($request->logOutDate));
-     $logOutNum = $request->logOutNum;
-     $logInNum = $request->logInNum;
-     $logInDate = date("d.m.Y", strtotime($request->logInDate));
-     isset($request->senderNum) ? $senderNum = $request->senderNum : $senderNum = $logInNum;
-     isset($request->senderDate) ? $senderDate = date("d.m.Y", strtotime($request->senderDate)) : $senderDate = $logInDate;
-     $name = ($request->declarant->type == 'FL') ? explode(' ', $request->declarant->name)[0].' '.substr(explode(' ', $request->declarant->name)[1],0,2) . '. ' . substr(explode(' ', $request->declarant->name)[2],0,2) . '. ' : $request->declarant->name;
+     $logOutDate = $request->reply->date;
+     $logOutNum = $request->reply->num;
+     $logInNum = $request->num;
+     $logInDate = $request->date;
+     $senderNum = ($request->senderNum != '') ? $request->senderNum : $logInNum;
+     $senderDate = ($request->senderDate != '') ? $request->senderDate : $logInDate;
+     $name = ($request->declarant->type == 'FL') ? explode(' ', $request->declarant->name)[0].' '.substr(explode(' ', $request->declarant->name)[1],0,2) . '. ' . substr(explode(' ', $request->declarant->name)[2],0,2) . '. ' : $request->declarant->name; //тут надо дательный падеж
      $realEstate = $request->realEstate;
-     $answer = $request->answerText; 
-     $text = $request->text;
-     $attach = $request->attach;
+     $answer = $request->tpl->answerText;
+     $text = $request->reply->text;
+     $attach = $request->tpl->attach;
      $addressArr = explode(', ', $request->declarant->address);
-     count($addressArr) < 5 ? $address = $request->declarant->address : $address = getAddress($addressArr);
-     $email = $request->declarant->email;
+     $address = (count($addressArr) < 5) ? ($request->declarant->address) ?? '' : getAddress($addressArr);
+     $email = ($request->declarant->email) ? $request->declarant->email : '';
      $performer = $request->performer->name;
      $performer2 = $request->performer->shortName;
      $title = $request->performer->title;
-     $subject = $request->subject;
-     isset($request->smev) ? $smev = $request->smev."-" : $smev = "";
+     $subject = $request->tpl->subject;
+     $smev = (isset($request->smevNum) && $request->smevNum != "-") ? $request->smevNum."-" : "";
      $img = $request->performer->pathIMG;;
 
 

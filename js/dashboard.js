@@ -127,11 +127,11 @@ function loadCards() {
         data: { info: "cards" },
         success: function(data) {
             data = $.parseJSON(data);
-            $("#reqAll").html(data["reqAll"]);
-            $("#reqToday").html("+" + data["reqToday"] + " сегодня");
-            $("#inWork").html(data["inWork"]);
-            $("#exp").html(data["exp"]);
-            $("#time").html(data["time"]);
+            $("#reqAll").html(data["reqRecieved"]);
+            $("#reqToday").html("+" + data["reqRecievedToday"] + " сегодня");
+            $("#inWork").html(data["reqInWork"]);
+            $("#exp").html(data["percentOfExp"]);
+            $("#time").html(data["timeAverage"]);
         }
     });
 }
