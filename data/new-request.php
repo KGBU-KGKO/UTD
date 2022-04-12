@@ -19,6 +19,7 @@ if (isset($_GET['decType'])) {
     $reqDate = date( "Y-m-d", strtotime($_GET["reqDate"]));
     $reqObjAddress = $_GET["reqObjAddress"];
     $reqComment = $_GET["reqComment"];
+    $reqObjInfo = $_GET["reqObjInfo"];
     $delivery = deliveryConcat();
     $attachList = $_GET["attachList"];
     $path = 'files/'.explode('/', $reqNum)[1];
@@ -51,7 +52,7 @@ if (isset($_GET['decType'])) {
 
         //отправляем запрос, получаем 0 или 1
         try {
-            $query = "{call AddRequestFL(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            $query = "{call AddRequestFL(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             $stmt = $conn->prepare($query);
             $stmt->bindParam(1, $Name, PDO::PARAM_STR);
             $stmt->bindParam(2, $BDay, PDO::PARAM_STR);
@@ -73,6 +74,7 @@ if (isset($_GET['decType'])) {
             $stmt->bindParam(18, $delivery, PDO::PARAM_STR);
             $stmt->bindParam(19, $attachList, PDO::PARAM_STR);
             $stmt->bindParam(20, $path, PDO::PARAM_STR);
+            $stmt->bindParam(21, $reqObjInfo, PDO::PARAM_STR);
             $stmt->execute();
             $rows = $stmt->fetch(PDO::FETCH_ASSOC);
             echo json_encode($rows);
@@ -99,7 +101,7 @@ if (isset($_GET['decType'])) {
 
             //отправляем запрос, получаем 0 или 1
             try {
-                $query = "{call AddRequestUL(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}"; 
+                $query = "{call AddRequestUL(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}"; 
                 $stmt = $conn->prepare($query);
                 $stmt->bindParam(1, $dULName, PDO::PARAM_STR);
                 $stmt->bindParam(2, $dINN, PDO::PARAM_STR);
@@ -122,6 +124,7 @@ if (isset($_GET['decType'])) {
                 $stmt->bindParam(19, $delivery, PDO::PARAM_STR);
                 $stmt->bindParam(20, $attachList, PDO::PARAM_STR);
                 $stmt->bindParam(21, $path, PDO::PARAM_STR);
+                $stmt->bindParam(22, $reqObjInfo, PDO::PARAM_STR);
                 $stmt->execute();
                 $rows = $stmt->fetch(PDO::FETCH_ASSOC);
                 echo json_encode($rows);
@@ -139,7 +142,7 @@ if (isset($_GET['decType'])) {
 
             //отправляем запрос, получаем 0 или 1
             try {
-                $query = "{call AddRequestOGV(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}"; 
+                $query = "{call AddRequestOGV(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}"; 
                 $stmt = $conn->prepare($query);
                 $stmt->bindParam(1, $dOGVName, PDO::PARAM_STR);
                 $stmt->bindParam(2, $reqNum, PDO::PARAM_STR);
@@ -153,6 +156,7 @@ if (isset($_GET['decType'])) {
                 $stmt->bindParam(10, $delivery, PDO::PARAM_STR);
                 $stmt->bindParam(11, $attachList, PDO::PARAM_STR);
                 $stmt->bindParam(12, $path, PDO::PARAM_STR);
+                $stmt->bindParam(13, $reqObjInfo, PDO::PARAM_STR);
                 $stmt->execute();
                 $rows = $stmt->fetch(PDO::FETCH_ASSOC);
                 echo json_encode($rows);
@@ -169,12 +173,11 @@ $conn = null;
 function deliveryConcat() {
     global $delivery;
     $deliveryTypes = array('smev', 'post', 'email', 'foot');
+    $deliveryText = [];
     foreach ($deliveryTypes as $type) {
-        if (isset($_GET[$type])) {
-            $delivery = $delivery.", ".$_GET[$type];
-        }
+        if (isset($_GET[$type])) array_push($deliveryText, $_GET[$type]);
     }
-    return substr($delivery, 1);
+    return implode(', ', $deliveryText);
 }
 ?>
 

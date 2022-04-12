@@ -64,7 +64,7 @@
 <div id="toolbar" class="row">
   <div class="col mt-2">
       <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" name="onlyDelivery" id="onlyDelivery" checked>
+        <input class="form-check-input" type="checkbox" role="switch" name="onlyDelivery" id="onlyDelivery">
         <label class="form-check-label" for="onlyDelivery">На выдачу</label>
       </div>                
   </div>

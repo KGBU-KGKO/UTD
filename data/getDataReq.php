@@ -3,7 +3,7 @@
 	include 'classRequest.php';
 
 	if (empty($num)) $num = (isset($_GET["numLog"])) ? $_GET["numLog"] : die('Не указан номер запроса');
-	$query = "select request.numLog as 'numLogReq', request.dateReq, request.status as 'statusReq', request.realEstate, request.Comment, request.IDs,request.delivery, request.attachList, request.dFLAgentDoc, request.IDa, request.senderNum, request.senderDate, request.smevNum,
+	$query = "select request.numLog as 'numLogReq', request.dateReq, request.status as 'statusReq', request.realEstate, request.Comment, request.IDs,request.delivery, request.attachList, request.dFLAgentDoc, request.IDa, request.senderNum, request.senderDate, request.smevNum, request.objInfo,
 
 declarant.name, declarant.type, declarant.INN, declarant.OGRN, declarant.address as 'addressDec', declarant.tel as 'telDec', 
 declarant.email as 'emailDec', declarant.dateBirth, declarant.dulNum as 'dulNumDec', declarant.dulDate as 'dulDateDec', declarant.dulOrg as 'dulOrgDec', 
@@ -36,6 +36,7 @@ users.shortFIO as 'userShortFIO', users.jobTitle as 'userJobTitle', users.imgPat
 	$request->smevNum = $rows["smevNum"];
 	$request->status = $rows["statusReq"];
 	$request->realEstate = $rows["realEstate"];
+	$request->objInfo = $rows["objInfo"]; 
 	$request->comment = $rows["Comment"]; 
 	$request->svc = getServicesName($rows["IDs"], "shortName");
 	$request->svcFull = getServicesName($rows["IDs"], "name");

@@ -1,6 +1,6 @@
 <!-- новая модалка запроса -->
 
-<div class="modal fade" id="reqInfo" tabindex="-1" aria-labelledby="reqInfoLabel" aria-hidden="true">
+<div class="modal fade" id="reqInfoModal" tabindex="-1" aria-labelledby="reqInfoLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content" id="reqInfoContent">
       <div class="modal-header">
@@ -31,6 +31,10 @@
                       <td class="w600">Объект</td>
                       <td id="reqTabInfoObject"></td>
                     </tr>
+                    <tr>
+                      <td class="w600">Доп. информация</td>
+                      <td id="reqTabInfoObjInfo"></td>
+                    </tr>                    
                     <tr>
                       <td class="w600">Комментарий</td>
                       <td id="reqTabInfoComment"></td>

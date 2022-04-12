@@ -15,6 +15,9 @@ $.when($.ready).then(function() {
 
     newReqTable.bootstrapTable('load', getDataTable("Новый"));
     inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
+    inworkReqTable.bootstrapTable('filterBy', {
+        status: ["В работе"]
+      });
 
     if (newReqTable.bootstrapTable('getData').length == '0') {
         $('#newReqData').addClass('d-none');

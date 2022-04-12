@@ -31,6 +31,7 @@ if (isset($request)) {
      $senderDate = ($request->senderDate != '') ? $request->senderDate : $logInDate;
      $name = ($request->declarant->type == 'FL') ? explode(' ', $request->declarant->name)[0].' '.substr(explode(' ', $request->declarant->name)[1],0,2) . '. ' . substr(explode(' ', $request->declarant->name)[2],0,2) . '. ' : $request->declarant->name; //тут надо дательный падеж
      $realEstate = $request->realEstate;
+     $objInfo = ($request->objInfo) ? ", ".$request->objInfo : "";
      $answer = $request->tpl->answerText;
      $text = $request->reply->text;
      $attach = $request->tpl->attach;

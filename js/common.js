@@ -1,4 +1,4 @@
-let reqInfoModal = new bootstrap.Modal($('#reqInfo'), {});
+let reqInfoModal = new bootstrap.Modal($('#reqInfoModal'), {});
 
 $.when($.ready).then(function() {
 	sugg();
@@ -17,6 +17,7 @@ function sugg() {
             });
 
             $("#gSearch").autocomplete({
+                minLength: 4,
                 source: list,
                 position: {
 			        my : "center top",
@@ -59,6 +60,7 @@ function addModalInfo(num) {
             $("#reqInfoStatus").html(reqData.request.status);
             //request
             $("#reqTabInfoObject").html(reqData.request.realEstate);
+            $("#reqTabInfoObjInfo").html(reqData.request.objInfo);
             $("#reqTabInfoComment").html(reqData.request.comment);
             $("#reqTabInfoServices").html(reqData.request.svc);
             $("#reqTabInfoDelivery").html(reqData.request.delivery);

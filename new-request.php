@@ -368,10 +368,16 @@
             <label for="reqDate">Дата регистрации</label>
           </div>
         </div>        
-      </div>      
+      </div>     
       <div class="row g-1 mb-3">
         <div class="form-floating">
-          <textarea class="form-control" placeholder="Leave a comment here" id="reqComment" name="reqComment" style="height: 200px"></textarea>
+          <textarea class="form-control" placeholder="Дополнительные сведения об объекте" id="reqObjInfo" name="reqObjInfo" style="height: 200px"></textarea>
+          <label for="reqObjInfo">Дополнительные сведения</label>
+        </div> 
+      </div>        
+      <div class="row g-1 mb-3">
+        <div class="form-floating">
+          <textarea class="form-control" placeholder="Напишите комментарий" id="reqComment" name="reqComment" style="height: 200px"></textarea>
           <label for="reqComment">Комментарий</label>
         </div> 
       </div>     
@@ -457,9 +463,9 @@
           </label>
         </div>          
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="post" id="post" value="Почтовым отправление">
+          <input class="form-check-input" type="checkbox" name="post" id="post" value="Почтовым отправлением">
           <label class="form-check-label" for="post">
-            Почтовым отправление
+            Почтовым отправлением
           </label>
         </div>
         <div class="form-check">
