@@ -1,6 +1,11 @@
 let reqInfoModal = new bootstrap.Modal($('#reqInfoModal'), {});
+let notifyModal = new bootstrap.Modal($('#notify'), {});
+let fakeUsers = getAvatarList();
+let fakeUser = fakeUsers[Math.floor(Math.random()*fakeUsers.length)];
 
 $.when($.ready).then(function() {
+    $('.preloader, .overlay').fadeOut(300);
+    session();
 	sugg();
 });
 
@@ -46,55 +51,102 @@ function sugg() {
     });
 }
 
+function showNotifyModal(text, title) {
+    $('#notifyText').html(text);
+    $('#notifyTitle').html(title);
+    notifyModal.show();
+}
+
 function addModalInfo(num) {
+    $("#decTabInfo").html(`<img src="/img/preload.gif" alt="mdo" width="64" height="64" class="rounded-circle mx-auto d-block">`);
     $.ajax({
         url: 'data/getCardInfo.php',
         type: 'GET',
         data: { numLog: num },
         success: function(data) {
-            //console.log(data);
             let reqData = $.parseJSON(data);
             $("#decTabInfo").html(reqData.decTbl);
             $("#reqInfoNum").html(reqData.request.num);
             $("#reqInfoDate").html(reqData.request.date);
             $("#reqInfoStatus").html(reqData.request.status);
             //request
-            $("#reqTabInfoObject").html(reqData.request.realEstate);
-            $("#reqTabInfoObjInfo").html(reqData.request.objInfo);
+            $("#history").html(reqData.history);
+            $("#servicesInfo").html(reqData.svcTbl);
             $("#reqTabInfoComment").html(reqData.request.comment);
-            $("#reqTabInfoServices").html(reqData.request.svc);
             $("#reqTabInfoDelivery").html(reqData.request.delivery);
             $("#reqTabInfoAttach").html(reqData.request.attachList);
             $("#reqTabInfoFiles").html(reqData.request.fileList);
             //reply 
             $("#repTabInfoDate").html(reqData.request.reply.date);
             $("#repTabInfoNum").html(reqData.request.reply.num);
-            $("#repTabInfoStatus").html(reqData.request.reply.status);
-            $("#repTabInfoReason").html(reqData.request.reply.reason);
+            $("#servicesInfoReplyBody").html(reqData.svcTblReply)
+            reqData.svcTblReply ? $("#servicesInfoReply").removeClass('d-none') : $("#servicesInfoReply").addClass('d-none');
         }
     });
 }
 
 $("#modalPrintReq").click(function() {
-    //window.open('/tpl/form' + $(this).parents().eq(1).find('td').eq(1).text() + '.php?numLog=' + $('#reqInfoNum').val(), '_blank');
+    window.open('/tpl/printRequest.php?numLog=' + $('#reqInfoNum').html(), '_blank');
 });
 
-function session() {    
-let session = localStorage.getItem("session");
-console.log(session);
-// if (result === 'spa') {
-//     document.getElementById("welcome").innerHTML = "Hola!";
-// } else {
-//     document.getElementById("welcome").innerHTML = "Hello!";
-// }
+$("#modalGetReply").click(function() {
+    window.open('/tpl/getReply.php?numLog=' + $('#reqInfoNum').html(), "_blank");
+});
+//modalPrintReq
+
+function session() {   
+    if (typeof $.cookie('uid') === 'undefined') {
+        $.cookie('uid', Date.now(), { expires: 365, path: '/' });
+        $.cookie('userIcon', fakeUser["img"], { expires: 365, path: '/' });
+        $.cookie('userName', fakeUser["name"], { expires: 365, path: '/' });
+        setUser(fakeUser);
+     } else {
+        user = getProfile('');
+        (user) ? setUser(user) : setUser({name: $.cookie('userName'), img: $.cookie('userIcon'), ID: 0});       
+    }
 }
 
-function addUser(key) {
-// if (key === 'en') {
-//     document.getElementById("welcome").innerHTML = "Hello!";
-//     localStorage.setItem("session", "en");
-// } else if (key === 'spa') {
-//     document.getElementById("welcome").innerHTML = "Hola!";
-//     localStorage.setItem("session", "spa");
-// }
+function setUser(user) {
+    $('#userName').html(user["name"]);
+    $('#userImg').attr('src', user["img"]);  
+    $(`#performer option:contains("${user["name"]}")`).prop('selected', true);
+    $(`#performerInWork option:contains("${user["name"]}")`).prop('selected', true);
+    $.cookie('id', user["ID"], { expires: 365, path: '/' });
+}
+
+function getAvatarList() {
+    data = $.ajax({
+        url: `data/getAvatars.php`,
+        type: 'GET',
+        async: false,
+        success: function(data) {
+            return data;
+        }
+    });
+    return $.parseJSON(data.responseText)
+}
+
+function getProfile(user) {
+    data = $.ajax({
+        url: `data/getProfiles.php`,
+        type: 'GET',
+        async: false,
+        data: { img: $.cookie('userIcon'), uid: $.cookie('uid'), user: user },
+        success: function(data) {
+            return data;
+        }
+    });
+    return $.parseJSON(data.responseText)
+}
+
+$(".dropdown-item").click(function() {
+    setUser(getProfile($(this).html()));
+});
+
+function logger(event, request) {
+    $.ajax({
+        url: 'data/addLog.php',
+        type: 'GET',
+        data: { uid: $.cookie('id'), event: event, request: request },
+    });    
 }

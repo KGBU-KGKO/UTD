@@ -19,7 +19,7 @@ if ($res['count'] != '0') {
       <th data-field="num" data-sortable="true" data-formatter="numFormatter">№ запроса</th>
       <th data-field="declarant" data-sortable="true" data-formatter="typeFormatter">Тип</th>
       <th data-field="declarant" data-sortable="true" data-formatter="decFormatter">Заявитель</th>
-      <th data-field="realEstate" data-sortable="true" >Объект запроса</th>
+      <th data-field="realEstate" data-sortable="true" data-formatter="objFormatter" >Объект запроса</th>
       <th data-field="svc" data-sortable="true" >Услуга</th>
     </tr>
   </thead>

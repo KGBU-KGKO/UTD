@@ -4,17 +4,22 @@
       <h1 class="display-3 mb-3">Новый запрос</h1>
       <h6 class="display-6">Сведения о заявителе</h6>
       <div class="row g-1 mb-3">
-        <div class="col-md">
-          <div class="form-floating">
-            <select class="form-select" id="declarantType" aria-label="Floating label select">
-              <option selected>---</option>
-              <option value="FL">Физическое лицо</option>
-              <option value="UL">Юридическое лицо</option>
-              <option value="OGV">Орган государственной власти</option>
-            </select>
-            <label for="declarantType">Выберите вид заявителя</label>
+        <form id="decTypeSelForm">
+          <div class="col-md">
+            <div class="form-floating">
+              <select class="form-select" id="declarantType" name="declarantType" aria-label="Floating label select" required>
+                <option value="" selected>---</option>
+                <option value="FL">Физическое лицо</option>
+                <option value="UL">Юридическое лицо</option>
+                <option value="OGV">Орган государственной власти</option>
+              </select>
+              <label for="declarantType">Выберите вид заявителя</label>
+              <div class="invalid-feedback">
+                Укажите тип заявителя
+              </div>              
+            </div>
           </div>
-        </div>
+        </form>
       </div>  
       <div id="declarantFL" class="declarant">
         <form id="reqFL" class="needs-validation" novalidate>
@@ -349,111 +354,36 @@
       </div>   
       <h6 class="display-6">Сведения о запросе</h6>
       <form id="reqInfo">
-      <div class="row g-3 mb-3 d-none">
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" role="switch" name="likeAddress" id="likeAddress">
-          <label class="form-check-label" for="likeAddress">Адрес совпадает с адресом места жительства</label>
-        </div>                
-      </div> 
+
+      <div id="services"></div>
+
       <div class="row g-1 mb-3">
-        <div class="col-md-8">
-          <div class="form-floating">
-            <input type="text" class="form-control address" id="reqObjAddress" name="reqObjAddress" placeholder="Адрес объекта недвижимости" value="">
-            <label for="reqObjAddress">Адрес объекта недвижимости</label>
-          </div>
+        <div class="col-md-3">
+          <div class="form-floating d-grid gap-2 mx-auto">
+            <button type="button" id="addService" class="btn btn-primary btn-lg"><i class="bi bi-plus-square fs-6"></i> Добавить услугу</button>
+          </div>          
         </div>  
-        <div class="col-md-4">
+        <div class="col-md-2">
+          <div class="form-floating d-grid gap-2 mx-auto">
+            <button type="button" id="rmService" class="btn btn-secondary btn-lg"><i class="bi bi-dash-square fs-6"></i> Убрать услугу</button>
+          </div>          
+        </div>         
+        <div class="col-md-2 mx-2">
           <div class="form-floating">
-            <input type="date" class="form-control" id="reqDate" name="reqDate" placeholder="Дата регистрации" value="" readonly>
+            <input style="height: 48px" type="date" class="form-control" id="reqDate" name="reqDate" placeholder="Дата регистрации" value="" readonly>
             <label for="reqDate">Дата регистрации</label>
           </div>
         </div>        
-      </div>     
+      </div> 
+
+      <h6 class="display-6">Комментарий</h6>
       <div class="row g-1 mb-3">
         <div class="form-floating">
-          <textarea class="form-control" placeholder="Дополнительные сведения об объекте" id="reqObjInfo" name="reqObjInfo" style="height: 200px"></textarea>
-          <label for="reqObjInfo">Дополнительные сведения</label>
-        </div> 
-      </div>        
-      <div class="row g-1 mb-3">
-        <div class="form-floating">
-          <textarea class="form-control" placeholder="Напишите комментарий" id="reqComment" name="reqComment" style="height: 200px"></textarea>
-          <label for="reqComment">Комментарий</label>
+          <textarea class="form-control" placeholder="Leave a comment here" id="reqComment" name="reqComment" style="height: 200px"></textarea>
+          <label for="reqComment">Текст комментария</label>
         </div> 
       </div>     
-      <h6 class="display-6">Сведения об услуге</h6>
-      <div class="row g-2 mb-3 groupCheck" id="services">
-        <div class="col-md">
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-1" name="svc-1">
-            <label class="form-check-label" for="svc-1">
-              Технический паспорт ОКС/помещения
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-2" name="svc-2">
-            <label class="form-check-label" for="svc-2">
-              Поэтажный/ситуационный план
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-3" name="svc-3">
-            <label class="form-check-label" for="svc-3">
-              Экспликация поэтажного плана/ОКС/помещения
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-4" name="svc-4">
-            <label class="form-check-label" for="svc-4">
-              УТД, содержащая сведения об инвентаризационной, восстановительной, балансовой или иной стоимости ОКС/помещения
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-5" name="svc-5">
-            <label class="form-check-label" for="svc-5">
-              Проектно-разрешительная документация, техническое или экспертное заключение, или иная документация, содржащаяся в архиве
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-6" name="svc-6">
-            <label class="form-check-label" for="svc-6">
-              Правоустанавливающий документ, хранящийся в материалах инвентарного дела
-            </label>
-          </div>
-        </div>
-        <div class="col-md">
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-7" name="svc-7">
-            <label class="form-check-label" for="svc-7">
-              Выписка из реестровой книги о праве собственности на ОКС/помещение
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-8" name="svc-8">
-            <label class="form-check-label" for="svc-8">
-              Справка, содержащая сведения об инвентаризационной стоимости ОКС
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-9" name="svc-9">
-            <label class="form-check-label" for="svc-9">
-              Справка, содержащая сведения об инвентаризационной стоимости помещения
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-10" name="svc-10">
-            <label class="form-check-label" for="svc-10">
-              Справка, содержащая сведения о наличии (отсутствии) права собствености на объекты недвижимости (один правообладатель)
-            </label>
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="" id="svc-11" name="svc-11">
-            <label class="form-check-label" for="svc-11">
-              Справка, содержащая сведения о характеристиках объекта государственного учета
-            </label>
-          </div>
-        </div>                
-      </div>
+
       <h6 class="display-6">Способ получения копии/справки</h6>      
       <div class="row g-1 mb-3 groupCheck" id="delivery">
         <div class="form-check">
@@ -503,25 +433,6 @@
         </div>
       </div>
     </div>
-
-<div class="modal fade" id="notify" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-<div class="modal-header">
-        <h5 class="modal-title">Ошибка</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-</div>
-<div class="modal-body">
-<p>Возникла ошибка при создании запроса. Обратитесь в отдел ИТ.</p>
-<p>Текст ошибки: </p>
-<p id="txtInfo"></p>
-</div>      
-<div class="modal-footer">
-  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Понятно</button>
-</div>
-    </div>
-  </div>
-</div>
 
 <?php 
 if (isset($_GET['toast'])) {

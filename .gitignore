@@ -3,3 +3,6 @@ data/config.php
 
 # Files
 files/*
+
+# Temp replys
+tmp/*

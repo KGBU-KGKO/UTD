@@ -1,5 +1,5 @@
 <?php
-	include '../data/getDataFL.php';
+	include '../data/getDataReq.php';
 ?>
 <!DOCTYPE html>
 <html lang="en" style="font-size: 12px;">
@@ -10,7 +10,7 @@
 	<!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="../lib/bootstrap/bootstrap.min.css">
 
-	<title>Запрос №<?=$rowsRequest['numLog'];?></title>
+	<title>Запрос №<?=$request->num;?></title>
 </head>
 <body>
 	<div class="container">
@@ -21,65 +21,115 @@
 			</div>
 		</div>
 	<br>
-	<p class="text-center my-0 py-0">ЗАПРОС №<?=$rowsRequest['numLog'];?></p>
+	<p class="text-center my-0 py-0">ЗАПРОС №<?=$request->num;?></p>
 	<p class="text-center">о предоставлении копий учетно-технической документации и (или) содержащихся в ней сведений</p>
 	<table class="table table-bordered border-dark">
   		<tbody>
   			<tr>
-      			<th scope="row" colspan="2" class="text-center fw-weight-bold">Сведения о заявителе - физическом лице<br>(паспортные данные подтверждаются копией паспорта)</th>
+  			<?php
+  				if ($request->declarant->type == 'FL'){
+  					echo '
+  						<th scope="row" colspan="2" class="text-center fw-weight-bold">
+  						Сведения о заявителе - физическом лице<br>(паспортные данные подтверждаются копией паспорта)</th>
+  					';
+  				}
+  				if ($request->declarant->type == 'UL'){
+  					echo '
+  						<th scope="row" colspan="2" class="text-center fw-weight-bold">Сведения о заявителе - юридическом лице</th>
+  					';
+  				}
+  				if ($request->declarant->type == 'OGV'){
+  					echo '
+  						<th scope="row" colspan="2" class="text-center fw-weight-bold">Сведения о заявителе - орган государственной власти</th>
+  					';
+  				} 
+  			 ?>
     	 	</tr>
 		    <tr>
-		      <td scope="row">ФИО</td>
-		      <td><?=$rowsRequest['name'] . ', ' .$dateBirth;?></td>
+		    	<?php 
+		    		if ($request->declarant->type == 'FL') {
+		    			echo '<td scope="row">ФИО</td>';
+		    		} else
+		    		echo '<td scope="row">Наименование юридического лица</td>';
+		    	 ?>	
+		      <td><?=$request->declarant->name;?></td>
 		    </tr>
 		    <tr>
-		      <td scope="row" class="align-middle">Адрес места жительства</td>
-		      <td><?=$rowsRequest['address'];?></td>
+		    	<?php 
+		    		if ($request->declarant->type == 'FL') {
+		    			echo '<td scope="row" class="align-middle">Адрес места жительства</td>';
+		    		} else
+		    			echo '<td scope="row" class="align-middle">Адрес местонахождения юридического лица</td>';
+		    	 ?>
+		      <td><?=$request->declarant->address;?></td>
 		    </tr>
+		    <?php 
+		    	if ($request->declarant->type == 'UL') {
+		    		echo '
+		    		<td scope="row">ИНН/ОГРН</td>
+		      		<td>' . $request->declarant->INN . ' / '. $request->declarant->OGRN . '</td>';
+		    	}
+		    ?>
 		    <tr>
-		      <td scope="row">Эл.почта</td>
-		      <td><?=$rowsRequest['email'];?></td>
-		    </tr>
-		    <tr>
-		      <td scope="row">Контактный телефон</td>
-		      <td><?=$rowsRequest['tel'];?></td>
+		    	<td scope="row">Эл.почта</td>
+		    	<?php
+			    	if ($request->declarant->haveAgent) {
+			    		if ($request->declarant->type == 'FL') {
+			    			echo '<td>' . $request->declarant->agent->email . '</td>';
+			    		} else {
+			    			echo '<td>' . $request->declarant->email . '</td>';	
+			    		}
+			    	} else {
+			    		echo '<td>' . $request->declarant->email . '</td>';
+			    	}
+		    	 ?>
 		    </tr>
 		    <?php
-		    	if (!is_null($rowsRequest['aFIO'])) {
+		    	if (($request->declarant->type == 'FL' && !$request->declarant->haveAgent) || 
+		    	   ($request->declarant->type == 'UL')) {
+		    		echo '
+		    		<tr>
+		    		<td scope="row">Контактный телефон</td>
+		    		<td>' . $request->declarant->phone . '</td>
+		    		</tr>
+		    		';
+		    	}
+		     ?>
+		    <?php
+		    	if ($request->declarant->haveAgent) {
 		    		echo ' 
 		    			<tr>
 					      <th scope="row" colspan="2" class="align-middle">В лице представителя по доверенности:</th>
 					    </tr>
 					    <tr>
 					      <td scope="row" class="align-middle">ФИО</td>
-					      <td>'.$rowsRequest['aFIO'].'</td>
+					      <td>'.$request->declarant->agent->name.'</td>
 					    </tr>
 					    <tr>
 					      <td scope="row">Контактный телефон</td>
-					      <td>'.$rowsRequest['aTel'].'</td>
+					      <td>'.$request->declarant->agent->phone.'</td>
 					    </tr>
 					    <tr>
 					      <td scope="row">Реквизиты доверенности или иного документа, подтверждающего полномочия представителя</td>
-					      <td>'.$rowsRequest['dFLAgentDoc'].'</td>
+					      <td>'.$request->declarant->agent->agentDoc.'</td>
 					    </tr>
-		    		'
-		    		;
+		    		';
 		    	}
 		    ?>
-		    <tr>
+		    <!-- <tr>
 		      <th scope="row" class="align-middle">Адрес запрашиваемого объекта</th>
-		      <td><?=$rowsRequest['realEstate'];?></td>
-		    </tr>
+		      <td><?=$request->realEstate;?></td>
+		    </tr> -->
 		    <?php
-		    	if (!is_null($rowsRequest['aFIO'])) {
+		    	if ($request->declarant->haveAgent) {
 		    		echo ' 
 		    			<tr>
 					      <td scope="row">Серия и номер документа, удостоверяющего личность представителя</td>
-					      <td>'.$dulNum.'</td>
+					      <td>'.$request->declarant->agent->dulNum.'</td>
 					    </tr>
 					    <tr>
 					      <td scope="row">Когда и кем выдан документ, удостоверяющий личность представителя</td>
-					      <td>'.$dulDate.', '.$dulOrg.'</td>
+					      <td>'.$request->declarant->agent->dulDate. ', '.$request->declarant->agent->dulOrg.'</td>
 					    </tr>
 		    		';
 		    	}
@@ -87,11 +137,11 @@
 		    		echo ' 
 		    			<tr>
 					      <td scope="row">Серия и номер документа, удостоверяющего личность заявителя</td>
-					      <td>'.$dulNum.'</td>
+					      <td>'. $request->declarant->dulNum . '</td>
 					    </tr>
 					    <tr>
 					      <td scope="row">Когда и кем выдан документ, удостоверяющий личность заявителя</td>
-					      <td>'.$dulDate.', '.$dulOrg.'</td>
+					      <td>' . $request->declarant->dulDate .', '.$request->declarant->dulOrg.'</td>
 					    </tr>
 		    		';
 		    	}
@@ -103,10 +153,19 @@
   		<tbody>
   			<tr>
   				<th scope="row" class="text-center">№</th>
-      			<th scope="row" class="text-center">Вид документа, копия которого предоставляется либо содержащего сведения</th>
+      			<th scope="row" class="text-center">Услуга</th>
+      			<th scope="row" class="text-center">Объект услуги</th>
       			<th scope="row" class="text-center">Размер платы</th>
     	 	</tr>
-    	 	<?=$rowsSvc['svcConcat'];?>
+    	 	<?php
+    	 		$num = 0;
+    	 		foreach($request->service as $service) {
+	    	 		$num++;
+	    	 		$svc = $service->name;
+	    	 		$serviceObject = ($service->forHuman == 1 ? $service->human->fullName : $service->realEstate->fullAddress);	    	 		
+	    	 		echo "<tr><th class=\"align-center text-center\">$num</th><td>$service->name</td><td>$serviceObject</td><td></td></tr>";
+	    	 	}
+    	 	?>
 		</tbody>
 	</table>
 	<br>
@@ -116,7 +175,7 @@
       			<th scope="row" colspan="2" class="text-center fw-weight-bold">Способ получения копий учетно-технической документации и (или) содержащихся в ней сведений, уведомлений</th>
     	 	</tr>
 		    <tr>
-		      <td scope="row" colspan="2"><?=$rowsRequest['delivery'];?></td>
+		      <td scope="row" colspan="2"><?=$request->delivery;?></td>
 		    </tr>
 		</tbody>
 	</table>
@@ -127,7 +186,7 @@
       			<th scope="row" colspan="2" class="text-center fw-weight-bold">Перечень прилагаемых документов </th>
     	 	</tr>
 		    <tr>
-		      <td scope="row" colspan="2"><?=$rowsRequest['attachList'];?></td>
+		      <td scope="row" colspan="2"><?=$request->attachList;?></td>
 		    </tr>
 		</tbody>
 	</table>
@@ -138,7 +197,7 @@
       			<th scope="row" colspan="2" class="text-center fw-weight-bold">Комментарий</th>
     	 	</tr>
 		    <tr>
-		      <td scope="row" colspan="2"><?=$rowsRequest['Comment'];?></td>
+		      <td scope="row" colspan="2"><?=$request->comment;?></td>
 		    </tr>
 		</tbody>
 	</table>
@@ -152,6 +211,23 @@
       				</span>
       			</td>
     	 	</tr>
+    	 	<?php 
+    	 		if ($request->declarant->haveAgent) {
+    	 			$FIO = $request->declarant->agent->name;
+    	 			$address = $request->declarant->agent->address;
+    	 			$dulNum = $request->declarant->agent->dulNum;
+    	 			$dulDate = $request->declarant->agent->dulDate;
+    	 			$dulOrg = $request->declarant->agent->dulOrg;
+    	 		} else {
+    	 			$FIO = $request->declarant->name;
+    	 			$address = $request->declarant->address;
+    	 			$dulNum = $request->declarant->dulNum;
+    	 			$dulDate = $request->declarant->dulDate;
+    	 			$dulOrg = $request->declarant->dulOrg;
+    	 		}
+    	 		$sFIO = explode(' ', $FIO);
+    			$sFIO = substr($sFIO[1],0,2) . '. ' . substr($sFIO[2],0,2) . '.' . ' ' . $sFIO[0];
+    	 	 ?>
 		    <tr>
 		      <td scope="row" colspan="2" class="text-center border-left-0 pb-0"><?=$FIO;?></td>
 		    </tr>

@@ -60,7 +60,7 @@
     							<td>" .$rows['senderDate'] . "</td>
     							<td>" .$rows['smevNum'] . "</td>
     							<td>" .$rows['name'] . "</td>
-    							<td>" .$rows['realEstate'] . "</td>
+    							<td>" .$rows['reqObjHum'] . "</td>
     							<td>" .$rows['svc'] . "</td>
     							<td nowrap>" .$rows['performer'] . "</td>
     							<td></td>

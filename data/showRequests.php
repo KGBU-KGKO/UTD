@@ -13,11 +13,11 @@ try {
 
     while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $req = new Request();
-      $type = ($rows['type'] == 'OGV') ? $rows['type']." <br>".$rows['smevNum'] : $rows['type'];
+      $type = ($rows['dType'] == 'OGV') ? $rows['dType']." <br>".$rows['smevNum'] : $rows['dType'];
       $req->num = $rows['reqNum'];
       $req->declarant->type = $type;
-      $req->declarant->name = $rows['name'];
-      $req->realEstate = $rows['reqObjAddress'];
+      $req->declarant->name = $rows['dName'];
+      $req->realEstate = $rows['reqObjHum'];
       $req->svc = $rows['svc'];
       if ($status == 'В работе') {
         $req->status = $rows['status'];

@@ -4,10 +4,9 @@ let newReqTable = $('#newReqTable').bootstrapTable({
 let inworkReqTable = $('#inworkReqTable').bootstrapTable({
     pagination: true,
 });
-let denyСopiesModal = new bootstrap.Modal($('#denyСopies'), {});
-let infoRefModal = new bootstrap.Modal($('#infoRef'), {});
-let notifyModal = new bootstrap.Modal($('#notify'), {});
 let replyModal = new bootstrap.Modal($('#reply'), {});
+let answerModal = new bootstrap.Modal($('#answer'), {});
+let request = {};
 
 $.when($.ready).then(function() {
     let today = new Date();
@@ -27,7 +26,7 @@ $.when($.ready).then(function() {
 });
 
 $("#onlyDelivery").change(function() {
-    let statusList = $(this).prop('checked') ? ["На выдачу (Ответ)", "На выдачу (Отказ)", "На выдачу (Отказ/Ответ)"] : ["В работе"];
+    let statusList = $(this).prop('checked') ? ["На выдачу (Ответ)", "На выдачу", "На выдачу (Отказ)", "На выдачу (Отказ/Ответ)"] : ["В работе"];
     inworkReqTable.bootstrapTable('filterBy', {
         status: statusList
       });
@@ -46,14 +45,9 @@ function getDataTable(dataStatus) {
     return $.parseJSON(dataTbl.responseText)
 }
 
-function showNotifyModal(text) {
-    $('#txtInfo').html(text);
-    notifyModal.show();
-}
-
 function numFormatter(value) {
     if (value) {
-        return '<a href="#">' + value + '</a>';
+        return '<a class="card-link" role="button">' + value + '</a>';
     }
 }
 
@@ -61,6 +55,17 @@ function payFormatter(value) {
     if (value) {
         return '<p class="text-center m-0"><i class="bi bi-check2-square text-success fs-5" ></i></p>';
     }
+}
+
+function objFormatter(value) {
+    arr = value.split('; ');
+    res = [];
+    $.each(arr, function(index, value) {
+         if ($.inArray(value, res) == -1)
+             res.push(value);
+
+    });
+    return res.join('; ');
 }
 
 function deadlineFormatter(value) {
@@ -123,21 +128,11 @@ $("#inworkReqTable").on('click', 'a', function() {
 });
 
 $("#newReqTable").on('click', 'tr', function() {
-    $('#reqNumNew').val($(this).find('td').eq(0).text());
-    // if (event.target.nodeName != 'A') {
-    //   $('html, body').animate({
-    //       scrollTop: $("#reqNumNew").offset().top
-    //   }, 50);         
-    // }      
+    $('#reqNumNew').val($(this).find('td').eq(0).text());     
 });
 
 $("#inworkReqTable").on('click', 'tr', function() {
-    $('#reqNumWork').val($(this).find('td').eq(0).text());
-    // if (event.target.nodeName != 'A') {
-    //   $('html, body').animate({
-    //       scrollTop: $("#reqNumWork").offset().top
-    //   }, 50);         
-    // }    
+    $('#reqNumWork').val($(this).find('td').eq(0).text()); 
 });
 
 $("#inWork").click(function() {
@@ -150,9 +145,7 @@ $("#inWork").click(function() {
         type: 'GET',
         data: { status: "В работе", num: $('#reqNumNew').val(), performer: $('#performer option:selected').text() },
         success: function(data) {
-            if (data == 'done') {} else {
-                showNotifyModal(data);
-            }
+            (data == 'done') ? logger('Взят в работу', $('#reqNumNew').val()) : showNotifyModal(data, 'Информация');
             newReqTable.bootstrapTable('load', getDataTable("Новый"));
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
             $('#reqNumNew').val('');
@@ -170,9 +163,7 @@ $("#Paid").click(function() {
         type: 'GET',
         data: { status: "Оплачен", num: $('#reqNumWork').val() },
         success: function(data) {
-            if (data == 'done') {} else {
-                showNotifyModal(data);
-            }
+            (data == 'done') ? logger('Оплачен', $('#reqNumWork').val()) : showNotifyModal(data, 'Информация');
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
         }
     });
@@ -187,121 +178,11 @@ $("#Issue").click(function() {
         type: 'GET',
         data: { status: "Выполнен", num: $('#reqNumWork').val() },
         success: function(data) {
-            if (data == 'done') {} else {
-                showNotifyModal(data);
-            }
+            (data == 'done') ? logger('Выдан', $('#reqNumWork').val()) : showNotifyModal(data, 'Информация');
             $('#reqNumWork').val("");
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
         }
     });
-});
-
-$("#Cancel").click(function() {
-    if (!validateForm(['reqNumWork', 'select:performerInWork'])) {
-        return;
-    }
-    request = getRequest($('#reqNumWork').val(), "inworkReqTable", "Отказ");
-    check = checkRequest(request);
-    if (check.status == "yes") {
-        //переделать на тосты
-        showNotifyModal(check.text);
-        $('#reqNumWork').val("");
-        inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
-        return;
-    }
-    prepareReply(request, "Отказ");
-});
-
-$("#denyReq").click(function() {
-    if (!validateForm(['denyTxt'])) {
-        return;
-    }
-    request = getRequest($('#reqNumWork').val(), "inworkReqTable", "Отказ");
-    request.svc[0].reason = $('#denyTxt').val();
-    request.performer = $('#performerInWork option:selected').text();
-    request.replayDate = $('#reqOutDate').val();
-    createReply(request);
-    denyСopiesModal.hide();
-    $('#denyСopiesModalForm').trigger("reset");
-});
-
-$("#createRef").click(function() {
-    if (!validateForm(['textRef'])) {
-        return;
-    }
-    request = getRequest($('#reqNumWork').val(), "inworkReqTable", "Ответ");
-    request.data.text = $('#textRef').val();
-    request.performer = $('#performerInWork option:selected').text();
-    request.replayDate = $('#reqOutDate').val();
-    createReply(request);
-    infoRefModal.hide();
-    $('#infoRefModalForm').trigger("reset");
-});
-
-$("#multiReply").click(function() {
-    let id = [];
-    let reasons = "",
-        answers = "";
-    $('[id^="reason-"]').each(function() {
-        id.push(this.id);
-    });
-    if (!validateForm(id)) {
-        return;
-    }
-    request = getRequest($('#reqNumWork').val(), "inworkReqTable", "");
-    request.performer = $('#performerInWork option:selected').text();
-    request.replayDate = $('#reqOutDate').val();
-    $.each(request.svc, function(index, value) {
-        answer = $(`#responseSVC-${++index} option:selected`).text();
-        answers = answers + ";" + answer;
-        if (answer == 'Отказ') {
-            reason = $(`#reason-${index}`).val();
-            reasons = reasons + ";" + reason;
-        }
-    });
-    answers = answers.substr(1);
-    reasons = reasons.substr(1);
-    request.svc = [];
-    request.svc.push({ name: 'Несколько услуг', answer: "", reason: reasons, answers: answers });
-    if (answers.includes("Ответ", 0) && answers.includes("Отказ", 0)) {
-        request.svc[0].answer = "Отказ/Ответ";
-    }
-    if (!answers.includes("Ответ", 0)) {
-        request.svc[0].answer = "Отказ";
-    }
-    if (!answers.includes("Отказ", 0)) {
-        request.svc[0].answer = "Ответ";
-    }
-    replyModal.hide();
-    createReply(request);
-});
-
-$("#Answer").click(function() {
-    if (!validateForm(['reqNumWork', 'select:performerInWork'])) {
-        return;
-    }
-    request = getRequest($('#reqNumWork').val(), "inworkReqTable", "Ответ");
-    request.performer = $('#performerInWork option:selected').text();
-    request.replayDate = $('#reqOutDate').val();
-    check = checkRequest(request);
-    if (check.status == "yes") {
-        //переделать на тосты
-        showNotifyModal(check.text);
-        $('#reqNumWork').val("");
-        inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
-        return;
-    }
-    prepareReply(request, "Ответ");
-});
-
-$('#denyTxtSelect').on('change', function() {
-    denySel = $('#denyTxtSelect option:selected').val();
-    $.getJSON("data/denyReason.json", function(data) {
-        $('#denyTxt').val(data['var' + denySel]);
-    }).fail(function() {
-        console.log("An error has occurred.");
-    });
-
 });
 
 $("#printList").click(function() {
@@ -333,104 +214,6 @@ function validateForm(inputs) {
     return result;
 }
 
-function prepareReply(request, answer) {
-    $('#replyBody').html('');
-    if (request.svc.length > 1) {
-        //множественный ответ или отказ
-        createReasonWindow(request.svc);
-        $('#replyNumTitle').html(request.num);
-        replyModal.show();
-    } else {
-        switch (request.svc[0].name) {
-            case "Справка о собственности":
-            case "Выписка":
-                //обработка справок и выписок
-                if (answer == "Отказ") {
-                    //единственный отказ
-                    request.performer = $('#performerInWork option:selected').text();
-                    request.replayDate = $('#reqOutDate').val();
-                    request.svc[0].reason = "";
-                    createReply(request);
-                } else {
-                    //единственный ответ
-                    $('#infoRefNum').html(request.num);
-                    infoRefModal.show();
-                }                
-                break;
-            default:
-                //обработка копий
-                if (answer == "Отказ") {
-                    //единственный отказ
-                    $('#denyСopiesNum').html(request.num);
-                    denyСopiesModal.show();
-                } else {
-                    //единственный ответ
-                    createReply(request);
-                }
-        }
-    }
-
-}
-
-
-function createReasonWindow(svc) {
-    $.each(svc, function(index, value) {
-        let yes = "",
-            no = "",
-            dnone = "",
-            readonly = "";
-        if (value.answer == 'Ответ') {
-            yes = 'selected';
-            dnone = 'd-none';
-            readonly = 'readonly';
-        } else {
-            no = 'selected';
-        }
-        //let itemindex = index+1;
-        let item = `<div class="row g-3 mb-2 me-2" id="svc-${++index}">
-                <div class="col-md-8">
-                  <div class="form-floating">
-                    <input type="text" readonly class="form-control-plaintext" id="svc-${index}" value="${index}. ${value.name}" placeholder="Наименование услуги">
-                    <label for="svc-1" class="visually-hidden">Услуга</label>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-floating">
-                    <select class="form-select answer" id="responseSVC-${index}" aria-label="Floating label select">
-                      <option ${yes} value="1">Ответ</option>
-                      <option ${no} value="2">Отказ</option>
-                    </select>
-                    <label for="responseSVC-${index}">Выберите резолюцию</label>
-                  </div>
-                </div>
-                </div>
-                <div class="row g-3 mb-1 ${dnone}" id="reasonText-${index}">
-                <div class="row g-3 mb-1">
-                  <div class="col-md">
-                    <div class="form-floating">
-                      <select class="form-select" id="denyManyTxtSelect-${index}" aria-label="Floating label select">
-                        <option selected>---</option>
-                        <option value="1">отсутствием инвентарного дела</option>
-                        <option value="2">ОГВ прислал не по СМЭВ</option>
-                        <option value="3">нет сведений в инвентарном деле</option>
-                        <option value="4">невозможно идентифицировать объект</option>
-                      </select>
-                      <label for="denyManyTxtSelect-${index}">Выберите шаблон причины отказа</label>
-                    </div>
-                  </div>
-                </div> 
-                  <div class="row g-3 mb-3">
-                    <div class="form-floating">
-                      <textarea class="form-control" placeholder="Leave a comment here" id="reason-${index}" name="reason-${index}" style="height: 200px" ${readonly}></textarea>
-                      <label class="px-4" for="denyTxt">Причина отказа </label>
-                    </div> 
-                  </div>                  
-                </div>`;
-        $('#replyBody').append(item);
-    });
-}
-
-
 function checkRequest(request) {
     check = $.ajax({
         url: 'data/new-reply.php',
@@ -444,76 +227,267 @@ function checkRequest(request) {
     return $.parseJSON(check.responseText);
 }
 
-function createReply(request) {
-    // записать отказ в бд
-    repData = writeReplyDB(request);
-    if (repData.status) {
-        //переделать на тосты
-        showNotifyModal(repData.status);
-        return;
-    }
-    // отдать печатную форму
-    window.open(`/tpl/getReply.php?numInLog=${request.num}&numOutLog=${repData.numLog}`, "_blank");
-    // отдать тост
-    // обновить таблицу
-    $('#reqNumWork').val("");
-    inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
-}
-
-
-function writeReplyDB(request) {
-    let statusRep = "";
-    if (request.svc[0].name == "Несколько услуг") {
-        statusRep = request.svc[0].answers;
-    }
-    dataReply = $.ajax({
-        url: 'data/new-reply.php',
+function getRequest(num) {
+    request = $.ajax({
+        url: 'data/getRequest.php',
         type: 'GET',
         async: false,
-        data: {
-            status: request.svc[0].answer,
-            statusRep: statusRep,
-            reqNum: request.num,
-            repDate: request.replayDate,
-            repPerformer: request.performer,
-            reason: request.svc[0].reason,
-            text: request.data.text
-        },
+        data: { numLog: num },
         success: function(data) {
             return data;
         }
     });
-    return $.parseJSON(dataReply.responseText);
+    return $.parseJSON(request.responseText);    
 }
 
-function getRequest(num, table, answer = "") {
-    let request = {
-        num: num,
-        svc: [],
-        data: {
-          text: "",
-        },
-    };
-    let svc = $(`#${table}  td:contains(${num})`).parents('tr').find('td').eq(4).text().split(', ');
-    $.each(svc, function(index, value) {
-        request.svc.push({ name: value, answer: answer });
-    });
+$(".performer").change(function() {
+    setUser(getProfile($(this).children("option:selected").text()));
+});
 
-    return request;
+$("#ShowReplyModal").click(function() {
+    if (!validateForm(['reqNumWork', 'select:performerInWork'])) 
+        return;
+    showReplyModal($('#reqNumWork').val());
+});
+
+$('body').on('click', '[id^="reply-svc"]', function() {
+    let svc = $(this).attr('id').split('-');
+    let svcID = svc[4];
+    let svcNum = svc[2];
+    let answer = svc[3];
+    switch (svcNum) {
+        case '7':
+        case '10':
+            textModalReference(answer, svcID);
+            break;
+        default:
+            textModalCopy(answer, svcID);
+    }  
+});
+
+$('body').on('click', '[id^="svc-edit-btn"]', function() {
+    let id = $(this).attr('id').split("-")[4];
+    let status = ($(this).attr('id').split("-")[3] == 'yes') ? 'Ответ' : 'Отказ';
+    let notValid = true;
+    let fields = new Object();
+    $('[id^="svc-edit-field"]').each(function() {
+        if (!validateForm([$(this).attr('id')])) {
+            notValid = false;
+            return false;
+        }
+        fields[$(this).attr('id').split('-')[3]] = $(this).val();
+    });    
+    if (!notValid)
+        return false;
+    editService(id, status, fields.reason, fields.answerText, fields.pages, fields.before2000, fields.limits);
+    answerModal.hide();
+});
+
+function textModalCopy(answer, id) {
+    let textModal = '';
+    $('#answerBtn').html(`<button id="svc-edit-btn-${answer}-${id}" type="button" class="btn btn-primary">Записать</button>`);
+    if (answer == 'yes') {
+        textModal = `<div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="svc-edit-field-pages-${answer}-${id}" name="svc-edit-field-pages-${answer}-${id}" placeholder="Введите количество листов копии" value="">
+              <label for="svc-edit-field-pages-${answer}-${id}">Введите количество листов копии</label>
+              <div class="invalid-feedback">
+                Введите информацию
+              </div>                   
+            </div>
+          </div></div>`;
+        showAnswerModal('Ведите данные для ответа', textModal);
+    } else {
+        textModal = `<div class="row g-3 mb-3">
+          <div class="col-md">
+            <div class="form-floating">
+              <textarea class="form-control" id="svc-edit-field-reason-${answer}-${id}" name="svc-edit-field-reason-${answer}-${id}" placeholder="Причина отказа" style="height: 200px"></textarea>
+              <label for="svc-edit-field-reason-${answer}-${id}">Причина отказа</label>
+              <div class="invalid-feedback">
+                Введите информацию
+              </div>                   
+            </div>
+          </div></div>`;    
+        let reasonPreset = getReasonPreset(id);   
+        showAnswerModal('Ведите причину отказа', reasonPreset+textModal);
+    }
 }
 
-$('#reply').on('change', '.answer', function() {
-    id = $(this).attr('id').split("-")[1];
-    $(`#reasonText-${id}`).toggleClass("d-none");
-    $(`#reason-${id}`).attr('readonly') ? $(`#reason-${id}`).attr('readonly', false) : $(`#reason-${id}`).attr('readonly', true)
+function textModalReference(answer, id) {
+    let textModal = '';
+    let textOption = `<div class="mb-2">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input svc-edit-checkbox" type="checkbox" id="svc-edit-field-before2000-${answer}-${id}" value="0">
+                          <label class="form-check-label" for="svc-edit-field-before2000-${answer}-${id}">До 2000</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input svc-edit-checkbox" type="checkbox" id="svc-edit-field-limits-${answer}-${id}" value="0">
+                          <label class="form-check-label" for="svc-edit-field-limits-${answer}-${id}">Ограничения</label>
+                        </div>
+                    </div>`;
+    $('#answerBtn').html(`<button id="svc-edit-btn-${answer}-${id}" type="button" class="btn btn-primary">Записать</button>`);
+    if (answer == 'yes') { //ответ по справке
+        textModal = `<div class="row g-3 mb-3">
+          <div class="col-md">
+            <div class="form-floating">
+              <textarea class="form-control" id="svc-edit-field-answerText-${answer}-${id}" name="svc-edit-field-answerText-${answer}-${id}" placeholder="Введите текст справки" style="height: 200px"></textarea>
+              <label for="svc-edit-field-answerText-${answer}-${id}">Введите текст справки</label>
+              <div class="invalid-feedback">
+                Введите информацию
+              </div>                   
+            </div>
+          </div></div>`;
+        showAnswerModal('Ведите данные для ответа', textOption+textModal);
+    } else { // отказ по справке
+        let reasonPreset = getReasonPreset(id);
+        textModal = `<div class="row g-3 mb-3">
+          <div class="col-md">
+            <div class="form-floating">
+              <textarea class="form-control" id="svc-edit-field-reason-${answer}-${id}" name="svc-edit-field-reason-${answer}-${id}" placeholder="Причина отказа" style="height: 200px"></textarea>
+              <label for="svc-edit-field-reason-${answer}-${id}">Причина отказа</label>
+              <div class="invalid-feedback">
+                Введите информацию
+              </div>                   
+            </div>
+          </div></div>`;        
+        showAnswerModal('Укажите причину отказа', textOption+reasonPreset+textModal);
+    }
+}
+
+function getReasonPreset(id) {
+    let arrOption = [];
+    let preset = '';
+    let options = '';
+    $.ajax({
+      url: "data/denyReason.json",
+      dataType: 'json',
+      async: false,
+      success: function(data) {
+        $.each(data.reasons, function( index, value ) {
+            arrOption.push(`<option value="${value.text}">${value.name}</option>`);
+        });
+        options = arrOption.join(''); 
+      }
+    });
+    return preset = `                  <div class="col-md mb-3">
+                        <div class="form-floating">
+                          <select class="form-select" id="svc-edit-field-presetReason-${id}" aria-label="">
+                            <option selected>---</option>
+                            ${options}
+                          </select>
+                          <label for="svc-edit-field-presetReason-${id}">Выберите шаблон причины отказа</label>
+                        </div>
+                      </div>`;
+}
+
+$('body').on('change', '[id^="svc-edit-field-presetReason"]', function() {
+    let id = $(this).attr('id').split("-")[4];
+    $(`#svc-edit-field-reason-no-${id}`).val(this.value);
 });
 
-$('#reply').on('change', 'select[id^="denyManyTxtSelect-"]', function() {
-    num = $(this).attr('id').split("-")[1];
-    denySel = $(`#denyManyTxtSelect-${num} option:selected`).val();
-    $.getJSON("data/denyReason.json", function(data) {
-        $(`#reason-${num}`).val(data[`var${denySel}`]);
-    }).fail(function() {
-        console.log("An error has occurred.");
-    });
+$('body').on('change', 'input[class*="svc-edit-checkbox"]', function() {
+    let value = $(this).is(':checked') ? '1' : '0';
+    $(this).val(value)
 });
+
+function editService(id, status, reason = null, answerText = null, pages = null, before2000 = null, limits = null) {
+    $.ajax({
+            url: 'data/editService.php',
+            type: 'GET',
+            async: false,
+            data: { id: id, status: status, reason: reason, answerText: answerText, pages: pages, before2000: before2000, limits: limits },
+            success: function(data) {
+                let service = searchService(id, request.service);
+                (data == 'done') ? logger(`${status} по услуге "${service.shortName}"`, request.num) : showNotifyModal(data, 'Ошибка');
+            }
+        });
+}
+
+function searchService(key, services) {
+    let result = {};
+    services.forEach(function(service){
+        if (service.id == key)
+          result = service;
+    })    
+    return result;
+}
+
+function showReplyModal(numberRequest) {
+    request = getRequest(numberRequest);
+    let svcList = '';
+    let objInfo = '';
+    let objDesc = '';
+    let knum = '';
+    let inum = '';
+    let info = '';
+    let location = '';
+    let bday = '';
+    let dul = '';
+    let textBtn = '';
+    $.each(request.service, function(index, value) {
+        if (value.forHuman == 1) {
+            objInfo = value.human.name;
+            bday = (value.human.bDate) ? `д.р. ${value.human.bDate}, ` : '';
+            dul = (value.human.dulNum) ? `ДУЛ: ${value.human.dulNum} ${value.human.dulDate} ${value.human.dulOrg}` : '';
+            objDesc = bday+dul;
+        } else {
+            objInfo = value.realEstate.address;
+            knum = (value.realEstate.knum) ? `КН: ${value.realEstate.knum}, ` : '';
+            inum = (value.realEstate.inum) ? `инв. номер: ${value.realEstate.inum}, ` : '';
+            info = (value.realEstate.info) ? `доп. инфо: ${value.realEstate.info}, ` : '';
+            location = (value.realEstate.location) ? `местоположение: ${value.realEstate.location}` : '';
+            objDesc = knum+inum+info+location;
+        }
+        if (value.status) {
+            textBtn = value.status;
+        } else {
+            textBtn = `<div class="col-md-6 text-end"><button id="reply-svc-${value.num}-yes-${value.id}" type="button" class="btn btn-outline-success btn-sm2"><i class="bi bi-check2"></i></button></div>
+                       <div class="col-md-6 text-start"><button id="reply-svc-${value.num}-no-${value.id}" type="button" class="btn btn-outline-danger btn-sm2"><i class="bi bi-x-lg"></i></button></div>`;
+        }
+        svcList += `<tr><td>${index+1}</td><td>${value.shortName}</td><td>${objInfo}</td><td>${objDesc}</td>
+                    <td style="vertical-align: middle"><div id="action" class="row justify-content-md-center align-items-center">${textBtn}</div></td></tr>`;
+    });
+    let svcTbl = `<table class="table table-bordered table-sm mt-2">
+                  <thead><tr><th>#</th><th>Услуга</th><th>Предмет услуги</th><th>Доп. информация</th><th>Действия</th></tr></thead>
+                  <tbody>${svcList}</tbody></table>`;
+    $('#replyText').html(svcTbl);
+    $('#replyTitle').html(`Запрос №${request.num} от ${request.date}`);
+    replyModal.show();
+}
+
+function showAnswerModal(title, text) {
+    $('#answerText').html(text);
+    $('#answerTitle').html(title);
+    replyModal.hide();
+    answerModal.show();
+}
+
+$('#answer').on('hidden.bs.modal', function () {
+  showReplyModal(request.num);
+})
+
+$('#reply').on('shown.bs.modal', function () {
+    let btn = $("button[id*='reply-svc']").length == 0 ? '<button id="newReply" type="button" class="btn btn-primary">Сформировать ответ</button>' : '';
+    $('#replyBtn').html(btn);
+})
+
+$('body').on('click', '[id="newReply"]', function() {
+    newReply(request);
+    window.open(`/tpl/getReply.php?numLog=${request.num}`, "_blank");
+    inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
+});
+
+function newReply(request) {
+    $.ajax({
+            url: 'data/new-reply.php',
+            type: 'GET',
+            async: false,
+            data: {
+                id: request.id,
+            },
+            success: function(data) {
+                data == 'done' ? logger('Сформирован ответ по запросу', request.num) : showNotifyModal(data, 'Ошибка');
+            }
+    });
+}

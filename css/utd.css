@@ -66,8 +66,9 @@ ul.timeline:before {
 }
 
 ul.timeline > li {
-    margin: 20px 0;
+    margin: 5px 0;
     padding-left: 20px;
+    font-size: small;
 }
 
 ul.timeline > li:before {
@@ -100,4 +101,51 @@ ul.timeline > li:before {
 
 .modal-open {
 overflow: visible !important;
+}
+
+.preloader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: #fff;
+  z-index: 1001;
+}
+
+.preloader__image {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin-top: -32px;
+  margin-left: -32px;
+  background: url('../img/preload.gif') no-repeat 50% 50%;
+}
+
+.loaded_hiding .preloader {
+  transition: 0.3s opacity;
+  opacity: 0;
+}
+
+.loaded .preloader {
+  display: none;
+}
+
+.thead600 > tr > th {
+    font-weight: 600;
+}
+
+.btn-sm2 {
+    padding: 0.125rem 0.25rem;
+    font-size: .75rem;
+    line-height: 1.5;
+    border-radius: 0.15rem;
+}
+
+.card-link {
+    color: #0d6efd;
+    text-decoration: underline;    
 }

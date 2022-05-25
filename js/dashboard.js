@@ -1,4 +1,5 @@
 let notifyToast = bootstrap.Toast.getOrCreateInstance($('#notifyToast'));
+let removeAlertModal = new bootstrap.Modal($('#removeAlert'), {});
 let uploadTable = $('#uploadTable').bootstrapTable({
     pagination: true,
     search: true,
@@ -227,6 +228,17 @@ function decFormatter(value) {
     return value.name;
 }
 
+function objFormatter(value) {
+    arr = value.split('; ');
+    res = [];
+    $.each(arr, function(index, value) {
+         if ($.inArray(value, res) == -1)
+             res.push(value);
+
+    });
+    return res.join('; ');
+}
+
 
 function customSort(sortName, sortOrder, data) {
     var order = sortOrder === 'desc' ? -1 : 1
@@ -249,7 +261,7 @@ $("#uploadTable").on('click', 'tr', function() {
 });
 
 $("#uploadTable").on('click', 'a', function() {
-    window.open('/tpl/form' + $(this).parents().eq(1).find('td').eq(1).text() + '.php?numLog=' + $(this).html(), '_blank');
+    window.open('/tpl/printRequest.php?numLog=' + $(this).html(), '_blank');
 });
 
 $("input[name=reqFiles]").change(function() {
@@ -296,11 +308,14 @@ $("#upload").click(function() {
         method: 'POST',
         success: function(data) {
             if (data.split(" ")[0] == 'Ошибка') {
-                $('#numReq').val('');
+                $('#formFiles').trigger('reset');
+                $('#nameFiles').html('');
                 uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
                 notify('danger', data);
             } else {
-                $('#numReq').val('');
+                (isPaid) ? logger('Файлы загружены и запрос оплачен', $('#numReq').val()) : logger('Файлы загружены', $('#numReq').val());
+                $('#formFiles').trigger('reset');
+                $('#nameFiles').html('');
                 uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
                 notify('success', data);
             }
@@ -315,7 +330,6 @@ $("#remove").click(function() {
         $('#numReq').addClass('is-invalid');
         return;
     }
-    let removeAlertModal = new bootstrap.Modal($('#removeAlert'), {});
     $('#numForDelete').html($('#numReq').val());
     removeAlertModal.show();
 });
@@ -327,9 +341,12 @@ $("#deleteReq").click(function() {
         data: { status: "Удалён-Свободен", num: $('#numForDelete').html() },
         success: function(data) {
             if (data == 'done') {
-                window.location.replace("index.php");
+                logger('Удалён', $('#numForDelete').html());
+                $('#formFiles').trigger('reset');
+                removeAlertModal.hide();
+                uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
             } else {
-                console.log('Ошибка: ' + data); //тут сделать тост
+                notify('danger', `Ошибка: ${data}`);
             }
         }
     });

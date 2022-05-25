@@ -1,7 +1,7 @@
 <?php 
 error_reporting(E_ALL);
 include '../data/config.php';
-$status = 'Только в работе';
+$status = 'Новый';
 ?>
 <!DOCTYPE html>
 <html lang="en" style="font-size: 12px;">
@@ -34,8 +34,8 @@ try {
     while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {
       echo "<tr>";
       echo "<td class=\"col-md-1\"><b>" . $rows['reqNum'] . "</b></td>";
-      echo "<td class=\"col-md-2\">" . $rows['name'] . "</td>";
-      echo "<td class=\"col-md-2\">" . $rows['reqObjAddress'] . "</td>";
+      echo "<td class=\"col-md-2\">" . $rows['dName'] . "</td>";
+      echo "<td class=\"col-md-2\">" . $rows['reqObjHum'] . "</td>";
       echo "<td>" . $rows['svc'] . "</td>";
       echo "<td>" . $rows['Comment'] . "</td>";
       echo "<td class=\"col-md-3\"></td>";

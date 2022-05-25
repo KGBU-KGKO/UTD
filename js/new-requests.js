@@ -1,3 +1,5 @@
+let numService = 0;
+
 $.when($.ready).then(function() {
     localStorage.setItem("listFL", "");
     localStorage.setItem("listAgents", "");
@@ -16,10 +18,7 @@ $.when($.ready).then(function() {
     $(".address").suggestions({
         token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
         type: "ADDRESS",
-        onSelect: function(suggestion) {
-            let fullAddress = suggestion.unrestricted_value.replace(' г ', ' г. ').replace(' д ', ' д. ').replace(' ул ', ' ул. ').replace(' кв ', ' кв. ');
-            $(this).val(fullAddress);
-        }
+        onSelect: showAddr
     });
 
     $("#dFLWhoDUL").suggestions({
@@ -30,29 +29,47 @@ $.when($.ready).then(function() {
     $("#dULINN").suggestions({
         token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
         type: "PARTY",
-        onSelect: function(suggestion) {
-            let data = suggestion.data;
-            if (!data)
-                return;
-            $("#dULName").val(data.name.short_with_opf);
-            $("#dULINN").val(data.inn);
-            $("#dULOGRN").val(data.ogrn);
-            if (data.address)
-                $("#dULAddress").val(data.address.value);
-            $("#dULEmail").val('');
-            $("#dULPhone").val('')
-            /* нету в бесплатном тарифе dadata
-                    if (data.emails) {
-                        $("#dULEmail").val(data.emails[0].value);    
-                    }
-                    if (data.phones)
-                    $("#dULPhone").val(data.phones[0].value);
-            */
-        }
-
+        onSelect: showUL
     });
 
 });
+
+function join(arr /*, separator */) {
+  var separator = arguments.length > 1 ? arguments[1] : ", ";
+  return arr.filter(function(n){return n}).join(separator);
+}
+
+function showAddr(suggestion) {
+    let fullAddress = suggestion.unrestricted_value.replace(' г ', ' г. ').replace(' д ', ' д. ').replace(' ул ', ' ул. ').replace(' кв ', ' кв. ');
+    $(this).val(fullAddress);  
+    if ($(this).attr('id').substring(0, 10) == 'svcInfoObj') {
+        let id = $(this).attr('id').split('-')[2];
+        let addr = suggestion.data; //добавить еще код региона и код района
+        $(`#svcInfoObj-address-postcode-${id}`).val(addr.postal_code);
+        $(`#svcInfoObj-address-region-${id}`).val(join([addr.region, addr.region_type], " "));
+        $(`#svcInfoObj-address-region-code-${id}`).val(addr.region_kladr_id);
+        $(`#svcInfoObj-address-area-${id}`).val(join([addr.area_type, addr.area], " "));
+        $(`#svcInfoObj-address-area-code-${id}`).val(addr.area_kladr_id);
+        $(`#svcInfoObj-address-local-${id}`).val(join([join([addr.city_type, addr.city], " "),join([addr.settlement_type, addr.settlement], " ")]));
+        $(`#svcInfoObj-address-street-${id}`).val(join([addr.street_type, addr.street], " "));
+        $(`#svcInfoObj-address-house-${id}`).val(join([join([addr.house_type, addr.house], " "),join([addr.block_type, addr.block], " ")]));
+        $(`#svcInfoObj-address-flat-${id}`).val(join([addr.flat_type, addr.flat], " "));
+    }
+}
+
+function showUL(suggestion) {
+    let data = suggestion.data;
+    if (!data)
+        return;
+    $("#dULName").val(data.name.short_with_opf);
+    $("#dULINN").val(data.inn);
+    $("#dULOGRN").val(data.ogrn);
+    if (data.address)
+        $("#dULAddress").val(data.address.value);
+    $("#dULEmail").val('');
+    $("#dULPhone").val('')
+    //emails и phones нету в бесплатном тарифе
+}
 
 $('#services input[type=checkbox]').change(function() {
     $('#services input[type=checkbox]').each(function() {
@@ -68,17 +85,26 @@ $('#delivery input[type=checkbox]').change(function() {
 
 function validate() {
     let check = true;
-    $(".groupCheck").each(function() {
-        if (!$('#' + $(this).attr('id') + ' input[type=checkbox]:checked').length) {
-            $('#' + $(this).attr('id') + ' input[type=checkbox]').prop('required', true);
-        }
-    });
+    let i = 0;
     $("form:visible").each(function() {
         $('#' + $(this).attr('id')).addClass('was-validated');
         if ($(this)[0].checkValidity() === false) {
             check = false;
         }
     });
+    users = $(".dropdown-item").toArray().reverse();
+    $.each(users, function(key,value) {
+        if ($('#userName').html() == value.innerHTML)
+            i++;
+    });
+    if (i == 0) {
+        check = false;
+        showNotifyModal('Укажите пользователя системы!', 'Ошибка');
+    }
+    if ($("select[id*='svcSelect-']").length == 0) {
+        check = false;
+        showNotifyModal('Выберите хотя бы одну услугу!', 'Ошибка');  
+    }
     if (!check) {
         $('html, body').animate({
             scrollTop: $(".invalid-feedback:visible:first").offset().top - 100
@@ -152,40 +178,62 @@ $('#agentFLSwitch').change(function() {
     }
 })
 
-$('#likeAddress').change(function() {
-    if ($(this).prop('checked')) {
-        $('#reqObjAddress').val($('#dFLAddress').val());
-    } else {
-        $('#reqObjAddress').val('');
-    }
+$('#services').on('change', 'input[id^="like"]', function() {
+    let id = $(this).attr('id').substring(4).split("-");
+    let val = ($(this).prop('checked')) ? $(`#dFL${id[0]}`).val() : '';
+    $(`#svcInfoObj-${id[0].toLowerCase()}-${id[1]}`).val(val);
+    (id[0] == 'Name') ? likeName(id[1], val) : $(`#svcInfoObj-address-${id[1]}`).focus();
 })
 
+function likeName(id, checked) {
+    if (checked) {
+        dFLBD = $('#dFLBD').val();
+        dFLNumDUL = $('#dFLNumDUL').val();
+        dFLDateDUL = $('#dFLDateDUL').val();
+        dFLWhoDUL = $('#dFLWhoDUL').val();
+    } else {
+        dFLBD = '';
+        dFLNumDUL = '';
+        dFLDateDUL = '';
+        dFLWhoDUL = '';        
+    }
+    $(`#svcInfoObj-name-${id}`).focusout();
+    $(`#svcInfoObj-bday-${id}`).val(dFLBD);
+    $(`#svcInfoObj-dulNum-${id}`).val(dFLNumDUL);
+    $(`#svcInfoObj-dulDate-${id}`).val(dFLDateDUL);
+    $(`#svcInfoObj-dulOrg-${id}`).val(dFLWhoDUL);
+}
 
-// function getRef(referenceType, declarantType, storageName, inputName, haveDUL, listAttr) {
-//     let listRef = [];
-//     $.ajax({
-//         url: 'data/getRef.php',
-//         method: 'GET',
-//         data: { ref: referenceType, decType: declarantType },
-//         success: function(data){
-//             localStorage.setItem(storageName, data);
-//             let obj = $.parseJSON(data);
-//             if (haveDUL) {
-//                 $.each(listAttr, function(value) {
-//                     rowRef = value + ' + " | " +value.';
-//                 });
-//                 rowRef = '{label: value.' + rowRef + ', value: value.name}';
-//             }
-//             $.each(obj, function(key,value) {
-//               listRef.push(rowRef);
-//             }); 
+function splitName(arr) {
+    let newArr = [];
+    let middle = [];
+    $.each(arr, function(key,value) {
+      switch (key) {
+        case 0:
+        newArr.push(value);
+        break;
+        case 1:
+        newArr.push(value);
+        break;
+        default:
+        middle.push(value);
+      }
+    });     
+    newArr.push(middle.join(' '));
+    return newArr;
+}
 
-//             $( "#"+inputName ).autocomplete({
-//               source: listRef
-//             });
-//         }
-//     });     
-// }
+$('#services').on('focusout', 'input[id^="svcInfoObj-name-"]', function() {
+    let id = $(this).attr('id').split("-")[2];
+    let full = $(this).val().split(" ");
+    $(`#svcInfoObj-lastName-${id}`).val(splitName(full)[0]);
+    $(`#svcInfoObj-firstName-${id}`).val(splitName(full)[1]);
+    $(`#svcInfoObj-middleName-${id}`).val(splitName(full)[2]);
+})
+
+$('#services').on('focusout', 'input[id^="svcInfoObj-area"]', function() {
+    $(this).val($(this).val().replace(/,/g, "."));
+})
 
 $('#declarantType').on('change', function() {
     let listFL = [];
@@ -193,15 +241,11 @@ $('#declarantType').on('change', function() {
     let listOGV = [];
     let listAgents = [];
     let dull = '';
-    $('#likeAddress').prop('checked', false);
-    $('#likeAddress').parents().eq(1).addClass('d-none');
     $('.declarant').hide();
     switch (this.value) {
         case 'FL':
             $('#declarantFL').show();
             checkItem('delivery', 'foot');
-            $('#likeAddress').parents().eq(1).removeClass('d-none');
-            //getRef('declarant', this.value, 'listFL', 'dFLName', 'True', ['name', 'dulNum', 'dateBirth', 'ID']);
             $.ajax({
                 url: 'data/getRef.php',
                 method: 'GET',
@@ -340,13 +384,11 @@ $("#send").click(function() {
         data: param,
         success: function(data) {
             if (data.split(" ")[0] == 'Error') {
-                console.log(data);
-                let notifyModal = new bootstrap.Modal($('#notify'), {});
-                $('#txtInfo').html(data);
-                notifyModal.show();
+                showNotifyModal('<p>Возникла ошибка при создании запроса. <br>Обратитесь в отдел ИТ.</p><p>Текст ошибки: </p>'+data, 'Ошибка');
             } else {
                 data = $.parseJSON(data);
-                window.open("/tpl/form" + decType + ".php?numLog=" + data.numLog, "_blank");
+                logger('Запрос создан', data.numLog);
+                window.open("/tpl/printRequest.php?numLog=" + data.numLog, "_blank");
                 window.location.replace("new-request.php?toast=" + data.numLog + "&ID=" + data.ID + "&decType=" + decType);
             }
         }
@@ -362,3 +404,397 @@ function checkItem(group, item) {
     $('#' + group + ' input[type=checkbox]').prop('checked', false);
     $('input[name="' + item + '"]').prop('checked', true);
 }
+
+$("#addService").click(function() {
+    let currentNumService = ++numService;
+    let selectService = `        <div id="svcInfo-${currentNumService}">
+                                  <h5 class="display-6 display-small">Услуга №${currentNumService}</h5>
+                                  <div class="row g-1 mb-3">
+                                    <div class="col-md">
+                                      <div class="form-floating">
+                                        <select class="form-select" id="svcSelect-${currentNumService}" name="svcSelect-${currentNumService}" aria-label="Floating label select" value="" required>
+                                          <option value="" selected>---</option>
+                                          <option value="svc1" data-stype="Копия">Технический паспорт ОКС/помещения</option>
+                                          <option value="svc2" data-stype="Копия">Поэтажный/ситуационный план</option>
+                                          <option value="svc3" data-stype="Копия">Экспликация поэтажного плана/ОКС/помещения</option>
+                                          <option value="svc4" data-stype="Копия">УТД, содержащая сведения об инвентаризационной, восстановительной, балансовой или иной стоимости ОКС/помещения</option>
+                                          <option value="svc5" data-stype="Копия">Проектно-разрешительная документация, техническое или экспертное заключение, или иная документация, содржащаяся в архиве</option>
+                                          <option value="svc6" data-stype="Копия">Правоустанавливающий документ, хранящийся в материалах инвентарного дела</option>
+                                          <option value="svc7" data-stype="Справка">Выписка из реестровой книги о праве собственности на ОКС/помещение</option>
+                                          <option value="svc8" data-stype="Копия">Справка, содержащая сведения об инвентаризационной стоимости ОКС</option>
+                                          <option value="svc9" data-stype="Копия">Справка, содержащая сведения об инвентаризационной стоимости помещения</option>
+                                          <option value="svc10" data-stype="Справка">Справка, содержащая сведения о наличии (отсутствии) права собствености на объекты недвижимости (один правообладатель)</option>
+                                          <option value="svc11" data-stype="Копия">Справка, содержащая сведения о характеристиках объекта государственного учета</option>
+                                        </select>
+                                        <label for="svcSelect-${currentNumService}">Выберите услугу</label>
+                                        <div class="invalid-feedback">
+                                          Выберите услугу
+                                        </div>                                        
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div id="svcInfoObj-${currentNumService}"></div>
+                                </div>`;
+    $("#services").append(selectService);
+});
+
+$("#rmService").click(function() {
+    $("div[id^='svcInfo-']").last().remove();
+    --numService;
+});
+
+$('#services').on('change', 'select[id^="svcSelect-"]', function() {
+    let id = $(this).attr('id').split("-")[1];
+    let obj = '';
+    let like = ($('#declarantType').val() == "FL") ? '' : 'd-none';
+    switch ($(this).find('option:selected').data('stype')) {
+        case 'Копия':
+            obj = `        <div class="row g-1 mb-3">
+                              <div class="col-md">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control address" id="svcInfoObj-address-${id}" name="svcInfoObj-address-${id}" placeholder="Адрес объекта недвижимости" value="" required>
+                                  <label for="svcInfoObj-address-${id}">Адрес объекта недвижимости</label>
+                                </div>
+                              </div>  
+                            </div>
+                            <div class="row g-3 mb-3 ${like}">
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" name="likeAddress-${id}" id="likeAddress-${id}">
+                                <label class="form-check-label" for="likeAddress-${id}">Адрес совпадает с адресом места жительства заявителя</label>
+                              </div>                
+                            </div>            
+                            <div class="row g-1 mb-3">
+                              <div class="col-md-1">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-postcode-${id}" name="svcInfoObj-address-postcode-${id}" placeholder="Индекс" value="">
+                                  <label for="svcInfoObj-address-postcode-${id}">Индекс</label>
+                                </div>
+                              </div>   
+                              <div class="col-md-2">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-region-${id}" name="svcInfoObj-address-region-${id}" placeholder="Регион" value="">
+                                  <label for="svcInfoObj-address-region-${id}">Регион</label>
+                                </div>
+                                <div class="form-floating d-none">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-region-code-${id}" name="svcInfoObj-address-region-code-${id}" placeholder="Регион" value="">
+                                  <label for="svcInfoObj-address-region-code-${id}">Регион</label>
+                                </div>                                
+                              </div>
+                              <div class="col-md-2">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-area-${id}" name="svcInfoObj-address-area-${id}" placeholder="Район" value="">
+                                  <label for="svcInfoObj-address-area-${id}">Район</label>
+                                </div>
+                                <div class="form-floating d-none">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-area-code-${id}" name="svcInfoObj-address-area-code-${id}" placeholder="Регион" value="">
+                                  <label for="svcInfoObj-address-area-code-${id}">Регион</label>
+                                </div>                                
+                              </div>                              
+                              <div class="col-md-3">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-local-${id}" name="svcInfoObj-address-local-${id}" placeholder="Населенный пункт" value="">
+                                  <label for="svcInfoObj-address-local-${id}">Населенный пункт</label>
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-street-${id}" name="svcInfoObj-address-street-${id}" placeholder="Улица" value="">
+                                  <label for="svcInfoObj-address-street-${id}">Улица</label>
+                                </div>
+                              </div> 
+                             <div class="col-md-1">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-house-${id}" name="svcInfoObj-address-house-${id}" placeholder="Дом" value="">
+                                  <label for="svcInfoObj-address-house-${id}">Дом</label>
+                                </div>
+                              </div>
+                              <div class="col-md-1">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-flat-${id}" name="svcInfoObj-address-flat-${id}" placeholder="Квартира" value="">
+                                  <label for="svcInfoObj-address-flat-${id}">Квартира</label>
+                                </div>
+                              </div>                   
+                            </div>
+                            <div class="row g-1 mb-3">
+                              <div class="col-md-12">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-location-${id}" name="svcInfoObj-address-location-${id}" placeholder="Местоположение" value="">
+                                  <label for="svcInfoObj-address-location-${id}">Местоположение объекта недвижимости</label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row g-1 mb-3">
+                              <div class="col-md-4">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-inum-${id}" name="svcInfoObj-inum-${id}" placeholder="Индекс" value="">
+                                  <label for="svcInfoObj-inum-${id}">Инв. номер</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-knum-${id}" name="svcInfoObj-knum-${id}" placeholder="Индекс" value="">
+                                  <label for="svcInfoObj-knum-${id}">Кадастровый номер</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-area-${id}" name="svcInfoObj-area-${id}" placeholder="Индекс" value="">
+                                  <label for="svcInfoObj-area-${id}">Площадь, кв.м.</label>
+                                </div>
+                              </div>                                                                                            
+                            </div>
+                            <div class="row g-1 mb-3">
+                                <div class="form-floating">
+                                  <textarea class="form-control" placeholder="Дополнительная информация" id="svcInfoObj-addInfo-${id}" name="svcInfoObj-addInfo-${id}" style="height: 200px"></textarea>
+                                  <label for="svcInfoObj-addInfo-${id}">Дополнительная информация</label>
+                                </div>                            
+                            </div>`;
+            break;
+        case 'Справка':
+            obj = `         <div class="row g-3 mb-3">
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" name="isHuman-${id}" id="isHuman-${id}" checked>
+                                <label class="form-check-label" for="isHuman-${id}">Запрос по собственнику</label>
+                              </div>                
+                            </div>
+                            <div id="svcInfoObj-control-${id}">
+                                <div class="row g-1 mb-3">
+                                  <div class="col-md">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-name-${id}" name="svcInfoObj-name-${id}" placeholder="ФИО собственника" value="" required>
+                                      <label for="svcInfoObj-name-${id}">ФИО собственника</label>
+                                    </div>
+                                  </div>  
+                                </div>   
+                                <div class="row g-3 mb-3 ${like}">
+                                  <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" name="likeName-${id}" id="likeName-${id}">
+                                    <label class="form-check-label" for="likeName-${id}">Данные совпадает с данными заявителя</label>
+                                  </div>                
+                                </div>
+                                <div class="row g-3 mb-3">
+                                  <div class="col-md-3">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-lastName-${id}" name="svcInfoObj-lastName-${id}" placeholder="Фамилия" value="" required>
+                                      <label for="svcInfoObj-lastName-${id}">Фамилия</label>
+                                    </div>
+                                  </div>   
+                                  <div class="col-md-3">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-firstName-${id}" name="svcInfoObj-firstName-${id}" placeholder="Имя" value="" required>
+                                      <label for="svcInfoObj-firstName-${id}">Имя</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-middleName-${id}" name="svcInfoObj-middleName-${id}" placeholder="Отчество" value="">
+                                      <label for="svcInfoObj-middleName-${id}">Отчество</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <div class="form-floating">
+                                      <input type="date" class="form-control" id="svcInfoObj-bday-${id}" name="svcInfoObj-bday-${id}" placeholder="Дата рождения" value="">
+                                      <label for="svcInfoObj-bday-${id}">Дата рождения</label>
+                                    </div>
+                                  </div>                                   
+                                </div>
+                                <div class="row g-3 mb-3">
+                                  <div class="col-md-2">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-dulNum-${id}" name="svcInfoObj-dulNum-${id}" placeholder="Серия и номер ДУЛ" value="">
+                                      <label for="svcInfoObj-dulNum-${id}">Номер ДУЛ</label>
+                                    </div>
+                                  </div>                                  
+                                  <div class="col-md-2">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-dulDate-${id}" name="svcInfoObj-dulDate-${id}" placeholder="Дата выдачи ДУЛ" value="">
+                                      <label for="svcInfoObj-dulDate-${id}">Дата ДУЛ</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-8">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-dulOrg-${id}" name="svcInfoObj-dulOrg-${id}" placeholder="Кем выдан ДУЛ" value="">
+                                      <label for="svcInfoObj-dulOrg-${id}">Выдан ДУЛ</label>
+                                    </div>
+                                  </div>
+                                </div>                                
+                            </div>`;
+            break;
+    }    
+    $(`#svcInfoObj-${id}`).html(obj);
+
+    $(".address").suggestions({
+        token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
+        type: "ADDRESS",
+        onSelect: showAddr
+    });    
+});
+
+$('#services').on('change', 'input[id^="isHuman-"]', function() {
+    let id = $(this).attr('id').split("-")[1];
+    let like = ($('#declarantType').val() == "FL") ? '' : 'd-none';
+    if ($(this).prop('checked')) {
+        controls = `              <div class="row g-1 mb-3">
+                                  <div class="col-md">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-name-${id}" name="svcInfoObj-name-${id}" placeholder="ФИО собственника" value="" required>
+                                      <label for="svcInfoObj-name-${id}">ФИО собственника</label>
+                                    </div>
+                                  </div>  
+                                </div>   
+                                <div class="row g-3 mb-3 ${like}">
+                                  <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" name="likeName-${id}" id="likeName-${id}">
+                                    <label class="form-check-label" for="likeName-${id}">ФИО совпадает с ФИО заявителя</label>
+                                  </div>                
+                                </div>
+                                <div class="row g-3 mb-3">
+                                  <div class="col-md-3">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-lastName-${id}" name="svcInfoObj-lastName-${id}" placeholder="Фамилия" value="" required>
+                                      <label for="svcInfoObj-lastName-${id}">Фамилия</label>
+                                    </div>
+                                  </div>   
+                                  <div class="col-md-3">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-firstName-${id}" name="svcInfoObj-firstName-${id}" placeholder="Имя" value="" required>
+                                      <label for="svcInfoObj-firstName-${id}">Имя</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-middleName-${id}" name="svcInfoObj-middleName-${id}" placeholder="Отчество" value="">
+                                      <label for="svcInfoObj-middleName-${id}">Отчество</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <div class="form-floating">
+                                      <input type="date" class="form-control" id="svcInfoObj-bday-${id}" name="svcInfoObj-bday-${id}" placeholder="Дата рождения" value="">
+                                      <label for="svcInfoObj-bday-${id}">Дата рождения</label>
+                                    </div>
+                                  </div>                                   
+                                </div>
+                                <div class="row g-3 mb-3">
+                                  <div class="col-md-2">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-dulNum-${id}" name="svcInfoObj-dulNum-${id}" placeholder="Серия и номер ДУЛ" value="">
+                                      <label for="svcInfoObj-dulNum-${id}">Номер ДУЛ</label>
+                                    </div>
+                                  </div>                                  
+                                  <div class="col-md-2">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-dulDate-${id}" name="svcInfoObj-dulDate-${id}" placeholder="Дата выдачи ДУЛ" value="">
+                                      <label for="svcInfoObj-dulDate-${id}">Дата ДУЛ</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-8">
+                                    <div class="form-floating">
+                                      <input type="text" class="form-control" id="svcInfoObj-dulOrg-${id}" name="svcInfoObj-dulOrg-${id}" placeholder="Кем выдан ДУЛ" value="">
+                                      <label for="svcInfoObj-dulOrg-${id}">Выдан ДУЛ</label>
+                                    </div>
+                                  </div>
+                                </div>`;
+    } else {
+        controls = `        <div class="row g-1 mb-3">
+                              <div class="col-md">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control address" id="svcInfoObj-address-${id}" name="svcInfoObj-address-${id}" placeholder="Адрес объекта недвижимости" value="" required>
+                                  <label for="svcInfoObj-address-${id}">Адрес объекта недвижимости</label>
+                                </div>
+                              </div>  
+                            </div>
+                            <div class="row g-3 mb-3 ${like}">
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" name="likeAddress-${id}" id="likeAddress-${id}">
+                                <label class="form-check-label" for="likeAddress-${id}">Адрес совпадает с адресом места жительства заявителя</label>
+                              </div>                
+                            </div>            
+                            <div class="row g-1 mb-3">
+                              <div class="col-md-1">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-postcode-${id}" name="svcInfoObj-address-postcode-${id}" placeholder="Индекс" value="">
+                                  <label for="svcInfoObj-address-postcode-${id}">Индекс</label>
+                                </div>
+                              </div>   
+                              <div class="col-md-2">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-region-${id}" name="svcInfoObj-address-region-${id}" placeholder="Регион" value="">
+                                  <label for="svcInfoObj-address-region-${id}">Регион</label>
+                                </div>
+                                <div class="form-floating d-none">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-region-code-${id}" name="svcInfoObj-address-region-code-${id}" placeholder="Регион" value="">
+                                  <label for="svcInfoObj-address-region-code-${id}">Регион</label>
+                                </div>                                
+                              </div>
+                              <div class="col-md-2">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-area-${id}" name="svcInfoObj-address-area-${id}" placeholder="Район" value="">
+                                  <label for="svcInfoObj-address-area-${id}">Район</label>
+                                </div>
+                                <div class="form-floating d-none">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-area-code-${id}" name="svcInfoObj-address-area-code-${id}" placeholder="Регион" value="">
+                                  <label for="svcInfoObj-address-area-code-${id}">Регион</label>
+                                </div>                                
+                              </div>                              
+                              <div class="col-md-3">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-local-${id}" name="svcInfoObj-address-local-${id}" placeholder="Населенный пункт" value="">
+                                  <label for="svcInfoObj-address-local-${id}">Населенный пункт</label>
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-street-${id}" name="svcInfoObj-address-street-${id}" placeholder="Улица" value="">
+                                  <label for="svcInfoObj-address-street-${id}">Улица</label>
+                                </div>
+                              </div> 
+                             <div class="col-md-1">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-house-${id}" name="svcInfoObj-address-house-${id}" placeholder="Дом" value="">
+                                  <label for="svcInfoObj-address-house-${id}">Дом</label>
+                                </div>
+                              </div>
+                              <div class="col-md-1">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-flat-${id}" name="svcInfoObj-address-flat-${id}" placeholder="Квартира" value="">
+                                  <label for="svcInfoObj-address-flat-${id}">Квартира</label>
+                                </div>
+                              </div>                   
+                            </div>
+                            <div class="row g-1 mb-3">
+                              <div class="col-md-12">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-address-location-${id}" name="svcInfoObj-address-location-${id}" placeholder="Местоположение" value="">
+                                  <label for="svcInfoObj-address-location-${id}">Местоположение объекта недвижимости</label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row g-1 mb-3">
+                              <div class="col-md-4">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-inum-${id}" name="svcInfoObj-inum-${id}" placeholder="Индекс" value="">
+                                  <label for="svcInfoObj-inum-${id}">Инв. номер</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-knum-${id}" name="svcInfoObj-knum-${id}" placeholder="Индекс" value="">
+                                  <label for="svcInfoObj-knum-${id}">Кадастровый номер</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="svcInfoObj-area-${id}" name="svcInfoObj-area-${id}" placeholder="Индекс" value="">
+                                  <label for="svcInfoObj-area-${id}">Площадь, кв.м.</label>
+                                </div>
+                              </div>                                                                                            
+                            </div>
+                            <div class="row g-1 mb-3">
+                                <div class="form-floating">
+                                  <textarea class="form-control" placeholder="Дополнительная информация" id="svcInfoObj-addInfo-${id}" name="svcInfoObj-addInfo-${id}" style="height: 200px"></textarea>
+                                  <label for="svcInfoObj-addInfo-${id}">Дополнительная информация</label>
+                                </div>                            
+                            </div>`;
+    }
+    $(`#svcInfoObj-control-${id}`).html(controls);
+})
