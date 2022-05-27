@@ -797,4 +797,10 @@ $('#services').on('change', 'input[id^="isHuman-"]', function() {
                             </div>`;
     }
     $(`#svcInfoObj-control-${id}`).html(controls);
+
+    $(".address").suggestions({
+        token: "34152e12e60fe6b7ef2a2682e1fe675021cedd05",
+        type: "ADDRESS",
+        onSelect: showAddr
+    });      
 })

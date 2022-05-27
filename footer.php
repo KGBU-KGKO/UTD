@@ -117,6 +117,12 @@
 </div>
 <!-- новая модалка notify -->
 
+<!-- toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  
+</div>
+<!-- toast -->
+
   </body>
 </html>
 <script type="text/javascript" src="lib/bootstrap/bootstrap.bundle.min.js" ></script>
@@ -124,6 +130,6 @@
 <script type="text/javascript" src="lib/bootstrap-table/bootstrap-table.min.js"></script>
 <script type="text/javascript" src="lib/bootstrap-table/bootstrap-table-ru-RU.min.js" ></script>
 <script type="text/javascript" src="lib/jquery/jquery-ui.js"></script>
-<script type="text/javascript" src="lib/suggestions/jquery.suggestions.min.js"></script>  
+<script type="text/javascript" src="lib/suggestions/jquery.suggestions.min.js"></script>   
 <script type="text/javascript" src="lib/cookie/jquery-cookie.js"></script>  
 <script type="text/javascript" src="js/common.js"></script> 

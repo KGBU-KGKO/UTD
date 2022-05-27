@@ -57,6 +57,38 @@ function showNotifyModal(text, title) {
     notifyModal.show();
 }
 
+function showSmallToast(type, text, delay) {
+    let id = Date.now();
+    let toastText = `
+  <div id="toast-${id}" class="toast ${type} text-white fade hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="${delay}">
+    <div class="d-flex">
+      <div class="toast-body" id="toastSmallBody">
+        ${text}
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+    </div>
+  </div>
+  `;
+    $(".toast-container").append(toastText);
+    let toast = bootstrap.Toast.getOrCreateInstance($(`#toast-${id}`));
+    toast.show();
+}
+
+function showBigToast(type, title, text, delay) {
+    let id = Date.now();
+    let toastText = `  <div id="toast-${id}" class="toast ${type} hide" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="${delay}">
+    <div class="toast-header">
+      <span class="me-auto">${title}</span>
+      <small>just now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">${text}</div>
+  </div>`;
+    $(".toast-container").append(toastText);
+    let toast = bootstrap.Toast.getOrCreateInstance($(`#toast-${id}`));
+    toast.show();
+}
+
 function addModalInfo(num) {
     $("#decTabInfo").html(`<img src="/img/preload.gif" alt="mdo" width="64" height="64" class="rounded-circle mx-auto d-block">`);
     $.ajax({

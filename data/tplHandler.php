@@ -85,7 +85,8 @@ function singleServiceDataPrepare($request, $numberService) {
 			$text = " имеются сведения о наличии права собственности в отношении объекта недвижимости, расположенного по адресу:q«".$service->answerText."».";
 		}
 		if ($service->status == 'Отказ') {
-			$text = "в отношении заявителя: q".$service->human->fullName.", ".$service->human->bDate." года рождения, q".$service->reason.".";
+			$bDate = ($service->human->bDate) ? date("d.m.Y", strtotime($service->human->bDate)) : "";
+			$text = "в отношении заявителя: q".$service->human->fullName.", $bDate года рождения, q".$service->reason.".";
 		}
 		$text .= $service->limits ? "qСведениями об ограничениях, арестах и запретах не располагаем." : "";
 		$text .= $service->before2000 ? "qДополнительно сообщаем, что с 01.01.2000 года государственную регистрацию прав на недвижимое имущество и сделки с ним осуществляет Управление Федеральной службы государственной регистрации, кадастра и картографии по Камчатскому краю." : "";	

@@ -225,8 +225,9 @@
     	 			$dulDate = $request->declarant->dulDate;
     	 			$dulOrg = $request->declarant->dulOrg;
     	 		}
+
     	 		$sFIO = explode(' ', $FIO);
-    			$sFIO = substr($sFIO[1],0,2) . '. ' . substr($sFIO[2],0,2) . '.' . ' ' . $sFIO[0];
+    	 		$sFIO = ($request->declarant->type == 'OGV' ? '' : substr($sFIO[1],0,2) . '. ' . substr($sFIO[2],0,2) . '.' . ' ' . $sFIO[0]);
     	 	 ?>
 		    <tr>
 		      <td scope="row" colspan="2" class="text-center border-left-0 pb-0"><?=$FIO;?></td>

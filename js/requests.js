@@ -145,7 +145,12 @@ $("#inWork").click(function() {
         type: 'GET',
         data: { status: "В работе", num: $('#reqNumNew').val(), performer: $('#performer option:selected').text() },
         success: function(data) {
-            (data == 'done') ? logger('Взят в работу', $('#reqNumNew').val()) : showNotifyModal(data, 'Информация');
+            if (data == 'done') {
+                logger('Взят в работу', $('#reqNumNew').val());
+                showSmallToast('bg-primary', 'Запрос '+$('#reqNumNew').val()+' взят в работу.', '5000');
+            } else {
+                showSmallToast('bg-primary', data, '10000');
+            }
             newReqTable.bootstrapTable('load', getDataTable("Новый"));
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
             $('#reqNumNew').val('');
@@ -163,7 +168,12 @@ $("#Paid").click(function() {
         type: 'GET',
         data: { status: "Оплачен", num: $('#reqNumWork').val() },
         success: function(data) {
-            (data == 'done') ? logger('Оплачен', $('#reqNumWork').val()) : showNotifyModal(data, 'Информация');
+            if (data == 'done') {
+                logger('Оплачен', $('#reqNumWork').val())
+                showSmallToast('bg-success', 'Запрос '+$('#reqNumWork').val()+' оплачен.', '5000');
+            } else {
+                showSmallToast('bg-primary', data, '10000');
+            }
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
         }
     });
@@ -178,7 +188,12 @@ $("#Issue").click(function() {
         type: 'GET',
         data: { status: "Выполнен", num: $('#reqNumWork').val() },
         success: function(data) {
-            (data == 'done') ? logger('Выдан', $('#reqNumWork').val()) : showNotifyModal(data, 'Информация');
+            if (data == 'done') {
+                logger('Выдан', $('#reqNumWork').val());
+                showSmallToast('bg-success', 'Запрос '+$('#reqNumWork').val()+' выдан.', '5000');
+            } else {
+                showSmallToast('bg-primary', data, '10000');
+            }
             $('#reqNumWork').val("");
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
         }
@@ -487,7 +502,13 @@ function newReply(request) {
                 id: request.id,
             },
             success: function(data) {
-                data == 'done' ? logger('Сформирован ответ по запросу', request.num) : showNotifyModal(data, 'Ошибка');
+                if (data == 'done') {
+                    logger('Сформирован ответ по запросу', request.num);
+                    replyModal.hide();
+                    showSmallToast('bg-success', `Ответ на запрос ${request.num} сформирован.`, '20000');
+                } else {
+                    showNotifyModal(data, 'Ошибка');
+                }
             }
     });
 }

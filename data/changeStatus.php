@@ -22,7 +22,7 @@ if ($status == 'В работе') {
 
 if ($status == 'Оплачен') {
 	if (!empty(isPaid($num))) {
-		echo 'Запрос уже оплачен';
+		echo "Запрос $num уже оплачен";
 		die();
 	} else {
 		$paid = "datePayment = GETDATE()";
