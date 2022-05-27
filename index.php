@@ -328,15 +328,6 @@ if ($res['count'] != '0') {
   </div> 
 </div>
 
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-  <div id="notifyToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="10000">
-    <div class="d-flex">
-      <div id="notifyToastBody" class="toast-body"></div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-  </div>
-</div>
-
 </div>
 
 <div class="modal fade" id="removeAlert" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">

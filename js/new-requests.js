@@ -532,7 +532,7 @@ $('#services').on('change', 'select[id^="svcSelect-"]', function() {
                               </div>
                               <div class="col-md-4">
                                 <div class="form-floating">
-                                  <input type="text" class="form-control" id="svcInfoObj-knum-${id}" name="svcInfoObj-knum-${id}" placeholder="Индекс" value="">
+                                  <input type="text" class="form-control knum" id="svcInfoObj-knum-${id}" name="svcInfoObj-knum-${id}" placeholder="Индекс" value="">
                                   <label for="svcInfoObj-knum-${id}">Кадастровый номер</label>
                                 </div>
                               </div>
@@ -628,6 +628,7 @@ $('#services').on('change', 'select[id^="svcSelect-"]', function() {
         type: "ADDRESS",
         onSelect: showAddr
     });    
+    Inputmask({"mask": "99:99:9999999:99"}).mask($(".knum"));
 });
 
 $('#services').on('change', 'input[id^="isHuman-"]', function() {

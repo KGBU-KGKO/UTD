@@ -149,3 +149,7 @@ overflow: visible !important;
     color: #0d6efd;
     text-decoration: underline;    
 }
+
+.bg-footer {
+    background-color: #f8f9fa!important;
+}

@@ -1,3 +1,12 @@
+<footer class="text-muted py-5 bg-footer">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#" class="fs-1 link-dark"><i class="bi bi-chevron-up"></i></a>
+    </p>
+    <p class="mb-1">Информационная система «Учетно-техническая документация» © КГБУ «КГКО»</p>
+    <p class="mb-0">Возникли проблемы или нашел ошибку в системе? Не поленись, сходи в отдел ИТ.</p>
+  </div>
+</footer>
 <!-- новая модалка запроса -->
 
 <div class="modal fade" id="reqInfoModal" tabindex="-1" aria-labelledby="removeAlertLabel" aria-hidden="true">
@@ -132,4 +141,5 @@
 <script type="text/javascript" src="lib/jquery/jquery-ui.js"></script>
 <script type="text/javascript" src="lib/suggestions/jquery.suggestions.min.js"></script>   
 <script type="text/javascript" src="lib/cookie/jquery-cookie.js"></script>  
+<script type="text/javascript" src="lib/inputmask/inputmask.min.js"></script>  
 <script type="text/javascript" src="js/common.js"></script> 

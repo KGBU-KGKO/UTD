@@ -441,7 +441,7 @@ if (isset($_GET['toast'])) {
   <div class="toast bg-success text-white fade show" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body">
-        Запрос <a class="wlink" href="/tpl/form'.$_GET['decType'].'.php?numLog='.$_GET['toast'].'" target="_blank">№'.$_GET['toast'].'</a> создан.
+        Запрос №'.$_GET['toast'].' создан.
       </div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
     </div>

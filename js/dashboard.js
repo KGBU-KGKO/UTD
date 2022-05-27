@@ -1,4 +1,3 @@
-let notifyToast = bootstrap.Toast.getOrCreateInstance($('#notifyToast'));
 let removeAlertModal = new bootstrap.Modal($('#removeAlert'), {});
 let uploadTable = $('#uploadTable').bootstrapTable({
     pagination: true,
@@ -210,12 +209,6 @@ function getDataTable(dataStatus) {
     return $.parseJSON(dataTbl.responseText)
 }
 
-function notify(status, text) {
-    $('#notifyToastBody').html(text);
-    $('#notifyToast').addClass('bg-' + status);
-    notifyToast.show();
-}
-
 function numFormatter(value) {
     return '<a href="#">' + value + '</a>';
 }
@@ -311,13 +304,13 @@ $("#upload").click(function() {
                 $('#formFiles').trigger('reset');
                 $('#nameFiles').html('');
                 uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
-                notify('danger', data);
+                showSmallToast('bg-danger', data, '10000');
             } else {
                 (isPaid) ? logger('Файлы загружены и запрос оплачен', $('#numReq').val()) : logger('Файлы загружены', $('#numReq').val());
                 $('#formFiles').trigger('reset');
                 $('#nameFiles').html('');
                 uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
-                notify('success', data);
+                showSmallToast('bg-success', data, '10000');
             }
         }
     });
@@ -346,7 +339,7 @@ $("#deleteReq").click(function() {
                 removeAlertModal.hide();
                 uploadTable.bootstrapTable('load', getDataTable("Ожидает загрузки"));
             } else {
-                notify('danger', `Ошибка: ${data}`);
+                showSmallToast('bg-danger', `Ошибка: ${data}`, '10000');
             }
         }
     });

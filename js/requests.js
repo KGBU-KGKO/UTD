@@ -149,7 +149,7 @@ $("#inWork").click(function() {
                 logger('Взят в работу', $('#reqNumNew').val());
                 showSmallToast('bg-primary', 'Запрос '+$('#reqNumNew').val()+' взят в работу.', '5000');
             } else {
-                showSmallToast('bg-primary', data, '10000');
+                showSmallToast('bg-danger', $('#reqNumNew').val()+": "+data, '10000');
             }
             newReqTable.bootstrapTable('load', getDataTable("Новый"));
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
@@ -172,7 +172,7 @@ $("#Paid").click(function() {
                 logger('Оплачен', $('#reqNumWork').val())
                 showSmallToast('bg-success', 'Запрос '+$('#reqNumWork').val()+' оплачен.', '5000');
             } else {
-                showSmallToast('bg-primary', data, '10000');
+                showSmallToast('bg-danger', $('#reqNumWork').val()+": "+data, '10000');
             }
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
         }
@@ -192,7 +192,7 @@ $("#Issue").click(function() {
                 logger('Выдан', $('#reqNumWork').val());
                 showSmallToast('bg-success', 'Запрос '+$('#reqNumWork').val()+' выдан.', '5000');
             } else {
-                showSmallToast('bg-primary', data, '10000');
+                showSmallToast('bg-danger', $('#reqNumWork').val()+": "+data, '10000');
             }
             $('#reqNumWork').val("");
             inworkReqTable.bootstrapTable('load', getDataTable("В работе"));
