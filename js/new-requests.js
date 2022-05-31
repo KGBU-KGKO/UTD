@@ -35,7 +35,7 @@ $.when($.ready).then(function() {
 });
 
 function join(arr /*, separator */) {
-  var separator = arguments.length > 1 ? arguments[1] : ", ";
+  let separator = arguments.length > 1 ? arguments[1] : ", ";
   return arr.filter(function(n){return n}).join(separator);
 }
 
@@ -61,7 +61,8 @@ function showUL(suggestion) {
     let data = suggestion.data;
     if (!data)
         return;
-    $("#dULName").val(data.name.short_with_opf);
+    let nameUL = data.name.short_with_opf ? data.name.short_with_opf : data.name.full_with_opf;
+    $("#dULName").val(nameUL);
     $("#dULINN").val(data.inn);
     $("#dULOGRN").val(data.ogrn);
     if (data.address)
@@ -607,7 +608,7 @@ $('#services').on('change', 'select[id^="svcSelect-"]', function() {
                                   </div>                                  
                                   <div class="col-md-2">
                                     <div class="form-floating">
-                                      <input type="text" class="form-control" id="svcInfoObj-dulDate-${id}" name="svcInfoObj-dulDate-${id}" placeholder="Дата выдачи ДУЛ" value="">
+                                      <input type="date" class="form-control" id="svcInfoObj-dulDate-${id}" name="svcInfoObj-dulDate-${id}" placeholder="Дата выдачи ДУЛ" value="">
                                       <label for="svcInfoObj-dulDate-${id}">Дата ДУЛ</label>
                                     </div>
                                   </div>

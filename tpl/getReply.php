@@ -32,7 +32,7 @@ function printRequest($request, $num = null, $tpl = null)
     global $img;
     global $performer2;
 
-    if ($num) 
+    if (!is_null($num)) 
         $request = singleServiceDataPrepare($request, $num);
     $TBS = new clsTinyButStrong;
     $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
@@ -76,7 +76,7 @@ function printRequest($request, $num = null, $tpl = null)
     // Define the name of the output file
     //$save_as = (isset($_POST['save_as']) && (trim($_POST['save_as'])!=='') && ($_SERVER['SERVER_NAME']=='localhost')) ? trim($_POST['save_as']) : '';
     $output_file_name = $smev.explode('/', $logInNum)[1].'.docm';
-    $output_file_name = $tpl ? "справка ".$output_file_name : $output_file_name;
+    $output_file_name = $tpl ? "справка-".($num+1)." ".$output_file_name : $output_file_name;
     // if ($save_as==='') {
     //     // Output the result as a downloadable file (only streaming, no data saved in the server)
     //     $TBS->Show(OPENTBS_DOWNLOAD, $output_file_name); // Also merges all [onshow] automatic fields.

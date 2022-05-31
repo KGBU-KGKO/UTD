@@ -149,9 +149,9 @@ foreach ($request->service as $service) {
     $serviceObjectInfo = concatInfo([$location, $inum, $knum, $area, $info]);
   } else {
     $serviceObject = $service->human->name;
-    $bday = $service->human->bDate ? 'дата рождения: '.$service->human->bDate : '';
+    $bday = $service->human->bDate ? 'дата рождения: '.prettyDate($service->human->bDate) : '';
     $dulNum = $service->human->dulNum ? 'серия и номер: '.$service->human->dulNum : '';
-    $dulDate = $service->human->dulDate ? 'дата документа: '.$service->human->dulDate : '';
+    $dulDate = $service->human->dulDate ? 'дата документа: '.prettyDate($service->human->dulDate) : '';
     $dulOrg = $service->human->dulOrg ? 'кем выдан: '.$service->human->dulOrg : '';
     $serviceObjectInfo = concatInfo([$bday, $dulNum, $dulDate, $dulOrg]);
   }
@@ -167,6 +167,11 @@ foreach ($request->service as $service) {
     $data->svcTblReply .= $row;    
   }
 
+}
+
+function prettyDate($date)
+{
+  return ($date) ? date("d.m.Y", strtotime($date)) : '';
 }
 
 function concatInfo($arr = [])

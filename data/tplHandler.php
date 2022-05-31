@@ -1,8 +1,6 @@
 <?php 
 include 'getDataReq.php';
-
 $request = dataPrepare($request);
-
 function dataPrepare($request)
 {
 
@@ -39,10 +37,10 @@ function multiServiceDataPrepare($request)
 				$answer = "справка (выписка) предоставлена.";
 				$attachNum++;
 				$attach .= "$attachNum. ".$service->name." на 1 л. в 1 экз.q";
-				array_push($request->tpl->needRef, $key);
 			} else {
 				$answer = "в предоставлении справки отказано в связи с ".$service->reason.".";
 			}
+			array_push($request->tpl->needRef, $key);
 			$num = $key + 1;
 			$text .= "$num. ".$service->name.", сообщает, что $answer q";
 		}
@@ -62,11 +60,11 @@ function singleServiceDataPrepare($request, $numberService) {
 	if ($service->type == "копия") {
 		$tpl = '1';
 		$objInfoArr = [];
-		pushObjInfo("инвентарный номер: ", $service->realEstate->inum, $objInfoArr);
-		pushObjInfo("кадастровый номер: ", $service->realEstate->knum, $objInfoArr);
-		pushObjInfo("площадь, кв. м.: ", $service->realEstate->area, $objInfoArr);
-		pushObjInfo("дополнительная информация: ", $service->realEstate->info, $objInfoArr);
-		pushObjInfo("местоположение: ", $service->realEstate->location, $objInfoArr);
+		$objInfoArr = pushObjInfo("инвентарный номер: ", $service->realEstate->inum, $objInfoArr);
+		$objInfoArr = pushObjInfo("кадастровый номер: ", $service->realEstate->knum, $objInfoArr);
+		$objInfoArr = pushObjInfo("площадь, кв. м.: ", $service->realEstate->area, $objInfoArr);
+		$objInfoArr = pushObjInfo("дополнительная информация: ", $service->realEstate->info, $objInfoArr);
+		$objInfoArr = pushObjInfo("местоположение: ", $service->realEstate->location, $objInfoArr);
 		$objInfo = (count($objInfoArr) > 0) ? " (".implode(" ,", $objInfoArr).")" : "";
 		if ($service->status == "Ответ") {
 			$subject = "О предоставлении";
@@ -124,6 +122,7 @@ function pushObjInfo($name, $value, $arr)
 {
 	if ($value)
 		array_push($arr, $name.$value);
+	return $arr;
 }
 
 ?>
