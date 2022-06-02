@@ -102,13 +102,14 @@ function addService($num, $IDr, $IDds) {
     $firstName = checkParam("svcInfoObj-firstName-$num", 'text');
     $middleName = checkParam("svcInfoObj-middleName-$num", 'text');
     $lastName = checkParam("svcInfoObj-lastName-$num", 'text');
+    $humInfo = checkParam("svcInfoObj-humInfo-$num", 'text');
     $bDate = checkParam("svcInfoObj-bday-$num", 'date');
     $dulNum = checkParam("svcInfoObj-dulNum-$num", 'text');
     $dulDate = checkParam("svcInfoObj-dulDate-$num", 'date');
     $dulOrg = checkParam("svcInfoObj-dulOrg-$num", 'text');
 
     try {
-        $query = "{call AddService(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        $query = "{call AddService(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(1, $IDr, PDO::PARAM_STR);
         $stmt->bindParam(2, $IDds, PDO::PARAM_STR);
@@ -136,6 +137,7 @@ function addService($num, $IDr, $IDds) {
         $stmt->bindParam(24, $dulNum, PDO::PARAM_STR);
         $stmt->bindParam(25, $dulDate, PDO::PARAM_STR);
         $stmt->bindParam(26, $dulOrg, PDO::PARAM_STR);
+        $stmt->bindParam(27, $humInfo, PDO::PARAM_STR);
         $stmt->execute();
     } catch(PDOException $e) {
         die("Error executing stored procedure (add service): ".$e->getMessage());

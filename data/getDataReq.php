@@ -98,7 +98,7 @@ where request.numLog = '$num'";
 	foreach ($rows as $row) {
 		$service = new Service($row);
 		if ($service->forHuman == 1) {
-			$query = "select firstName, middleName, lastName, bDate, dulNum, dulDate, dulOrg, 
+			$query = "select firstName, middleName, lastName, humInfo, bDate, dulNum, dulDate, dulOrg, 
 CONCAT((lastName),(' '+firstName),(' '+middleName)) as 'fullName',
 CONCAT((lastName),(' '+SUBSTRING(firstName,1,1)+'.'),(' '+SUBSTRING(middleName,1,1)+'.')) as 'name'
 from human where ID = ".$service->idObject;

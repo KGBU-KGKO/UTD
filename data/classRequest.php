@@ -77,6 +77,7 @@ class Human
     public $firstName = "";
     public $middleName = "";
     public $lastName = "";
+    public $humInfo = "";
     public $bDate = "";
     public $dulNum = "";
     public $dulDate = "";
@@ -85,7 +86,7 @@ class Human
     public function __construct(array $arguments = array()) {
         if (!empty($arguments)) {
             foreach ($arguments as $property => $argument) {
-                $this->{$property} = $argument;
+                $this->{$property} = (strstr($property, 'Date')) ? date("d.m.Y", strtotime($argument)) : $argument;
             }
         }
     }

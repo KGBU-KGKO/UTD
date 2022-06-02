@@ -153,7 +153,8 @@ foreach ($request->service as $service) {
     $dulNum = $service->human->dulNum ? 'серия и номер: '.$service->human->dulNum : '';
     $dulDate = $service->human->dulDate ? 'дата документа: '.prettyDate($service->human->dulDate) : '';
     $dulOrg = $service->human->dulOrg ? 'кем выдан: '.$service->human->dulOrg : '';
-    $serviceObjectInfo = concatInfo([$bday, $dulNum, $dulDate, $dulOrg]);
+    $humInfo = $service->human->humInfo ? 'доп. инф.: '.$service->human->humInfo : '';
+    $serviceObjectInfo = concatInfo([$bday, $dulNum, $dulDate, $dulOrg, $humInfo]);
   }
   $row = "<tr><td>$serviceName</td><td>$serviceObject</td><td>$serviceObjectInfo</td></tr>";
   $data->svcTbl .= $row;

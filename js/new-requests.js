@@ -619,6 +619,12 @@ $('#services').on('change', 'select[id^="svcSelect-"]', function() {
                                     </div>
                                   </div>
                                 </div>                                
+                                <div class="row g-1 mb-3">
+                                  <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Дополнительная информация" id="svcInfoObj-humInfo-${id}" name="svcInfoObj-humInfo-${id}" style="height: 100px"></textarea>
+                                    <label for="svcInfoObj-humInfo-${id}">Дополнительная информация</label>
+                                  </div>                            
+                                </div>                                
                             </div>`;
             break;
     }    
@@ -695,6 +701,12 @@ $('#services').on('change', 'input[id^="isHuman-"]', function() {
                                       <label for="svcInfoObj-dulOrg-${id}">Выдан ДУЛ</label>
                                     </div>
                                   </div>
+                                </div>
+                                <div class="row g-1 mb-3">
+                                  <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Дополнительная информация" id="svcInfoObj-humInfo-${id}" name="svcInfoObj-humInfo-${id}" style="height: 100px"></textarea>
+                                    <label for="svcInfoObj-humInfo-${id}">Дополнительная информация</label>
+                                  </div>                            
                                 </div>`;
     } else {
         controls = `        <div class="row g-1 mb-3">
@@ -780,7 +792,7 @@ $('#services').on('change', 'input[id^="isHuman-"]', function() {
                               </div>
                               <div class="col-md-4">
                                 <div class="form-floating">
-                                  <input type="text" class="form-control" id="svcInfoObj-knum-${id}" name="svcInfoObj-knum-${id}" placeholder="Индекс" value="">
+                                  <input type="text" class="form-control knum" id="svcInfoObj-knum-${id}" name="svcInfoObj-knum-${id}" placeholder="Индекс" value="">
                                   <label for="svcInfoObj-knum-${id}">Кадастровый номер</label>
                                 </div>
                               </div>
@@ -805,4 +817,5 @@ $('#services').on('change', 'input[id^="isHuman-"]', function() {
         type: "ADDRESS",
         onSelect: showAddr
     });      
+    Inputmask({"mask": "99:99:9999999:99"}).mask($(".knum"));
 })

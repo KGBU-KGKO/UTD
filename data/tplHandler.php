@@ -33,13 +33,9 @@ function multiServiceDataPrepare($request)
 		}
 
 		if ($service->type == 'справка') {
-			if ($service->status == 'Ответ') {
-				$answer = "справка (выписка) предоставлена.";
-				$attachNum++;
-				$attach .= "$attachNum. ".$service->name." на 1 л. в 1 экз.q";
-			} else {
-				$answer = "в предоставлении справки отказано в связи с ".$service->reason.".";
-			}
+			$answer = ($service->status == 'Ответ') ? "справка (выписка) предоставлена." : "в предоставлении справки отказано в связи с ".$service->reason.".";
+			$attachNum++;
+			$attach .= "$attachNum. ".$service->name." на 1 л. в 1 экз.q";
 			array_push($request->tpl->needRef, $key);
 			$num = $key + 1;
 			$text .= "$num. ".$service->name.", сообщает, что $answer q";
@@ -59,13 +55,7 @@ function singleServiceDataPrepare($request, $numberService) {
 	$service = $request->service[$numberService];
 	if ($service->type == "копия") {
 		$tpl = '1';
-		$objInfoArr = [];
-		$objInfoArr = pushObjInfo("инвентарный номер: ", $service->realEstate->inum, $objInfoArr);
-		$objInfoArr = pushObjInfo("кадастровый номер: ", $service->realEstate->knum, $objInfoArr);
-		$objInfoArr = pushObjInfo("площадь, кв. м.: ", $service->realEstate->area, $objInfoArr);
-		$objInfoArr = pushObjInfo("дополнительная информация: ", $service->realEstate->info, $objInfoArr);
-		$objInfoArr = pushObjInfo("местоположение: ", $service->realEstate->location, $objInfoArr);
-		$objInfo = (count($objInfoArr) > 0) ? " (".implode(" ,", $objInfoArr).")" : "";
+		$objInfo = getObjInfo($service->realEstate);
 		if ($service->status == "Ответ") {
 			$subject = "О предоставлении";
 			$text = $service->realEstate->address."$objInfo, направляет Вам копии учётно-технической документации на указанный объект";
@@ -84,13 +74,21 @@ function singleServiceDataPrepare($request, $numberService) {
 		}
 		if ($service->status == 'Отказ') {
 			if ($service->human) {
-			$bDate = ($service->human->bDate) ? date("d.m.Y", strtotime($service->human->bDate)) : "";
+			$bDate = $service->human->bDate;
 			$fullName = $service->human->fullName;
+			$info = $service->human->humInfo ? " (".$service->human->humInfo.")" : "";
+			$text = "в отношении заявителя: q$fullName$info, $bDate года рождения, q".$service->reason.".";
 			} else {
-				$bDate = "";
-				$fullName = "";
+				if ($service->realEstate) {
+					$address = $service->realEstate->address;
+					$objInfo = getObjInfo($service->realEstate);
+					$text = "в отношении объекта недвижимости, расположенного по адресу: q$address$objInfo, q".$service->reason.".";
+				} else {
+					$bDate = "";
+					$fullName = "";		
+					$text = "в отношении заявителя: q$fullName, $bDate года рождения, q".$service->reason.".";			
+				}
 			}
-			$text = "в отношении заявителя: q$fullName, $bDate года рождения, q".$service->reason.".";
 		}
 		$text .= $service->limits ? "qСведениями об ограничениях, арестах и запретах не располагаем." : "";
 		$text .= $service->before2000 ? "qДополнительно сообщаем, что с 01.01.2000 года государственную регистрацию прав на недвижимое имущество и сделки с ним осуществляет Управление Федеральной службы государственной регистрации, кадастра и картографии по Камчатскому краю." : "";	
@@ -125,4 +123,15 @@ function pushObjInfo($name, $value, $arr)
 	return $arr;
 }
 
+function getObjInfo($realEstate)
+{
+	$objInfoArr = [];
+	$objInfoArr = pushObjInfo("инвентарный номер: ", $realEstate->inum, $objInfoArr);
+	$objInfoArr = pushObjInfo("кадастровый номер: ", $realEstate->knum, $objInfoArr);
+	$objInfoArr = pushObjInfo("площадь, кв. м.: ", $realEstate->area, $objInfoArr);
+	$objInfoArr = pushObjInfo("дополнительная информация: ", $realEstate->info, $objInfoArr);
+	$objInfoArr = pushObjInfo("местоположение: ", $realEstate->location, $objInfoArr);
+	$objInfo = (count($objInfoArr) > 0) ? " (".implode(", ", $objInfoArr).")" : "";
+	return $objInfo;
+}
 ?>
