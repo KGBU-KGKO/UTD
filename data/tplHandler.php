@@ -14,9 +14,10 @@ function dataPrepare($request)
 
 function multiServiceDataPrepare($request)
 {
+	$subjectTitle = 'УВЕДОМЛЕНИЕ';
 	$subject = '';
 	$text = '';
-	$attach = "Приложение: q";
+	$attach = "Приложение: ";
 	$request->tpl->number = '0';
 	$attachNum = 0;
 	foreach ($request->service as $key => $service) {
@@ -24,31 +25,34 @@ function multiServiceDataPrepare($request)
 			if ($service->status == "Ответ") {
 				$answer = "копия документа предоставлена.";
 				$attachNum++;
-				$attach .= "$attachNum. ".$service->name."(копия) на ".$service->pages." л. в 1 экз.q";
+				$attach .= "\r$attachNum. ".$service->name."(копия) на ".$service->pages." л. в 1 экз.";
 			} else {
 				$answer = "в предоставлении документов отказано в связи с ".$service->reason.".";
 			}
 			$num = $key + 1;
-			$text .= "$num. ".$service->name." на объект недвижимости, расположенный по адресу: ".$service->realEstate->fullAddress.", сообщает, что $answer q";
+			$text .= "$num. ".$service->name." на объект недвижимости, расположенный по адресу: ".$service->realEstate->fullAddress.", сообщает, что $answer\r";
 		}
 
 		if ($service->type == 'справка') {
 			$answer = ($service->status == 'Ответ') ? "справка (выписка) предоставлена." : "в предоставлении справки отказано в связи с ".$service->reason.".";
 			$attachNum++;
-			$attach .= "$attachNum. ".$service->name." на 1 л. в 1 экз.q";
+			$attach .= "\r$attachNum. ".$service->name." на 1 л. в 1 экз.";
 			array_push($request->tpl->needRef, $key);
 			$num = $key + 1;
-			$text .= "$num. ".$service->name.", сообщает, что $answer q";
+			$newline = ($num == 1) ? "" : "\r";
+			$text .= "$newline$num. ".$service->name.", сообщает, что $answer";
 		}
 	}
+	$request->tpl->subjectTitle = $subjectTitle;
 	$request->tpl->subject = $subject;
 	$request->tpl->text = $text;
-	$request->tpl->attach = ($attach == "Приложение: q") ? "" : $attach;
+	$request->tpl->attach = ($attach == "Приложение: \r") ? "" : $attach;
 	$request = getSignInfo($request);	
 	return $request;
 }
 
 function singleServiceDataPrepare($request, $numberService) {
+	$subjectTitle = 'УВЕДОМЛЕНИЕ';
 	$subject = '';
 	$text = '';
 	$attach = '';	
@@ -58,42 +62,47 @@ function singleServiceDataPrepare($request, $numberService) {
 		$objInfo = getObjInfo($service->realEstate);
 		if ($service->status == "Ответ") {
 			$subject = "О предоставлении";
-			$text = $service->realEstate->address."$objInfo, направляет Вам копии учётно-технической документации на указанный объект";
-			$attach = "Приложение: ".$service->name."(копия) на ".$service->pages." л. в 1 экз.";
+			$text = $service->realEstate->address."$objInfo, направляет Вам копии учётно-технической документации на указанный объект.";
+			$attach = "Приложение: \r".$service->name."(копия) на ".$service->pages." л. в 1 экз.";
 		}
 		if ($service->status == 'Отказ') {
 			$subject = 'Отказ в предоставлении';
-			$text = $service->realEstate->address."$objInfo, отказывает в её предоставлении в связи с ".$service->reason;
+			$text = $service->realEstate->address."$objInfo, отказывает в её предоставлении в связи с ".$service->reason.".";
 		}		
 	}
 
 	if ($service->type == 'справка') {
 		$tpl = '10';
+		$subjectTitle = $service->shortName == "Выписка" ? "" : "СПРАВКА"; 
+		$subject = $service->shortName == "Выписка" ? "Выписка из реестровой книги о праве собственности на объект капитального строительства, помещение (до 1998 года)" : "Справка, содержащая сведения о наличии/отсутствии права собственности на объекты недвижимости (до 2000 года)";
+		$text = "В учетно-технической документации, регистрационных книгах (журналах), информационной системе, находящихся на хранении* в КГБУ «КГКО» ";
 		if ($service->status == 'Ответ') {
-			$text = " имеются сведения о наличии права собственности в отношении объекта недвижимости, расположенного по адресу:q«".$service->answerText."».";
+			$text .= $service->shortName == "Выписка" ? "имеется следующая регистрационная запись: \r«".$service->answerText."»." : " имеются сведения о наличии права собственности в отношении объекта недвижимости, расположенного по адресу: \r«".$service->answerText."».";
 		}
 		if ($service->status == 'Отказ') {
 			if ($service->human) {
 			$bDate = $service->human->bDate;
 			$fullName = $service->human->fullName;
 			$info = $service->human->humInfo ? " (".$service->human->humInfo.")" : "";
-			$text = "в отношении заявителя: q$fullName$info, $bDate года рождения, q".$service->reason.".";
+			$text .= "в отношении заявителя: \r$fullName$info, $bDate года рождения, \r".$service->reason.".";
 			} else {
 				if ($service->realEstate) {
 					$address = $service->realEstate->address;
 					$objInfo = getObjInfo($service->realEstate);
-					$text = "в отношении объекта недвижимости, расположенного по адресу: q$address$objInfo, q".$service->reason.".";
+					$text .= "в отношении объекта недвижимости, расположенного по адресу: \r$address$objInfo, \r".$service->reason.".";
 				} else {
 					$bDate = "";
 					$fullName = "";		
-					$text = "в отношении заявителя: q$fullName, $bDate года рождения, q".$service->reason.".";			
+					$text .= "в отношении заявителя: \r$fullName, $bDate года рождения, \r".$service->reason.".";			
 				}
 			}
 		}
-		$text .= $service->limits ? "qСведениями об ограничениях, арестах и запретах не располагаем." : "";
-		$text .= $service->before2000 ? "qДополнительно сообщаем, что с 01.01.2000 года государственную регистрацию прав на недвижимое имущество и сделки с ним осуществляет Управление Федеральной службы государственной регистрации, кадастра и картографии по Камчатскому краю." : "";	
+		$text .= $service->limits ? "\rСведениями об ограничениях, арестах и запретах не располагаем." : "";
+		$text .= $service->before2000 ? "\rДополнительно сообщаем, что с 01.01.2000 года государственную регистрацию прав на недвижимое имущество и сделки с ним осуществляет Управление Федеральной службы государственной регистрации, кадастра и картографии по Камчатскому краю." : "";	
+		$text .= $service->shortName == "Выписка" ? "\rНастоящая выписка дана для предоставления по месту требования." : "\rСправка дана по месту требования.";
 	}
 
+	$request->tpl->subjectTitle = $subjectTitle;
 	$request->tpl->subject = $subject;
 	$request->tpl->text = $text;
 	$request->tpl->attach = $attach;

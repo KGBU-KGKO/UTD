@@ -418,6 +418,11 @@
           <button type="button" class="btn btn-outline-secondary mb-1">Копия доверенности</button>
           <button type="button" class="btn btn-outline-secondary mb-1">Выписка из ЕГРН</button>
           <button type="button" class="btn btn-outline-secondary mb-1">Выписка из ЕГРЮЛ</button>
+          <button type="button" class="btn btn-outline-secondary mb-1">Св-во о заключении брака</button>
+          <button type="button" class="btn btn-outline-secondary mb-1">Св-во о рождении</button>
+          <button type="button" class="btn btn-outline-secondary mb-1">Св-во о смерти</button>
+          <button type="button" class="btn btn-outline-secondary mb-1">Трудовая книжка 1 лист</button>
+          <button type="button" class="btn btn-outline-secondary mb-1">Завещание</button>
         </div>
         <div class="form-floating">
           <textarea class="form-control" placeholder="Leave a comment here" id="attachList" name="attachList" style="height: 100px"></textarea>

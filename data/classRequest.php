@@ -122,6 +122,7 @@ class Reply
 
 class TPL 
 {
+    public $subjectTitle = "";
     public $subject = "";
     public $attach = "";
     public $text = "";

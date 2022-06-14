@@ -22,6 +22,7 @@ function printRequest($request, $num = null, $tpl = null)
     global $senderNum;
     global $senderDate;
     global $name;
+    global $subjectTitle;
     global $subject;
     global $text;
     global $attach;
@@ -31,13 +32,14 @@ function printRequest($request, $num = null, $tpl = null)
     global $title;
     global $img;
     global $performer2;
+    global $x;
 
     if (!is_null($num)) 
         $request = singleServiceDataPrepare($request, $num);
     $TBS = new clsTinyButStrong;
     $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);
 
-    $template = $tpl ? "tpl$tpl.docm" : 'tpl'.$request->tpl->number.'.docm';
+    $template = $tpl ? "tpl$tpl.docx" : 'tpl'.$request->tpl->number.'.docx';
     $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload] automatic fields (depends of the type of document).
     //$TBS->Plugin(OPENTBS_DEBUG_XML_CURRENT, true);
 
@@ -57,9 +59,7 @@ function printRequest($request, $num = null, $tpl = null)
     $senderDate = ($request->senderDate != '') ? $request->senderDate : $logInDate;
      //тут надо дательный падеж
     $name = ($request->declarant->type == 'FL') ? explode(' ', $request->declarant->name)[0].' '.substr(explode(' ', $request->declarant->name)[1],0,2) . '. ' . substr(explode(' ', $request->declarant->name)[2],0,2) . '. ' : $request->declarant->name; //тут надо дательный падеж
-     //$realEstate = $request->realEstate;
-     //$objInfo = ($request->objInfo) ? ", ".$request->objInfo : "";
-     //$answer = $request->tpl->answerText;
+    $subjectTitle = $request->tpl->subjectTitle;
     $subject = $request->tpl->subject;
     $text = $request->tpl->text;
     $attach = $request->tpl->attach;
@@ -69,13 +69,16 @@ function printRequest($request, $num = null, $tpl = null)
     $performer = $request->performer->name;
     $performer2 = $request->performer->shortName;
     $title = $request->performer->title;
+
+    $text = $attach ? explode("\r", "$text\r\r$attach") : explode("\r", $text);
+    $TBS->MergeBlock('text', $text);
      
     $smev = (isset($request->smevNum) && $request->smevNum != "-") ? $request->smevNum."-" : "";
     $img = $request->performer->pathIMG;
 
     // Define the name of the output file
     //$save_as = (isset($_POST['save_as']) && (trim($_POST['save_as'])!=='') && ($_SERVER['SERVER_NAME']=='localhost')) ? trim($_POST['save_as']) : '';
-    $output_file_name = $smev.explode('/', $logInNum)[1].'.docm';
+    $output_file_name = $smev.explode('/', $logInNum)[1].'.docx';
     $output_file_name = $tpl ? "справка-".($num+1)." ".$output_file_name : $output_file_name;
     // if ($save_as==='') {
     //     // Output the result as a downloadable file (only streaming, no data saved in the server)

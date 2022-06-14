@@ -232,8 +232,8 @@ $('#services').on('focusout', 'input[id^="svcInfoObj-name-"]', function() {
     $(`#svcInfoObj-middleName-${id}`).val(splitName(full)[2]);
 })
 
-$('#services').on('focusout', 'input[id^="svcInfoObj-area"]', function() {
-    $(this).val($(this).val().replace(/,/g, "."));
+$('#services').on('input', 'input[id^="svcInfoObj-area"]', function() {
+    $(this).val($(this).val().replace(/[^0-9\.]/g, ""));
 })
 
 $('#declarantType').on('change', function() {
