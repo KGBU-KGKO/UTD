@@ -233,7 +233,8 @@ $('#services').on('focusout', 'input[id^="svcInfoObj-name-"]', function() {
 })
 
 $('#services').on('input', 'input[id^="svcInfoObj-area"]', function() {
-    $(this).val($(this).val().replace(/[^0-9\.]/g, ""));
+    $(this).val($(this).val().replace(/[^0-9\.\,]/g, ""));
+    $(this).val($(this).val().replace(/,/g, "."));
 })
 
 $('#declarantType').on('change', function() {
@@ -635,7 +636,7 @@ $('#services').on('change', 'select[id^="svcSelect-"]', function() {
         type: "ADDRESS",
         onSelect: showAddr
     });    
-    Inputmask({"mask": "99:99:9999999:99"}).mask($(".knum"));
+    //Inputmask({"mask": "99:99:9999999:99999"}).mask($(".knum"));
 });
 
 $('#services').on('change', 'input[id^="isHuman-"]', function() {
@@ -817,5 +818,5 @@ $('#services').on('change', 'input[id^="isHuman-"]', function() {
         type: "ADDRESS",
         onSelect: showAddr
     });      
-    Inputmask({"mask": "99:99:9999999:99"}).mask($(".knum"));
+    //Inputmask({"mask": "99:99:9999999:99"}).mask($(".knum"));
 })

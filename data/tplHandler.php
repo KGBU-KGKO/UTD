@@ -23,24 +23,32 @@ function multiServiceDataPrepare($request)
 	foreach ($request->service as $key => $service) {
 		if ($service->type == 'копия') {
 			if ($service->status == "Ответ") {
-				$answer = "копия документа предоставлена.";
+				$answer = "направляет копию";
+				$denyReason = "";
 				$attachNum++;
-				$attach .= "\r$attachNum. ".$service->name."(копия) на ".$service->pages." л. в 1 экз.";
+				$attach .= "\r$attachNum. ".$service->name." (копия) на ".$service->pages." л. в 1 экз.";
 			} else {
-				$answer = "в предоставлении документов отказано в связи с ".$service->reason.".";
+				$answer = "отказывает в предоставлении";
+				$denyReason = " в связи с ".$service->reason;
 			}
 			$num = $key + 1;
-			$text .= "$num. ".$service->name." на объект недвижимости, расположенный по адресу: ".$service->realEstate->fullAddress.", сообщает, что $answer\r";
+			$text .= "$num) $answer документа «".$service->name."» на объект недвижимости, расположенного по адресу: ".$service->realEstate->fullAddress."$denyReason;\r";
 		}
 
 		if ($service->type == 'справка') {
-			$answer = ($service->status == 'Ответ') ? "справка (выписка) предоставлена." : "в предоставлении справки отказано в связи с ".$service->reason.".";
+			if ($service->status == 'Ответ') {
+				$answer = "направляет справку (выписка) «".$service->name."»";
+				$denyReason = "";
+			} else {
+				$answer = "отказывает в предоставлении справки (выписки) «".$service->name."»";
+				$denyReason = " в связи с ".$service->reason;
+			}
 			$attachNum++;
 			$attach .= "\r$attachNum. ".$service->name." на 1 л. в 1 экз.";
 			array_push($request->tpl->needRef, $key);
 			$num = $key + 1;
-			$newline = ($num == 1) ? "" : "\r";
-			$text .= "$newline$num. ".$service->name.", сообщает, что $answer";
+			//$newline = ($num == 1) ? "" : "\r";
+			$text .= "$num) $answer$denyReason;\r";
 		}
 	}
 	$request->tpl->subjectTitle = $subjectTitle;

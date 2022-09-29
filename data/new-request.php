@@ -169,7 +169,7 @@ function checkParam($param, $type, $num = 0)
             return isset($_GET["$param"]) ? explode(' ', $_GET["$param"])[0] : null;
             break;                    
         case 'post':
-            return isset($_GET["$param"]) ? (($_GET["$param"]) != '') ? explode(' ', $_GET["$param"])[1] : null : null;
+            return isset($_GET["$param"]) ? (($_GET["$param"]) != '') ? substr($_GET["$param"], strpos($_GET["$param"],' ')+1) : null : null;
             break;       
         case 'code':
             return isset($_GET["$param"]) ? (($_GET["$param"]) != '') ? substr($_GET["$param"], 0, $num) : null : null;

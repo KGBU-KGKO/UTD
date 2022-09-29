@@ -77,9 +77,10 @@ switch ($info) {
         $labels = [];
         $data = [];
         try {
-            $query = "SELECT performer, count(performer) as count FROM request
-                        WHERE DateClose >= '$from' and DateClose <= '$to' and performer <> ''
-                        GROUP BY performer";
+            $query = "SELECT request.performer, count(request.performer) as count FROM request
+                        inner join reply on request.ID = reply.IDr
+                        WHERE dateReply >= '$from' and dateReply <= '$to' and request.performer <> ''
+                        GROUP BY request.performer";
             $stmt = $conn->prepare($query);
             $stmt->execute();
             while($rows = $stmt->fetch(PDO::FETCH_ASSOC)) {

@@ -162,7 +162,24 @@
     	 		foreach($request->service as $service) {
 	    	 		$num++;
 	    	 		$svc = $service->name;
-	    	 		$serviceObject = ($service->forHuman == 1 ? $service->human->fullName : $service->realEstate->fullAddress);	    	 		
+	    	 		//$serviceObject = ($service->forHuman == 1 ? $service->human->fullName : $service->realEstate->fullAddress.";".$service->realEstate->info);
+	    	 		if ($service->forHuman == 1) {
+	    	 			$serviceObject = $service->human->fullName;
+	    	 		} else {
+	    	 			$objectInfo = [];
+	    	 			array_push($objectInfo, $service->realEstate->fullAddress);
+	    	 			if ($service->realEstate->inum)
+	    	 				array_push($objectInfo, "инв. номер: ".$service->realEstate->inum);
+	    	 			if ($service->realEstate->knum)
+	    	 				array_push($objectInfo, "кад. номер: ".$service->realEstate->knum);
+	    	 			if ($service->realEstate->area)
+	    	 				array_push($objectInfo, "площадь, кв.м.: ".$service->realEstate->area);
+	    	 			if ($service->realEstate->location)
+	    	 				array_push($objectInfo, "местоположение: ".$service->realEstate->location);
+	    	 			if ($service->realEstate->info)
+	    	 				array_push($objectInfo, "доп. инф.: ".$service->realEstate->info);
+	    	 			$serviceObject = implode("; ", $objectInfo);
+	    	 		}
 	    	 		echo "<tr><th class=\"align-center text-center\">$num</th><td>$service->name</td><td>$serviceObject</td><td></td></tr>";
 	    	 	}
     	 	?>

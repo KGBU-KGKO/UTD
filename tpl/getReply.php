@@ -70,7 +70,7 @@ function printRequest($request, $num = null, $tpl = null)
     $performer2 = $request->performer->shortName;
     $title = $request->performer->title;
 
-    $text = $attach ? explode("\r", "$text\r\r$attach") : explode("\r", $text);
+    $text = $attach ? explode("\r", "$text\r$attach") : explode("\r", $text);
     $TBS->MergeBlock('text', $text);
      
     $smev = (isset($request->smevNum) && $request->smevNum != "-") ? $request->smevNum."-" : "";

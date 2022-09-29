@@ -59,6 +59,7 @@
             <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">Гайнуллина М.И.</a></li>
             <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">Задорожняя Э.О.</a></li>
             <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">Кондратьева Н.В.</a></li>
+            <li><a class="dropdown-item" href="#" mb-checked="1" data-tip="">Алещенко Н.Г.</a></li>
           </ul>
         </div>
       </div>
